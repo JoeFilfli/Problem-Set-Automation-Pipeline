@@ -1,0 +1,28 @@
+FEEDBACK FOR: Alice Johnson
+======================================================================
+
+Score: 20/20 (100.0%)
+Grade: A
+
+----------------------------------------------------------------------
+
+Great job on your solution! You demonstrated a solid understanding of how to calculate simple interest, and your work was clear and well-organized. Here’s a breakdown of what you did well and some thoughts for future improvement:
+
+### What You Did Well:
+1. **Identification of Given Values**: You accurately identified the initial amount (P), interest rate (i), and time (n). This is crucial for solving the problem, and you expressed the interest rate as a decimal correctly, which is an important step.
+   
+2. **Use of the Correct Formula**: You correctly applied the formula for simple interest, \( I = P \times i \times n \). This shows that you understand the relationship between the variables involved.
+
+3. **Substitution and Calculation**: Your substitution of values into the formula was spot on, and your calculations were accurate. You clearly showed each step, which makes it easy to follow your thought process.
+
+4. **Final Answer Presentation**: You provided a clear final answer with the correct units, which is essential in mathematical communication. This helps ensure that your answer is understood in context.
+
+### Areas for Improvement:
+While your solution was excellent, here are a couple of suggestions to enhance your skills even further:
+
+- **Explanation of Steps**: In future problems, consider adding a brief explanation of each step as you go along. For example, you could explain why you convert the interest rate from a percentage to a decimal. This not only reinforces your understanding but also helps others who might read your work.
+
+- **Exploring Compound Interest**: Since you have a strong grasp of simple interest, you might want to explore how compound interest works as well. Understanding the differences between the two can deepen your financial literacy and prepare you for more complex problems.
+
+### Overall Assessment:
+You did an outstanding job on this problem, scoring a perfect 100%! Your clear and methodical approach is commendable, and it shows that you have a strong foundation in this topic. Keep up the great work, and continue to challenge yourself with new concepts in finance and mathematics. I’m excited to see how you apply your skills in future problems!
