@@ -7,7 +7,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import json
 
-load_dotenv()
+load_dotenv(override=True)
 
 
 class Agent:

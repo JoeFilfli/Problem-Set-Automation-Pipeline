@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import json
 from vector_store import RAGVectorStore
 
-load_dotenv()
+load_dotenv(override=True)
 
 
 class Agent:
@@ -161,17 +161,44 @@ Return ONLY valid JSON in this format:
 class SolutionGeneratorAgent(Agent):
     """Generates detailed solutions for problems."""
     
+    SOLUTION_TEMPLATE = """### 1. Approach & Strategy
+- Briefly explain the plan (2-3 bullet points).
+
+### 2. Step-by-step Calculations
+#### Step 1: <Descriptive title>
+- Explanation sentence(s).
+- Bullet list of given/derived values (use **bold** labels).
+$$
+<math for this step>
+$$
+
+#### Step 2: <Next title>
+- Continue numbering steps sequentially.
+- Include intermediate results in **bold**.
+$$
+<math or code block>
+$$
+
+### 3. Final Answer
+- **Answer:** <concise final value(s) with units or justification>.
+- **Check:** Optional verification or note if assumptions were made.
+
+> Tips:
+> - Keep Markdown tidy (no extra blank lines).
+> - Use inline math $like\ this$ for short expressions and display math $$like\ this$$ for longer derivations.
+> - Present any tables or comparisons using Markdown tables when helpful."""
+    
     def __init__(self):
         super().__init__(
             name="Solution Generator",
             role="""You are an expert at solving and explaining academic problems across all subjects.
-Provide solutions that:
-- Show all steps clearly
-- Explain the reasoning
-- Use proper notation (LaTeX for math: $...$, $$...$$, code blocks for programming, etc.)
-- Include intermediate steps and calculations
-- Highlight final answers
-- Reference relevant formulas, theorems, or concepts"""
+Produce polished, classroom-ready solution walkthroughs that:
+- Follow the provided Markdown template (Approach, Step-by-step, Final Answer).
+- Use numbered step headings (#### Step 1, Step 2, ...).
+- Present givens/derived values as short bullet lists with **bold** labels.
+- Use LaTeX math for every formula ($...$ for inline, $$...$$ for display).
+- Highlight final numerical answers in **bold** and include units or justification.
+- Reference formulas or theorems where relevant while keeping the layout clean."""
         )
     
     def generate_solution(
@@ -181,7 +208,7 @@ Provide solutions that:
     ) -> str:
         """Generate detailed solution for a problem."""
         
-        task = f"""Solve this problem with a detailed, step-by-step solution:
+        task = f"""Solve this problem with a detailed, step-by-step solution that strictly follows the Markdown template shown below.
 
 PROBLEM:
 {json.dumps(problem, indent=2)}
@@ -189,12 +216,16 @@ PROBLEM:
 CHAPTER CONTENT (for reference):
 {chapter_content}
 
-Provide a complete solution with:
-1. Approach/Strategy
-2. Step-by-step calculations
-3. Final answer(s)
+TEMPLATE TO FOLLOW (replace the angle-bracket placeholders with actual content and keep the section headings exactly as shown):
 
-Use LaTeX notation for math: $inline$ and $$display$$"""
+{self.SOLUTION_TEMPLATE}
+
+Formatting requirements:
+- Do not introduce extra top-level sections beyond those in the template.
+- Keep exactly one blank line between paragraphs/sections.
+- Use inline math for short expressions and display math blocks for derivations.
+- When a step involves computations, include the symbolic equation first, then the substituted numbers, then the evaluated result.
+- Ensure the Final Answer section summarizes the result in a single bullet plus an optional check."""
         
         return self.run(task)
 

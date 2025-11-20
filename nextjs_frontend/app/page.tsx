@@ -1,6 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import type { Components } from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+import "katex/dist/katex.min.css";
+
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL ||
+  (process.env.NODE_ENV === "development" ? "http://127.0.0.1:8000" : "");
+
+const buildApiUrl = (path: string) => {
+  if (!API_BASE_URL) {
+    return path;
+  }
+  const normalizedBase = API_BASE_URL.endsWith("/")
+    ? API_BASE_URL.slice(0, -1)
+    : API_BASE_URL;
+  return `${normalizedBase}${path}`;
+};
 
 type ChapterResponse = {
   chapters: string[];
@@ -9,6 +29,72 @@ type ChapterResponse = {
 type ProblemSetResponse = {
   success: boolean;
   problem_set: any;
+};
+
+const markdownComponents: Components = {
+  h3: ({ node, ...props }) => (
+    <h3
+      className="mt-4 text-base font-semibold text-[#2c1b14]"
+      {...props}
+    />
+  ),
+  h4: ({ node, ...props }) => (
+    <h4
+      className="mt-3 text-sm font-semibold text-[#5c0f17]"
+      {...props}
+    />
+  ),
+  p: ({ node, ...props }) => (
+    <p className="mt-2 text-sm leading-relaxed text-[#3e2b22]" {...props} />
+  ),
+  ul: ({ node, ...props }) => (
+    <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-[#3e2b22]" {...props} />
+  ),
+  ol: ({ node, ...props }) => (
+    <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm text-[#3e2b22]" {...props} />
+  ),
+  li: ({ node, ...props }) => <li {...props} />,
+  strong: ({ node, ...props }) => (
+    <strong className="font-semibold text-[#2c1b14]" {...props} />
+  ),
+  blockquote: ({ node, ...props }) => (
+    <blockquote
+      className="my-3 border-l-4 border-[#f5c2b4] bg-[#fff7f2] px-4 py-2 text-sm italic text-[#5c0f17]"
+      {...props}
+    />
+  ),
+  code({
+    node,
+    inline,
+    className,
+    children,
+    ...props
+  }: any) {
+    if (inline) {
+      return (
+        <code
+          className="rounded bg-[#f9ece1] px-1.5 py-0.5 text-[0.75rem] text-[#5c0f17]"
+          {...props}
+        >
+          {children}
+        </code>
+      );
+    }
+    return (
+      <pre className="my-3 overflow-x-auto rounded-lg bg-[#2c1b14] p-3 text-[0.75rem] text-white">
+        <code {...props}>{children}</code>
+      </pre>
+    );
+  },
+};
+
+const normalizeSolutionMarkdown = (text?: string | null) => {
+  if (!text) return "";
+  return text
+    .replace(/\r\n/g, "\n")
+    .replace(/\\times/g, "×")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 };
 
 export default function Home() {
@@ -32,7 +118,7 @@ export default function Home() {
         setErrorMessage(null);
         setStatusMessage("Gathering your course chapters…");
 
-        const res = await fetch("/api/py/chapters");
+        const res = await fetch(buildApiUrl("/api/py/chapters"));
 
         if (!res.ok) {
           // Try to surface backend error details if available
@@ -92,7 +178,7 @@ export default function Home() {
         check_quality: checkQuality,
       };
 
-      const res = await fetch("/api/py/generate-problem-set", {
+      const res = await fetch(buildApiUrl("/api/py/generate-problem-set"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -440,8 +526,16 @@ export default function Home() {
                               <p className="font-semibold text-[#5c0f17]">
                                 Solution walkthrough
                               </p>
-                              <div className="mt-2 rounded-xl bg-white p-3 text-[0.85rem] text-[#2c1b14] ring-1 ring-rose-100 whitespace-pre-wrap break-words font-mono">
-                                {solution}
+                              <div className="markdown-card mt-2 rounded-xl bg-white p-4 ring-1 ring-rose-100">
+                                <div className="markdown-body">
+                                  <ReactMarkdown
+                                    remarkPlugins={[remarkGfm, remarkMath]}
+                                    rehypePlugins={[rehypeKatex]}
+                                    components={markdownComponents}
+                                  >
+                                    {normalizeSolutionMarkdown(solution)}
+                                  </ReactMarkdown>
+                                </div>
                               </div>
                             </div>
                           )}

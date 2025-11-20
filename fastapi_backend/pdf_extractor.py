@@ -1,7 +1,16 @@
 """
 PDF text extraction utilities.
 """
+from typing import Iterable
 import fitz  # PyMuPDF
+
+
+def _concatenate_text(pages: Iterable[fitz.Page]) -> str:
+    """Helper to concatenate the text contents of PyMuPDF pages."""
+    text_parts = []
+    for page in pages:
+        text_parts.append(page.get_text("text"))
+    return "\n".join(text_parts)
 
 
 def extract_pdf_text(path: str) -> str:
@@ -15,8 +24,24 @@ def extract_pdf_text(path: str) -> str:
         Extracted text as a single string
     """
     doc = fitz.open(path)
-    text_parts = []
-    for page in doc:
-        text_parts.append(page.get_text("text"))
-    doc.close()
-    return "\n".join(text_parts)
+    try:
+        return _concatenate_text(doc)
+    finally:
+        doc.close()
+
+
+def extract_pdf_text_from_bytes(data: bytes) -> str:
+    """
+    Extract text directly from raw PDF bytes.
+    
+    Args:
+        data: Raw PDF bytes
+        
+    Returns:
+        Extracted text as a single string
+    """
+    doc = fitz.open(stream=data, filetype="pdf")
+    try:
+        return _concatenate_text(doc)
+    finally:
+        doc.close()

@@ -1,14 +1,14 @@
 """
 Vector store management using ChromaDB for RAG.
 """
-from typing import List
+from typing import Any, Dict, List
 from openai import OpenAI
 import chromadb
 from dotenv import load_dotenv
 from models import Chunk
 
 # Load environment variables
-load_dotenv()
+load_dotenv(override=True)
 
 
 class RAGVectorStore:
@@ -40,7 +40,7 @@ class RAGVectorStore:
             model="text-embedding-3-large",
             input=text
         )
-        print(f"   [OpenAI] ✓ Embedding received (dim={len(res.data[0].embedding)})")
+        print(f"   [OpenAI] Embedding received (dim={len(res.data[0].embedding)})")
         return res.data[0].embedding
 
     def add_chunk(self, chunk: Chunk, doc_id: str, chunk_id: str):
@@ -70,7 +70,7 @@ class RAGVectorStore:
             }],
             documents=[chunk.formatted]
         )
-        print(f"   [VectorDB] ✓ Stored {chunk_id}")
+        print(f"   [VectorDB] Stored {chunk_id}")
 
     def document_exists(self, doc_id: str) -> bool:
         """
@@ -87,6 +87,27 @@ class RAGVectorStore:
             limit=1
         )
         return len(results["ids"]) > 0
+
+    def delete_document(self, doc_id: str) -> None:
+        """
+        Remove all chunks associated with a document.
+        
+        Args:
+            doc_id: Document identifier to delete
+        """
+        self.collection.delete(where={"doc_id": doc_id})
+
+    def get_chunks_for_document(self, doc_id: str) -> Dict[str, Any]:
+        """
+        Retrieve all stored chunks for a document.
+        
+        Args:
+            doc_id: Document identifier
+            
+        Returns:
+            Raw ChromaDB get() response containing ids, documents, and metadata
+        """
+        return self.collection.get(where={"doc_id": doc_id})
 
     def query_by_document(self, query: str, doc_id: str, top_k=4):
         """

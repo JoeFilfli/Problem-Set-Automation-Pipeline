@@ -25,3 +25,87 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.markdown-body {
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont,
+    "Helvetica Neue", sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: #2c1b14;
+  word-break: break-word;
+}
+
+.markdown-body h3 {
+  margin-top: 1rem;
+  margin-bottom: 0.4rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c1b14;
+}
+
+.markdown-body h4 {
+  margin-top: 0.85rem;
+  margin-bottom: 0.3rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #5c0f17;
+}
+
+.markdown-body p {
+  margin-top: 0.35rem;
+  margin-bottom: 0.35rem;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  margin: 0.35rem 0;
+  padding-left: 1.2rem;
+}
+
+.markdown-body li {
+  margin-top: 0.2rem;
+}
+
+.markdown-body blockquote {
+  border-left: 4px solid #f5c2b4;
+  background-color: #fff7f2;
+  padding: 0.75rem 1rem;
+  margin: 0.8rem 0;
+  color: #5c0f17;
+  font-style: italic;
+}
+
+.markdown-body code {
+  font-family: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono",
+    Menlo, monospace;
+  background-color: #f9ece1;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.35rem;
+  font-size: 0.78rem;
+  color: #5c0f17;
+}
+
+.markdown-body pre {
+  background-color: #2c1b14;
+  color: #fff;
+  padding: 0.75rem;
+  border-radius: 0.65rem;
+  margin: 0.9rem 0;
+  overflow-x: auto;
+}
+
+.markdown-body pre code {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  color: inherit;
+}
+
+.markdown-body .katex-display {
+  margin: 0.75rem 0;
+  padding: 0.5rem 0;
+}
+
+.markdown-body .katex-display > .katex {
+  font-size: 1rem;
+}
