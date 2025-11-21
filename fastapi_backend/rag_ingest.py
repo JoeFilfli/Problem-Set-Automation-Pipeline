@@ -4,23 +4,23 @@ Processes all PDFs in sample_materials folder, chunks them semantically,
 embeds them, and stores in ChromaDB for retrieval.
 """
 import os
-from chunker import LLMChunker
+from chunker import smart_chunk_without_llm
 from pdf_extractor import extract_pdf_text
 from vector_store import RAGVectorStore
 
 
-def process_directory(folder: str) -> RAGVectorStore:
+def process_directory(folder: str, use_llm_chunking: bool = False) -> RAGVectorStore:
     """
     Process all PDF files in a directory.
     
     Args:
         folder: Path to folder containing PDF files
+        use_llm_chunking: If True, use LLM-based chunking. If False, use rule-based (default: False)
         
     Returns:
         RAGVectorStore instance with all documents processed
     """
-    print("[INIT] Creating LLM Chunker and Vector Store...")
-    chunker = LLMChunker()
+    print(f"[INIT] Creating {'LLM' if use_llm_chunking else 'Rule-Based'} Chunker and Vector Store...")
     vs = RAGVectorStore()
     
     openai_calls = {"chunking": 0, "embedding": 0}
@@ -42,10 +42,16 @@ def process_directory(folder: str) -> RAGVectorStore:
         text = extract_pdf_text(path)
         print(f" → Extracted {len(text)} characters")
 
-        # Use smart splitting to handle large documents
-        print(f" → Starting semantic chunking...")
-        chunks = chunker.chunk_with_splitting(text)
-        print(f" → Created {len(chunks)} semantic chunks")
+        # Choose chunking strategy
+        print(f" → Starting {'LLM-based' if use_llm_chunking else 'rule-based'} chunking...")
+        if use_llm_chunking:
+            from chunker import LLMChunker
+            chunker = LLMChunker()
+            chunks = chunker.chunk_with_splitting(text)
+        else:
+            chunks = smart_chunk_without_llm(text, max_size=2000)
+        
+        print(f" → Created {len(chunks)} chunks")
         
         print(f" → Storing chunks in vector DB...")
         for i, ch in enumerate(chunks):

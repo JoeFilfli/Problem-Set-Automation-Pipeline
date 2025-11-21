@@ -1,0 +1,24 @@
+{
+  "submissions": [
+    {
+      "student_name": "Test Student 1",
+      "student_id": "001",
+      "answers": [
+        {
+          "problem_id": 1,
+          "solution": "Alternative A NPV Calculation:\nUsing NPV formula: NPV = Sum of [Cash Flow / (1+r)^t] - Initial Investment\n\nFor Alternative A:\n- Year 1: 30000/1.1 = 27,272.73\n- Year 2: 30000/1.21 = 24,793.39\n- Year 3: 30000/1.331 = 22,533.29\n- Year 4: 30000/1.4641 = 20,484.90\n- Year 5: 30000/1.61051 = 18,622.64\n\nTotal PV = 113,707\nNPV_A = 113,707 - 100,000 = $13,707\n\nAlternative B NPV Calculation:\n- Year 1: 25000/1.1 = 22,727.27\n- Year 2: 25000/1.21 = 20,661.16\n- Year 3: 25000/1.331 = 18,796.56\n- Year 4: 25000/1.4641 = 17,070.75\n- Year 5: 25000/1.61051 = 15,518.87\n\nTotal PV = 94,774\nNPV_B = 94,774 - 80,000 = $14,774\n\nConclusion: Choose Alternative B (higher NPV)"
+        }
+      ]
+    },
+    {
+      "student_name": "Test Student 2",
+      "student_id": "002",
+      "answers": [
+        {
+          "problem_id": 1,
+          "solution": "I calculated NPV for both alternatives.\n\nAlternative A: NPV = $12,000 (approximately)\nAlternative B: NPV = $15,000 (approximately)\n\nI recommend Alternative B because it has higher NPV.\n\nNote: I used the formula NPV = PV - Initial Cost and discounted all cash flows."
+        }
+      ]
+    }
+  ]
+}

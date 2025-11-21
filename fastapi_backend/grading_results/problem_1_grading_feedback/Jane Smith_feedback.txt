@@ -1,37 +1,11 @@
-================================================================================
-GRADING REPORT
-================================================================================
+FEEDBACK FOR: Jane Smith
+======================================================================
 
-OVERALL STATISTICS
---------------------------------------------------------------------------------
-Total Students: 1
-Average Score: 0.0%
-Median Score: 0.0%
-Score Range: 0.0% - 0.0%
-
-Grade Distribution:
-  F: 1 students
-
-================================================================================
-
-STUDENT 1: Jane Smith
---------------------------------------------------------------------------------
 Score: 0/15 (0.0%)
 Grade: F
 
-Rubric Breakdown:
-  ✗ Identify the first step in the decision-making process: 0/5 pts
-     → The student did not provide any relevant steps related to the decision-making process.
-  ✗ Identify the second step in the decision-making process: 0/5 pts
-     → The student did not provide any relevant steps related to the decision-making process.
-  ✗ Identify the third step in the decision-making process: 0/5 pts
-     → The student did not provide any relevant steps related to the decision-making process.
+----------------------------------------------------------------------
 
-Areas for Improvement:
-  - The student did not address the problem statement at all.
-  - The student's work is unrelated to the decision-making process.
-
-Personalized Feedback:
 Thank you for submitting your homework! I appreciate the effort you put into your work, and I can see that you are engaging with the material. However, it seems that there was a misunderstanding regarding the specific task at hand. Let’s break down your submission and identify areas for improvement.
 
 ### What You Did Well:
@@ -50,6 +24,3 @@ Thank you for submitting your homework! I appreciate the effort you put into you
 
 ### Encouragement:
 I know it can be challenging to connect different concepts, especially when they seem unrelated. Keep practicing, and don’t be discouraged by this feedback. Each assignment is an opportunity to learn and grow. I believe you have the potential to excel in this area, and I’m here to support you as you continue to develop your skills. Keep up the hard work, and I look forward to seeing your next submission!
-
-================================================================================
-

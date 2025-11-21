@@ -47,9 +47,26 @@ def load_student_submission_text(text_path: str, student_name: str) -> str:
         return f.read()
 
 
-def load_student_submission_pdf(pdf_path: str, student_name: str) -> str:
-    """Load a single student's submission from PDF."""
-    return extract_pdf_text(pdf_path)
+def load_student_submission_pdf(pdf_path: str, student_name: str, use_ocr: bool = True) -> str:
+    """
+    Load a single student's submission from PDF.
+    
+    Args:
+        pdf_path: Path to student's PDF file
+        student_name: Name of the student
+        use_ocr: If True, automatically uses OCR for handwritten/scanned PDFs
+        
+    Returns:
+        Extracted text from PDF
+    """
+    from pdf_extractor import extract_pdf_smart, extract_pdf_with_ocr
+    
+    if use_ocr:
+        # Smart extraction: tries text first, falls back to OCR
+        return extract_pdf_smart(pdf_path)
+    else:
+        # Force OCR mode
+        return extract_pdf_with_ocr(pdf_path)
 
 
 def save_grading_report_json(results: List[Dict[str, Any]], output_path: str):
@@ -176,8 +193,17 @@ def main():
     parser.add_argument(
         "--submissions",
         type=str,
-        required=True,
         help="Path to student submissions JSON file"
+    )
+    parser.add_argument(
+        "--student-pdf",
+        type=str,
+        help="Path to single student PDF submission (requires --student-name)"
+    )
+    parser.add_argument(
+        "--student-name",
+        type=str,
+        help="Name of student (required when using --student-pdf)"
     )
     parser.add_argument(
         "--output-dir",
@@ -190,8 +216,23 @@ def main():
         action="store_true",
         help="Generate individual feedback files for each student"
     )
+    parser.add_argument(
+        "--force-ocr",
+        action="store_true",
+        help="Force OCR mode for all PDFs (use for handwritten submissions)"
+    )
     
     args = parser.parse_args()
+    
+    # Validate arguments
+    if not args.submissions and not args.student_pdf:
+        parser.error("Must specify either --submissions or --student-pdf")
+    
+    if args.student_pdf and not args.student_name:
+        parser.error("--student-name is required when using --student-pdf")
+    
+    if args.submissions and args.student_pdf:
+        parser.error("Cannot use both --submissions and --student-pdf")
     
     # Create output directory
     output_dir = Path(args.output_dir)
@@ -214,9 +255,25 @@ def main():
     print(f"   ✓ Loaded Problem {args.problem_id}: {problem.get('topic', 'N/A')}\n")
     
     # Load student submissions
-    print("[INIT] Loading student submissions...")
-    submissions_data = load_student_submissions_json(args.submissions)
-    print(f"   ✓ Loaded {len(submissions_data)} submissions\n")
+    if args.student_pdf:
+        # Single PDF submission mode
+        print(f"[INIT] Loading student PDF submission: {args.student_name}...")
+        use_ocr_mode = not args.force_ocr  # Smart mode unless force_ocr is True
+        student_solution = load_student_submission_pdf(args.student_pdf, args.student_name, use_ocr=use_ocr_mode)
+        
+        submissions_data = [{
+            'student_name': args.student_name,
+            'answers': [{
+                'problem_id': args.problem_id,
+                'solution': student_solution
+            }]
+        }]
+        print(f"   ✓ Loaded PDF submission ({len(student_solution)} characters extracted)\n")
+    else:
+        # JSON batch mode
+        print("[INIT] Loading student submissions...")
+        submissions_data = load_student_submissions_json(args.submissions)
+        print(f"   ✓ Loaded {len(submissions_data)} submissions\n")
     
     # Prepare submissions for this specific problem
     student_submissions = []

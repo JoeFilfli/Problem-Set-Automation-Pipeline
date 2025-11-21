@@ -20,13 +20,14 @@ class Agent:
         self.model = model
         self.client = OpenAI()
         
-    def run(self, task: str, context: Dict[str, Any] = None) -> str:
+    def run(self, task: str, context: Dict[str, Any] = None, force_json: bool = False) -> str:
         """
         Execute the agent's task.
         
         Args:
             task: The specific task/prompt for this agent
             context: Additional context data
+            force_json: Whether to force JSON response format
             
         Returns:
             Agent's response as string
@@ -38,11 +39,17 @@ class Agent:
             {"role": "user", "content": task}
         ]
         
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=messages,
-            temperature=0.3,
-        )
+        kwargs = {
+            "model": self.model,
+            "messages": messages,
+            "temperature": 0.3,
+        }
+        
+        # Force JSON output when requested
+        if force_json:
+            kwargs["response_format"] = {"type": "json_object"}
+        
+        response = self.client.chat.completions.create(**kwargs)
         
         result = response.choices[0].message.content
         print(f"   [{self.name}] ✓ Complete")
@@ -79,7 +86,7 @@ Return your analysis as structured JSON with:
 
 Return ONLY valid JSON with the structure specified in your role."""
         
-        response = self.run(task)
+        response = self.run(task, force_json=True)
         
         # Extract JSON from response
         try:
@@ -87,9 +94,14 @@ Return ONLY valid JSON with the structure specified in your role."""
             end = response.rfind("}") + 1
             json_str = response[start:end]
             return json.loads(json_str)
-        except:
-            print(f"   [WARNING] Failed to parse JSON, returning raw response")
-            return {"raw": response}
+        except Exception as e:
+            print(f"   [WARNING] Failed to parse JSON: {e}")
+            return {
+                "topics": ["General Content"],
+                "key_formulas": [],
+                "concepts": ["Course Material"],
+                "difficulty_areas": {"easy": [], "medium": [], "hard": []}
+            }
 
 
 class ProblemGeneratorAgent(Agent):
@@ -145,7 +157,7 @@ Return ONLY valid JSON in this format:
   ]
 }}"""
         
-        response = self.run(task)
+        response = self.run(task, force_json=True)
         
         try:
             start = response.find("{")
@@ -161,7 +173,7 @@ Return ONLY valid JSON in this format:
 class SolutionGeneratorAgent(Agent):
     """Generates detailed solutions for problems."""
     
-    SOLUTION_TEMPLATE = """### 1. Approach & Strategy
+    SOLUTION_TEMPLATE = r"""### 1. Approach & Strategy
 - Briefly explain the plan (2-3 bullet points).
 
 ### 2. Step-by-step Calculations
@@ -268,9 +280,9 @@ PROBLEM:
 SOLUTION:
 {solution}
 
-Assess quality and return JSON as specified in your role."""
+Assess quality and return your assessment as valid JSON with keys: overall_quality, issues, suggestions."""
         
-        response = self.run(task)
+        response = self.run(task, force_json=True)
         
         try:
             start = response.find("{")

@@ -2,54 +2,30 @@
   "doc_id": "INDE301_Ch1_Notes_24.pdf",
   "analysis": {
     "topics": [
-      "Interest Examples",
-      "Simple and Compound Interest",
-      "Equivalence",
-      "Cash Flows",
-      "Interest",
-      "Engineering Economy and Economic Feasibility Analysis",
-      "Time Value of Money",
-      "Operations Research (OR) and Data Analytics",
-      "Rule of 72",
-      "What is Engineering Economy?",
-      "Minimum Attractive Rate of Return (MARR)"
+      "Engineering Economy",
+      "Decision-Making Process",
+      "Economic Analysis in Engineering"
     ],
-    "key_formulas": [
-      "Interest earned = Final amount - Initial amount",
-      "ROR = (Interest earned / Initial amount) × 100",
-      "F = P + niP (Simple Interest)",
-      "F = P(1 + i)^n (Compound Interest)",
-      "Interest rate = (Interest accrued per time unit) / (Original amount)",
-      "Interest rate = (Final loan amount - Original amount borrowed) / Original amount × 100",
-      "n ≈ 72 / i (Rule of 72)"
-    ],
+    "key_formulas": [],
     "concepts": [
-      "Simple Interest",
-      "Compound Interest",
-      "Time Value of Money",
-      "Present Worth Analysis",
-      "Future Worth Analysis",
-      "Economic Feasibility",
-      "Minimum Attractive Rate of Return (MARR)",
-      "Weighted Average Cost of Capital (WACC)"
+      "Estimating financial outcomes",
+      "Formulating alternatives",
+      "Evaluating costs",
+      "Decision criteria",
+      "Implementation and monitoring"
     ],
     "difficulty_areas": {
       "easy": [
-        "Interest Examples",
-        "Simple and Compound Interest",
-        "Cash Flows"
+        "Understanding the importance of engineering economy",
+        "Identifying steps in the decision-making process"
       ],
       "medium": [
-        "Equivalence",
-        "Interest",
-        "Time Value of Money",
-        "Rule of 72"
+        "Estimating relevant costs",
+        "Defining alternatives"
       ],
       "hard": [
-        "Engineering Economy and Economic Feasibility Analysis",
-        "Operations Research (OR) and Data Analytics",
-        "What is Engineering Economy?",
-        "Minimum Attractive Rate of Return (MARR)"
+        "Evaluating each alternative",
+        "Selecting the best alternative"
       ]
     }
   },
@@ -59,39 +35,46 @@
       "problem": {
         "id": 1,
         "difficulty": "easy",
-        "topic": "Simple and Compound Interest",
-        "statement": "You deposit $1,000 in a savings account that earns a simple interest rate of 5% per year. How much interest will you earn after 3 years?",
-        "given": [
-          "Initial amount (P) = $1,000",
-          "Interest rate (i) = 5%",
-          "Time (n) = 3 years"
-        ],
+        "topic": "Decision-Making Process",
+        "statement": "List the first three steps in the decision-making process as outlined in the chapter.",
+        "given": [],
         "required": [
-          "Total interest earned after 3 years"
+          "List the first three steps in the decision-making process."
         ]
       },
-      "solution": "To solve the problem of calculating the total interest earned on a deposit of $1,000 at a simple interest rate of 5% per year over a period of 3 years, we will follow a systematic approach.\n\n### 1. Approach/Strategy\nWe will use the formula for calculating simple interest, which is given by:\n\n$$\nI = P \\cdot i \\cdot n\n$$\n\nwhere:\n- \\( I \\) is the total interest earned,\n- \\( P \\) is the principal amount (initial deposit),\n- \\( i \\) is the interest rate (expressed as a decimal),\n- \\( n \\) is the time in years.\n\n### 2. Step-by-step Calculations\n\n#### Step 1: Identify the given values\nFrom the problem statement, we have:\n- Initial amount (principal), \\( P = 1000 \\) dollars\n- Interest rate, \\( i = 5\\% = 0.05 \\) (as a decimal)\n- Time, \\( n = 3 \\) years\n\n#### Step 2: Substitute the values into the formula\nNow, we substitute the values into the simple interest formula:\n\n$$\nI = P \\cdot i \\cdot n\n$$\n\nSubstituting the values:\n\n$$\nI = 1000 \\cdot 0.05 \\cdot 3\n$$\n\n#### Step 3: Perform the calculations\nNow we will calculate the interest:\n\n1. Calculate \\( 1000 \\cdot 0.05 \\):\n\n   $$\n   1000 \\cdot 0.05 = 50\n   $$\n\n2. Now multiply this result by \\( n \\) (which is 3):\n\n   $$\n   I = 50 \\cdot 3 = 150\n   $$\n\n### 3. Final Answer\nThe total interest earned after 3 years is:\n\n$$\n\\boxed{150} \\text{ dollars}\n$$\n\n### Summary\nAfter depositing $1,000 in a savings account with a simple interest rate of 5% per year, the total interest earned after 3 years is $150. This calculation was performed using the simple interest formula, demonstrating the straightforward nature of simple interest calculations.",
+      "solution": "### 1. Approach & Strategy\n- Identify the first three steps in the decision-making process as outlined in the chapter.\n- Present these steps in a clear and concise format.\n\n### 2. Step-by-step Calculations\n#### Step 1: Understand the Problem and Define the Objective\n- This step involves recognizing the issue at hand and clarifying what needs to be achieved.\n- **Given:** \n  - Problem recognition\n  - Objective definition\n\n#### Step 2: Collect Relevant Information\n- In this step, gather all necessary data and information that will inform the decision-making process.\n- **Given:**\n  - Data collection\n  - Information relevance\n\n#### Step 3: Define Alternatives and Estimate Relevant Costs\n- This step requires identifying different options available and assessing the costs associated with each alternative.\n- **Given:**\n  - Alternatives identification\n  - Cost estimation\n\n### 3. Final Answer\n- **Answer:** The first three steps in the decision-making process are:\n  1. Understand the problem and define the objective.\n  2. Collect relevant information.\n  3. Define alternatives and estimate relevant costs.\n- **Check:** These steps are fundamental to effective decision-making in engineering economy.",
       "quality": {
-        "overall_quality": "excellent",
-        "issues": [],
-        "suggestions": []
+        "overall_quality": "good",
+        "issues": [
+          "The problem statement is clear, but it lacks context or relevance to a specific scenario, which could enhance engagement.",
+          "The solution includes unnecessary sections like 'Approach & Strategy' and 'Step-by-step Calculations' that do not directly contribute to answering the problem.",
+          "The use of 'Given' in the solution is misleading as it does not pertain to the problem context; it should be omitted."
+        ],
+        "suggestions": [
+          "Provide a brief context or scenario for the decision-making process to make the problem more engaging and relevant.",
+          "Remove the 'Approach & Strategy' and 'Step-by-step Calculations' sections to streamline the solution and focus on the answer.",
+          "Clarify that the 'Given' section is not applicable in this context or remove it entirely."
+        ]
       }
     },
     {
       "problem": {
         "id": 2,
         "difficulty": "medium",
-        "topic": "Rule of 72",
-        "statement": "You have invested $5,000 in a mutual fund that has an annual return of 9%. Using the Rule of 72, approximately how many years will it take for your investment to double?",
+        "topic": "Estimating financial outcomes",
+        "statement": "A company is considering two alternatives for a new project. Alternative A has an estimated cost of $150,000 and is expected to generate $200,000 in revenue. Alternative B has an estimated cost of $120,000 with expected revenue of $180,000. Calculate the net financial outcome for each alternative.",
         "given": [
-          "Investment amount = $5,000",
-          "Annual return (i) = 9%"
+          "Cost of Alternative A: $150,000",
+          "Revenue from Alternative A: $200,000",
+          "Cost of Alternative B: $120,000",
+          "Revenue from Alternative B: $180,000"
         ],
         "required": [
-          "Number of years to double the investment"
+          "Net financial outcome for Alternative A",
+          "Net financial outcome for Alternative B"
         ]
       },
-      "solution": "To solve the problem of determining how many years it will take for an investment of $5,000 to double at an annual return of 9% using the Rule of 72, we can follow a structured approach.\n\n### 1. Approach/Strategy\nThe Rule of 72 is a simple formula used to estimate the number of years required to double an investment at a fixed annual rate of return. The formula is given by:\n\n$$\nn \\approx \\frac{72}{i}\n$$\n\nwhere:\n- \\( n \\) is the number of years to double the investment,\n- \\( i \\) is the annual interest rate expressed as a percentage.\n\nIn this case, we will substitute \\( i = 9\\% \\) into the formula to find \\( n \\).\n\n### 2. Step-by-step calculations\n\n**Step 1: Identify the annual return rate.**\n- Given: \\( i = 9\\% \\)\n\n**Step 2: Substitute the value into the Rule of 72 formula.**\nUsing the Rule of 72:\n\n$$\nn \\approx \\frac{72}{i}\n$$\n\nSubstituting \\( i = 9 \\):\n\n$$\nn \\approx \\frac{72}{9}\n$$\n\n**Step 3: Perform the division.**\n\nCalculating \\( \\frac{72}{9} \\):\n\n$$\nn \\approx 8\n$$\n\n### 3. Final answer(s)\nUsing the Rule of 72, it will take approximately **8 years** for the investment of $5,000 to double at an annual return of 9%.\n\n### Summary\nThus, the final answer is:\n\n**It will take approximately 8 years for the investment to double.**",
+      "solution": "### 1. Approach & Strategy\n- Calculate the net financial outcome for each alternative by subtracting the estimated cost from the expected revenue.\n- Compare the results to determine which alternative is financially more favorable.\n\n### 2. Step-by-step Calculations\n#### Step 1: Calculate Net Financial Outcome for Alternative A\n- The net financial outcome is calculated using the formula:\n$$\n\\text{Net Outcome} = \\text{Revenue} - \\text{Cost}\n$$\n- **Given values:**\n  - **Cost of Alternative A:** $150,000\n  - **Revenue from Alternative A:** $200,000\n\n$$\n\\text{Net Outcome A} = 200,000 - 150,000\n$$\n\n#### Step 2: Calculate Net Financial Outcome for Alternative B\n- Using the same formula for Alternative B:\n$$\n\\text{Net Outcome} = \\text{Revenue} - \\text{Cost}\n$$\n- **Given values:**\n  - **Cost of Alternative B:** $120,000\n  - **Revenue from Alternative B:** $180,000\n\n$$\n\\text{Net Outcome B} = 180,000 - 120,000\n$$\n\n### 3. Final Answer\n- **Answer:** \n  - Net financial outcome for Alternative A: **$50,000**\n  - Net financial outcome for Alternative B: **$60,000**\n- **Check:** Both outcomes are positive, indicating that both alternatives are financially viable, with Alternative B being the more favorable option.",
       "quality": {
         "overall_quality": "excellent",
         "issues": [],
@@ -102,24 +85,31 @@
       "problem": {
         "id": 3,
         "difficulty": "hard",
-        "topic": "Minimum Attractive Rate of Return (MARR)",
-        "statement": "A company is considering a new project that requires an initial investment of $200,000. The project is expected to generate cash flows of $50,000 per year for 5 years. If the company's MARR is set at 10%, should the company undertake the project? Calculate the Net Present Value (NPV) to support your answer.",
+        "topic": "Evaluating costs",
+        "statement": "A company has three alternatives for upgrading its manufacturing process. The estimated costs and expected savings over five years are as follows: Alternative X costs $500,000 and saves $600,000; Alternative Y costs $450,000 and saves $550,000; Alternative Z costs $400,000 and saves $450,000. Evaluate each alternative based on the net savings and determine which alternative is the best choice.",
         "given": [
-          "Initial investment = $200,000",
-          "Annual cash flow = $50,000",
-          "MARR = 10%",
-          "Number of years = 5"
+          "Cost of Alternative X: $500,000, Savings: $600,000",
+          "Cost of Alternative Y: $450,000, Savings: $550,000",
+          "Cost of Alternative Z: $400,000, Savings: $450,000"
         ],
         "required": [
-          "NPV of the project",
-          "Decision to undertake the project (Yes/No)"
+          "Net savings for Alternative X",
+          "Net savings for Alternative Y",
+          "Net savings for Alternative Z",
+          "Best alternative based on net savings"
         ]
       },
-      "solution": "To determine whether the company should undertake the project based on the Net Present Value (NPV) calculation, we will follow a systematic approach. Here’s how we will solve the problem:\n\n### 1. Approach/Strategy\nWe will calculate the NPV of the project using the formula:\n\n$$\n\\text{NPV} = \\sum_{t=1}^{n} \\frac{C_t}{(1 + r)^t} - C_0\n$$\n\nWhere:\n- \\( C_t \\) = cash flow at time \\( t \\)\n- \\( r \\) = discount rate (MARR in this case)\n- \\( n \\) = total number of periods (years)\n- \\( C_0 \\) = initial investment\n\nAfter calculating the NPV, we will compare it to zero:\n- If \\( \\text{NPV} > 0 \\), the project is financially viable and should be undertaken.\n- If \\( \\text{NPV} < 0 \\), the project should not be undertaken.\n\n### 2. Step-by-step calculations\n\n#### Given Data\n- Initial investment \\( C_0 = 200,000 \\)\n- Annual cash flow \\( C_t = 50,000 \\) for \\( t = 1, 2, 3, 4, 5 \\)\n- MARR (discount rate) \\( r = 10\\% = 0.10 \\)\n- Number of years \\( n = 5 \\)\n\n#### Step 1: Calculate Present Value of Cash Flows\n\nWe will calculate the present value of each annual cash flow over the 5 years.\n\nFor each year \\( t \\):\n$$\nPV_t = \\frac{C_t}{(1 + r)^t}\n$$\n\nCalculating for each year:\n\n- For \\( t = 1 \\):\n$$\nPV_1 = \\frac{50,000}{(1 + 0.10)^1} = \\frac{50,000}{1.10} \\approx 45,454.55\n$$\n\n- For \\( t = 2 \\):\n$$\nPV_2 = \\frac{50,000}{(1 + 0.10)^2} = \\frac{50,000}{1.21} \\approx 41,322.31\n$$\n\n- For \\( t = 3 \\):\n$$\nPV_3 = \\frac{50,000}{(1 + 0.10)^3} = \\frac{50,000}{1.331} \\approx 37,688.45\n$$\n\n- For \\( t = 4 \\):\n$$\nPV_4 = \\frac{50,000}{(1 + 0.10)^4} = \\frac{50,000}{1.4641} \\approx 34,257.28\n$$\n\n- For \\( t = 5 \\):\n$$\nPV_5 = \\frac{50,000}{(1 + 0.10)^5} = \\frac{50,000}{1.61051} \\approx 31,081.08\n$$\n\n#### Step 2: Sum the Present Values\n\nNow, we will sum all the present values calculated above:\n\n$$\n\\text{Total PV} = PV_1 + PV_2 + PV_3 + PV_4 + PV_5\n$$\n\nCalculating the total:\n\n$$\n\\text{Total PV} \\approx 45,454.55 + 41,322.31 + 37,688.45 + 34,257.28 + 31,081.08 \\approx 189,803.67\n$$\n\n#### Step 3: Calculate NPV\n\nNow we can calculate the NPV using the total present value of cash flows:\n\n$$\n\\text{NPV} = \\text{Total PV} - C_0\n$$\n\nSubstituting the values:\n\n$$\n\\text{NPV} = 189,803.67 - 200,000 \\approx -10,196.33\n$$\n\n### 3. Final answer(s)\n\n- **NPV of the project**: \\(\\text{NPV} \\approx -10,196.33\\)\n- **Decision**: Since the NPV is less than zero, the company **should not undertake the project**.\n\n### Conclusion\nThe project does not meet the company's Minimum Attractive Rate of Return (MARR) of 10%, as indicated by the negative NPV. Therefore, the financial analysis suggests that the project is not a viable investment.",
+      "solution": "### 1. Approach & Strategy\n- Calculate the net savings for each alternative by subtracting the cost from the savings.\n- Compare the net savings of all alternatives to determine the best choice.\n\n### 2. Step-by-step Calculations\n#### Step 1: Calculate Net Savings for Alternative X\n- To find the net savings for Alternative X, we will use the formula:\n$$\n\\text{Net Savings} = \\text{Savings} - \\text{Cost}\n$$\n- **Given values:**\n  - **Cost of Alternative X:** $500,000\n  - **Savings of Alternative X:** $600,000\n\n$$\n\\text{Net Savings for X} = 600,000 - 500,000 = \\textbf{100,000}\n$$\n\n#### Step 2: Calculate Net Savings for Alternative Y\n- Now, we will calculate the net savings for Alternative Y using the same formula.\n- **Given values:**\n  - **Cost of Alternative Y:** $450,000\n  - **Savings of Alternative Y:** $550,000\n\n$$\n\\text{Net Savings for Y} = 550,000 - 450,000 = \\textbf{100,000}\n$$\n\n#### Step 3: Calculate Net Savings for Alternative Z\n- Next, we will calculate the net savings for Alternative Z.\n- **Given values:**\n  - **Cost of Alternative Z:** $400,000\n  - **Savings of Alternative Z:** $450,000\n\n$$\n\\text{Net Savings for Z} = 450,000 - 400,000 = \\textbf{50,000}\n$$\n\n#### Step 4: Compare Net Savings\n- We will now compare the net savings of all alternatives to determine the best choice.\n- **Net Savings:**\n  - **Alternative X:** $100,000\n  - **Alternative Y:** $100,000\n  - **Alternative Z:** $50,000\n\n### 3. Final Answer\n- **Answer:** The best alternatives based on net savings are Alternative X and Alternative Y, both yielding **$100,000** in net savings. Alternative Z is less favorable with **$50,000**. \n- **Check:** Both Alternatives X and Y provide the same net savings, while Alternative Z is significantly lower.",
       "quality": {
-        "overall_quality": "excellent",
-        "issues": [],
-        "suggestions": []
+        "overall_quality": "good",
+        "issues": [
+          "The problem statement is clear, but it could benefit from a more explicit definition of 'best choice' since multiple alternatives yield the same net savings.",
+          "The solution does not explicitly state that both Alternatives X and Y are equally viable choices, which may confuse readers."
+        ],
+        "suggestions": [
+          "Clarify in the problem statement that the best choice may involve multiple alternatives if they yield the same net savings.",
+          "In the final answer, explicitly mention that both Alternatives X and Y are optimal choices and suggest considering other factors (e.g., implementation time, risk) for a final decision."
+        ]
       }
     }
   ]

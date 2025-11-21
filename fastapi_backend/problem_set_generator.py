@@ -18,9 +18,8 @@ def save_json(data: dict, output_path: str):
     print(f"✓ Saved JSON to: {output_path}")
 
 
-def save_markdown(data: dict, output_path: str):
-    """Save problem set as formatted Markdown."""
-    
+def build_markdown(data: dict) -> str:
+    """Return problem set as formatted Markdown string."""
     md = f"""# Problem Set: {data['doc_id']}
 
 Generated using AI-powered agent orchestration system.
@@ -37,12 +36,27 @@ Generated using AI-powered agent orchestration system.
     for topic in topics:
         md += f"- {topic}\n"
     
-    md += "\n**Key Formulas:**\n"
+    md += "\n**Key Formulas:**\n\n"
     formulas = data['analysis'].get('key_formulas', [])
-    for formula in formulas:
-        md += f"- {formula}\n"
+    if formulas:
+        for formula in formulas:
+            # Split formula from description if present
+            if " for " in formula:
+                eq, desc = formula.split(" for ", 1)
+                eq_tex = eq.strip().replace("_", r"\_")
+                md += f"- ${eq_tex}$ – {desc.strip()}\n"
+            elif " where " in formula:
+                eq, desc = formula.split(" where ", 1)
+                eq_tex = eq.strip().replace("_", r"\_")
+                md += f"- ${eq_tex}$ where {desc.strip()}\n"
+            else:
+                f_tex = formula.strip().replace("_", r"\_")
+                md += f"- ${f_tex}$\n"
+        md += "\n"
+    else:
+        md += "_No formulas identified_\n\n"
     
-    md += "\n---\n\n"
+    md += "---\n\n"
     
     # Add problems and solutions
     for i, item in enumerate(data['problem_set'], 1):
@@ -83,10 +97,120 @@ Generated using AI-powered agent orchestration system.
         
         md += "---\n\n"
     
+    return md
+
+
+def build_markdown_problems_only(data: dict) -> str:
+    """Return problem set with ONLY problems (no solutions) for students."""
+    md = f"""# Problem Set: {data['doc_id']}
+
+Generated using AI-powered agent orchestration system.
+
+---
+
+## Chapter Analysis
+
+**Topics Covered:**
+"""
+    
+    # Add topics from analysis
+    topics = data['analysis'].get('topics', [])
+    for topic in topics:
+        md += f"- {topic}\n"
+    
+    md += "\n**Key Formulas:**\n\n"
+    formulas = data['analysis'].get('key_formulas', [])
+    if formulas:
+        for formula in formulas:
+            if " for " in formula:
+                eq, desc = formula.split(" for ", 1)
+                eq_tex = eq.strip().replace("_", r"\_")
+                md += f"- ${eq_tex}$ – {desc.strip()}\n"
+            elif " where " in formula:
+                eq, desc = formula.split(" where ", 1)
+                eq_tex = eq.strip().replace("_", r"\_")
+                md += f"- ${eq_tex}$ where {desc.strip()}\n"
+            else:
+                f_tex = formula.strip().replace("_", r"\_")
+                md += f"- ${f_tex}$\n"
+        md += "\n"
+    else:
+        md += "_No formulas identified_\n\n"
+    
+    md += "---\n\n"
+    
+    # Add problems WITHOUT solutions
+    for i, item in enumerate(data['problem_set'], 1):
+        problem = item['problem']
+        
+        md += f"## Problem {i}\n\n"
+        md += f"**Difficulty:** {problem.get('difficulty', 'N/A').upper()}\n\n"
+        md += f"**Topic:** {problem.get('topic', 'N/A')}\n\n"
+        
+        md += f"### Problem Statement\n\n"
+        md += f"{problem.get('statement', '')}\n\n"
+        
+        if problem.get('given'):
+            md += "**Given:**\n"
+            for g in problem['given']:
+                md += f"- {g}\n"
+            md += "\n"
+        
+        if problem.get('required'):
+            md += "**Find:**\n"
+            for r in problem['required']:
+                md += f"- {r}\n"
+            md += "\n"
+        
+        md += "---\n\n"
+    
+    return md
+
+
+def save_markdown(data: dict, output_path: str, problems_only: bool = False):
+    """Save problem set as formatted Markdown."""
+    md = build_markdown_problems_only(data) if problems_only else build_markdown(data)
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(md)
-    
-    print(f"✓ Saved Markdown to: {output_path}")
+    suffix = " (problems only)" if problems_only else ""
+    print(f"✓ Saved Markdown to: {output_path}{suffix}")
+
+
+def save_pdf(data: dict, output_path: str, problems_only: bool = False):
+    """
+    Save problem set as PDF using pandoc (Markdown -> PDF).
+    Requires pandoc to be installed and available on PATH.
+    """
+    md = build_markdown_problems_only(data) if problems_only else build_markdown(data)
+    tmp_md_path = str(Path(output_path).with_suffix('.tmp.md'))
+
+    # Write temporary markdown
+    with open(tmp_md_path, 'w', encoding='utf-8') as f:
+        f.write(md)
+
+    # Call pandoc: temp.md -> output.pdf
+    try:
+        subprocess.run(
+            ["pandoc", tmp_md_path, "-o", output_path, "--pdf-engine=xelatex"],
+            check=True,
+            capture_output=True,
+            text=True
+        )
+        suffix = " (problems only)" if problems_only else ""
+        print(f"✓ Saved PDF to: {output_path}{suffix}")
+    except FileNotFoundError:
+        print("[ERROR] pandoc is not installed or not on PATH. Cannot generate PDF.")
+        print("       Install pandoc from: https://pandoc.org/installing.html")
+    except subprocess.CalledProcessError as e:
+        print(f"[ERROR] pandoc failed to generate PDF: {e}")
+        if e.stderr:
+            print(f"       {e.stderr}")
+    finally:
+        # Clean up temporary markdown file
+        try:
+            Path(tmp_md_path).unlink()
+        except FileNotFoundError:
+            pass
 
 def main():
     parser = argparse.ArgumentParser(
@@ -173,8 +297,20 @@ def main():
                 save_json(problem_set, str(json_path))
             
             if args.format in ["markdown", "all"]:
-                md_path = output_dir / f"{base_name}_problems.md"
-                save_markdown(problem_set, str(md_path))
+                # Always generate both versions
+                md_path_full = output_dir / f"{base_name}_problems_with_solutions.md"
+                save_markdown(problem_set, str(md_path_full), problems_only=False)
+                
+                md_path_student = output_dir / f"{base_name}_problems_only.md"
+                save_markdown(problem_set, str(md_path_student), problems_only=True)
+            
+            if args.format in ["pdf", "all"]:
+                # Always generate both versions
+                pdf_path_full = output_dir / f"{base_name}_problems_with_solutions.pdf"
+                save_pdf(problem_set, str(pdf_path_full), problems_only=False)
+                
+                pdf_path_student = output_dir / f"{base_name}_problems_only.pdf"
+                save_pdf(problem_set, str(pdf_path_student), problems_only=True)
             
             print()
             

@@ -66,9 +66,6 @@ DOC_ID_SANITIZER = re.compile(r"[^a-zA-Z0-9_.-]+")
 
 # ---------- Helper factories (avoid re-creating heavy objects per call) ----------
 
-# ---------- Helper factories (avoid re‑creating heavy objects per call) ----------
-
-
 def get_vector_store() -> RAGVectorStore:
     return RAGVectorStore()
 

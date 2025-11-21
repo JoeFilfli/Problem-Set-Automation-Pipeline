@@ -1,0 +1,15 @@
+FEEDBACK FOR: Test Student 1
+======================================================================
+
+Score: 0/15 (0.0%)
+Grade: F
+
+----------------------------------------------------------------------
+
+Thank you for your effort in tackling this problem! I appreciate the work you've done on the NPV calculations for Alternatives A and B. Your calculations are clear and show a good understanding of how to apply the NPV formula, which is a valuable skill in decision-making processes related to finance.
+
+However, it seems there was a misunderstanding regarding the task at hand. The problem asked for the first three steps in the decision-making process, but your response focused on calculating the NPV for two alternatives. This indicates that you may have misinterpreted the question or perhaps got sidetracked by the financial analysis aspect.
+
+To improve, I recommend revisiting the chapter on the decision-making process. The first three steps typically involve identifying the problem, gathering information, and evaluating alternatives. Here’s a suggestion: try to summarize these steps in your own words, and think about how they apply to a decision-making scenario you might encounter.
+
+Remember, it's perfectly okay to make mistakes as they are part of the learning process! I encourage you to keep practicing and to focus on aligning your responses with the specific questions asked. If you have any questions about the decision-making process or need further clarification, feel free to ask. Keep up the good work, and I look forward to seeing your next attempt!
