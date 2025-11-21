@@ -2,28 +2,474 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+/* Base Styles */
+@layer base {
+  body {
+    @apply bg-aub-cream text-gray-900 antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold text-aub-black;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+/* Component Utilities */
+@layer components {
+  /* Container */
+  .container-aub {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply px-4 py-2 bg-aub-red text-white rounded-aub font-medium
+           hover:bg-aub-red-dark transition-colors duration-200
+           disabled:opacity-50 disabled:cursor-not-allowed shadow-aub;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 bg-white text-aub-red border border-aub-red
+           rounded-aub font-medium hover:bg-aub-red-pale transition-colors
+           duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-gray {
+    @apply px-4 py-2 bg-aub-gray text-white rounded-aub font-medium
+           hover:bg-aub-gray-dark transition-colors duration-200
+           disabled:opacity-50 disabled:cursor-not-allowed shadow-aub;
+  }
+
+  .btn-danger {
+    @apply px-4 py-2 bg-error text-white rounded-aub font-medium 
+           hover:bg-red-800 transition-colors duration-200 
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white rounded-aub shadow-aub p-6;
+  }
+
+  .card-hover {
+    @apply card cursor-pointer hover:shadow-aub-lg 
+           transition-shadow duration-200;
+  }
+
+  .panel {
+    @apply bg-white rounded-aub shadow-aub overflow-hidden;
+  }
+
+  .panel-header {
+    @apply px-4 py-3 border-b border-gray-200 bg-aub-beige;
+  }
+
+  /* Forms */
+  .input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-aub
+           focus:outline-none focus:ring-2 focus:ring-aub-red
+           focus:border-transparent disabled:bg-gray-100
+           disabled:cursor-not-allowed;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+
+  .select {
+    @apply input appearance-none bg-white pr-8;
+  }
+
+  .textarea {
+    @apply input resize-none;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full 
+           text-xs font-medium;
+  }
+
+  .badge-red {
+    @apply badge bg-aub-red-pale text-aub-red-dark;
+  }
+
+  .badge-gray {
+    @apply badge bg-aub-gray/20 text-aub-gray-dark;
+  }
+
+  .badge-success {
+    @apply badge bg-green-100 text-green-800;
+  }
+
+  .badge-warning {
+    @apply badge bg-yellow-100 text-yellow-800;
+  }
+
+  .badge-error {
+    @apply badge bg-red-100 text-red-800;
+  }
+
+  .badge-info {
+    @apply badge bg-blue-100 text-blue-800;
+  }
+
+  /* Loading Spinner */
+  .spinner {
+    @apply inline-block w-5 h-5 border-2 border-aub-red
+           border-t-transparent rounded-full animate-spin;
+  }
+
+  .spinner-lg {
+    @apply spinner w-8 h-8 border-4;
+  }
+
+  /* Progress Bar */
+  .progress-bar {
+    @apply w-full h-2 bg-gray-200 rounded-full overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full bg-aub-red transition-all duration-300;
+  }
+
+  /* Gradient Background */
+  .gradient-aub {
+    @apply bg-gradient-to-br from-aub-red-dark via-aub-red to-aub-red-light;
+  }
+
+  /* Alert/Message Boxes */
+  .alert {
+    @apply p-4 rounded-aub border;
+  }
+
+  .alert-success {
+    @apply alert bg-green-50 border-green-300 text-green-800;
+  }
+
+  .alert-warning {
+    @apply alert bg-yellow-50 border-yellow-300 text-yellow-800;
+  }
+
+  .alert-error {
+    @apply alert bg-red-50 border-red-300 text-red-800;
+  }
+
+  .alert-info {
+    @apply alert bg-blue-50 border-blue-300 text-blue-800;
+  }
+
+  /* Chat Styles */
+  .chat-container {
+    @apply flex flex-col space-y-3;
+  }
+
+  .chat-message-user {
+    @apply ml-auto max-w-[80%] bg-aub-red text-white rounded-2xl
+           rounded-tr-sm px-4 py-2;
+  }
+
+  .chat-message-assistant {
+    @apply mr-auto max-w-[80%] bg-gray-100 text-gray-900 rounded-2xl 
+           rounded-tl-sm px-4 py-2;
+  }
+
+  /* Table Styles */
+  .table {
+    @apply w-full border-collapse;
+  }
+
+  .table th {
+    @apply bg-aub-beige text-left px-4 py-3 text-sm font-semibold
+           text-aub-black border-b-2 border-aub-red;
+  }
+
+  .table td {
+    @apply px-4 py-3 border-b border-gray-200;
+  }
+
+  .table tr:hover {
+    @apply bg-aub-beige/30;
+  }
+
+  /* Scrollbar Styles */
+  .custom-scrollbar::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-gray-100 rounded-full;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-aub-red rounded-full;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-aub-red-dark;
+  }
+
+  /* Markdown Content Styles */
+  .markdown-body {
+    @apply prose prose-sm max-w-none;
+  }
+
+  .markdown-body h3 {
+    @apply text-base font-semibold text-aub-black mt-4 mb-2;
+  }
+
+  .markdown-body h4 {
+    @apply text-sm font-semibold text-gray-700 mt-3 mb-1;
+  }
+
+  .markdown-body p {
+    @apply text-sm text-gray-700 my-2;
+  }
+
+  .markdown-body ul, .markdown-body ol {
+    @apply my-2 ml-4;
+  }
+
+  .markdown-body li {
+    @apply text-sm text-gray-700;
+  }
+
+  .markdown-body code {
+    @apply bg-gray-100 px-1.5 py-0.5 rounded text-xs;
+  }
+
+  .markdown-body pre {
+    @apply bg-gray-900 text-gray-100 p-3 rounded-aub overflow-x-auto my-3;
+  }
+
+  .markdown-body pre code {
+    @apply bg-transparent p-0;
+  }
+}
+
+/* AUB LMS Global Styles */
+
+@layer base {
+  :root {
+    /* AUB Official Brand Color Variables */
+    --aub-red: #840132;
+    --aub-red-dark: #6a0028;
+    --aub-red-light: #a0013d;
+    --aub-red-pale: #f5e5ea;
+    --aub-gray: #808080;
+    --aub-gray-dark: #666666;
+    --aub-gray-light: #999999;
+    --aub-black: #000000;
+    --aub-cream: #faf8f3;
+    --aub-beige: #f5f1e8;
+  }
+
+  * {
+    @apply border-gray-200;
+  }
+
+  body {
+    @apply bg-aub-cream text-gray-900 antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold text-aub-black;
+  }
+
+  h1 {
+    @apply text-4xl;
+  }
+
+  h2 {
+    @apply text-3xl;
+  }
+
+  h3 {
+    @apply text-2xl;
+  }
+
+  h4 {
+    @apply text-xl;
+  }
+}
+
+@layer components {
+  /* Button Styles */
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  .btn-primary {
+    @apply btn bg-aub-red text-white hover:bg-aub-red-light focus:ring-aub-red;
+  }
+
+  .btn-secondary {
+    @apply btn bg-white text-aub-red border-2 border-aub-red hover:bg-aub-red-pale focus:ring-aub-red;
+  }
+
+  .btn-gray {
+    @apply btn bg-aub-gray text-white hover:bg-aub-gray-light focus:ring-aub-gray;
+  }
+
+  .btn-danger {
+    @apply btn bg-error text-white hover:bg-red-700 focus:ring-error;
+  }
+
+  .btn-sm {
+    @apply px-3 py-1.5 text-sm;
+  }
+
+  .btn-lg {
+    @apply px-6 py-3 text-lg;
+  }
+
+  /* Card Styles */
+  .card {
+    @apply bg-white rounded-aub shadow-aub p-6 transition-shadow duration-200;
+  }
+
+  .card-hover {
+    @apply card hover:shadow-aub-lg cursor-pointer;
+  }
+
+  .card-header {
+    @apply border-b border-gray-200 pb-4 mb-4;
+  }
+
+  /* Input Styles */
+  .input {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-aub-red focus:border-transparent transition-all;
+  }
+
+  .input-error {
+    @apply input border-error focus:ring-error;
+  }
+
+  /* Badge Styles */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+  }
+
+  .badge-red {
+    @apply badge bg-aub-red-pale text-aub-red-dark;
+  }
+
+  .badge-gray {
+    @apply badge bg-aub-gray/20 text-aub-gray-dark;
+  }
+
+  .badge-success {
+    @apply badge bg-green-100 text-success;
+  }
+
+  .badge-warning {
+    @apply badge bg-orange-100 text-warning;
+  }
+
+  .badge-error {
+    @apply badge bg-red-100 text-error;
+  }
+
+  /* Navigation Styles */
+  .nav-link {
+    @apply px-4 py-2 rounded-lg text-gray-700 hover:bg-aub-red-pale hover:text-aub-red transition-colors duration-200;
+  }
+
+  .nav-link-active {
+    @apply nav-link bg-aub-red text-white hover:bg-aub-red-light;
+  }
+
+  /* Panel Styles */
+  .panel {
+    @apply bg-white border border-gray-200 rounded-aub overflow-hidden;
+  }
+
+  .panel-header {
+    @apply bg-aub-red-pale px-4 py-3 border-b border-gray-200;
+  }
+
+  .panel-body {
+    @apply p-4;
+  }
+
+  /* Progress Bar */
+  .progress-bar {
+    @apply w-full h-2 bg-gray-200 rounded-full overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full bg-aub-red transition-all duration-300;
+  }
+
+  /* Loading Spinner */
+  .spinner {
+    @apply inline-block w-5 h-5 border-2 border-gray-300 border-t-aub-red rounded-full animate-spin;
+  }
+
+  /* Divider */
+  .divider {
+    @apply border-t border-gray-200 my-6;
+  }
+
+  /* Container */
+  .container-aub {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Scrollbar Styles */
+  .scrollbar-aub {
+    scrollbar-width: thin;
+    scrollbar-color: var(--aub-red) var(--aub-red-pale);
+  }
+
+  .scrollbar-aub::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-aub::-webkit-scrollbar-track {
+    @apply bg-aub-red-pale;
+  }
+
+  .scrollbar-aub::-webkit-scrollbar-thumb {
+    @apply bg-aub-red rounded-full;
+  }
+
+  .scrollbar-aub::-webkit-scrollbar-thumb:hover {
+    @apply bg-aub-red-light;
+  }
+}
+
+@layer utilities {
+  /* Gradient Utilities */
+  .gradient-aub {
+    background: linear-gradient(135deg, var(--aub-red-dark) 0%, var(--aub-red) 100%);
+  }
+
+  .gradient-gray {
+    background: linear-gradient(135deg, var(--aub-gray-dark) 0%, var(--aub-gray-light) 100%);
+  }
+}
+
+/* Custom Scrollbar for Chat */
+.chat-container {
+  scrollbar-width: thin;
+  scrollbar-color: var(--aub-red) transparent;
+}
+
+.chat-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+  @apply bg-aub-red/30 rounded-full;
+}
+
+.chat-container::-webkit-scrollbar-thumb:hover {
+  @apply bg-aub-red/50;
 }
 
 .markdown-body {

@@ -404,3 +404,368 @@ def rag_query(payload: RAGQueryRequest) -> Dict[str, Any]:
         "answer": answer,
         "retrieved_chunks": retrieved_chunks,
     }
+
+
+# ---------- Document management endpoints ----------
+
+
+@app.delete("/api/py/documents/{doc_id}")
+def delete_document(doc_id: str) -> Dict[str, Any]:
+    """
+    Delete a document and all its chunks from the vector store.
+    
+    Args:
+        doc_id: Document identifier to delete
+        
+    Returns:
+        Success confirmation
+    """
+    vs = get_vector_store()
+    
+    if not vs.document_exists(doc_id):
+        raise HTTPException(status_code=404, detail=f"Document '{doc_id}' not found.")
+    
+    vs.delete_document(doc_id)
+    
+    return {
+        "success": True,
+        "message": f"Document '{doc_id}' and all its chunks have been deleted.",
+        "doc_id": doc_id
+    }
+
+
+@app.get("/api/py/documents")
+def list_all_documents() -> Dict[str, Any]:
+    """
+    List all documents in the vector store with metadata.
+    
+    Returns:
+        List of documents with chunk counts and statistics
+    """
+    vs = get_vector_store()
+    all_docs = vs.get_all_documents()
+    
+    # Get metadata for each document
+    doc_info = []
+    for doc_id in all_docs:
+        results = vs.get_chunks_for_document(doc_id)
+        num_chunks = len(results.get("ids", []))
+        
+        # Calculate total characters
+        documents = results.get("documents", [])
+        total_chars = sum(len(doc) for doc in documents)
+        
+        doc_info.append({
+            "doc_id": doc_id,
+            "chunk_count": num_chunks,
+            "total_chars": total_chars,
+            "avg_chunk_size": total_chars // num_chunks if num_chunks > 0 else 0
+        })
+    
+    return {
+        "success": True,
+        "total_documents": len(doc_info),
+        "documents": doc_info
+    }
+
+
+# ---------- Export endpoints ----------
+
+
+class ExportFormat(BaseModel):
+    """Request model for exporting problem sets."""
+    format: str = "markdown"  # markdown, json, or problems_only
+
+
+@app.post("/api/py/export-problem-set")
+def export_problem_set(
+    problem_set: Dict[str, Any],
+    format_request: ExportFormat
+) -> Dict[str, Any]:
+    """
+    Export a problem set in different formats (Markdown, JSON, problems-only).
+    
+    Args:
+        problem_set: The complete problem set data
+        format_request: Desired export format
+        
+    Returns:
+        Formatted content ready for download
+    """
+    from problem_set_generator import build_markdown, build_markdown_problems_only
+    
+    export_format = format_request.format.lower()
+    
+    if export_format == "json":
+        return {
+            "success": True,
+            "format": "json",
+            "content": json.dumps(problem_set, indent=2, ensure_ascii=False),
+            "filename": f"{problem_set.get('doc_id', 'problem_set')}.json"
+        }
+    
+    elif export_format == "problems_only":
+        markdown_content = build_markdown_problems_only(problem_set)
+        return {
+            "success": True,
+            "format": "markdown",
+            "content": markdown_content,
+            "filename": f"{problem_set.get('doc_id', 'problem_set')}_problems_only.md"
+        }
+    
+    else:  # Default to full markdown with solutions
+        markdown_content = build_markdown(problem_set)
+        return {
+            "success": True,
+            "format": "markdown",
+            "content": markdown_content,
+            "filename": f"{problem_set.get('doc_id', 'problem_set')}_with_solutions.md"
+        }
+
+
+# ---------- Statistics and analytics endpoints ----------
+
+
+@app.get("/api/py/stats")
+def get_system_stats() -> Dict[str, Any]:
+    """
+    Get overall system statistics.
+    
+    Returns:
+        System-wide statistics including document counts, chunk counts, etc.
+    """
+    vs = get_vector_store()
+    all_docs = vs.get_all_documents()
+    
+    total_chunks = 0
+    total_chars = 0
+    chunk_sizes = []
+    
+    for doc_id in all_docs:
+        results = vs.get_chunks_for_document(doc_id)
+        chunks = results.get("documents", [])
+        total_chunks += len(chunks)
+        
+        for chunk in chunks:
+            chunk_len = len(chunk)
+            total_chars += chunk_len
+            chunk_sizes.append(chunk_len)
+    
+    return {
+        "success": True,
+        "statistics": {
+            "total_documents": len(all_docs),
+            "total_chunks": total_chunks,
+            "total_characters": total_chars,
+            "avg_chunk_size": total_chars // total_chunks if total_chunks > 0 else 0,
+            "min_chunk_size": min(chunk_sizes) if chunk_sizes else 0,
+            "max_chunk_size": max(chunk_sizes) if chunk_sizes else 0,
+            "avg_chunks_per_document": total_chunks // len(all_docs) if all_docs else 0
+        }
+    }
+
+
+# ---------- Health check and validation endpoints ----------
+
+
+@app.get("/api/py/health")
+def health_check() -> Dict[str, Any]:
+    """
+    Comprehensive health check for the API and its dependencies.
+    
+    Returns:
+        Health status of all system components
+    """
+    health_status = {
+        "api": "healthy",
+        "vector_store": "unknown",
+        "openai": "unknown"
+    }
+    
+    # Check vector store
+    try:
+        vs = get_vector_store()
+        docs = vs.get_all_documents()
+        health_status["vector_store"] = "healthy"
+        health_status["vector_store_docs"] = len(docs)
+    except Exception as e:
+        health_status["vector_store"] = f"unhealthy: {str(e)}"
+    
+    # Check OpenAI connection
+    try:
+        client = OpenAI()
+        # Simple test call
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": "test"}],
+            max_tokens=5
+        )
+        health_status["openai"] = "healthy"
+    except Exception as e:
+        health_status["openai"] = f"unhealthy: {str(e)}"
+    
+    # Determine overall status
+    overall_healthy = all(
+        status == "healthy" or isinstance(status, int)
+        for key, status in health_status.items()
+        if key != "vector_store_docs"
+    )
+    
+    return {
+        "success": overall_healthy,
+        "status": "healthy" if overall_healthy else "degraded",
+        "components": health_status,
+        "timestamp": json.dumps({"time": "now"})  # Simple timestamp
+    }
+
+
+# ---------- Batch operations endpoints ----------
+
+
+class BatchGenerateRequest(BaseModel):
+    """Request model for batch problem set generation."""
+    doc_ids: List[str]
+    num_problems: int = 5
+    check_quality: bool = True
+
+
+@app.post("/api/py/batch-generate-problem-sets")
+def batch_generate_problem_sets(payload: BatchGenerateRequest) -> Dict[str, Any]:
+    """
+    Generate problem sets for multiple documents in batch.
+    
+    Args:
+        payload: List of document IDs and generation parameters
+        
+    Returns:
+        Results for each document (success or error)
+    """
+    vs = get_vector_store()
+    orchestrator = get_problem_set_orchestrator(vs)
+    
+    results = []
+    for doc_id in payload.doc_ids:
+        try:
+            problem_set = orchestrator.generate_problem_set(
+                doc_id=doc_id,
+                num_problems=payload.num_problems,
+                check_quality=payload.check_quality
+            )
+            
+            if problem_set:
+                results.append({
+                    "doc_id": doc_id,
+                    "success": True,
+                    "problem_set": problem_set
+                })
+            else:
+                results.append({
+                    "doc_id": doc_id,
+                    "success": False,
+                    "error": "No content found"
+                })
+        except Exception as e:
+            results.append({
+                "doc_id": doc_id,
+                "success": False,
+                "error": str(e)
+            })
+    
+    successful = sum(1 for r in results if r["success"])
+    
+    return {
+        "success": True,
+        "total_requested": len(payload.doc_ids),
+        "successful": successful,
+        "failed": len(payload.doc_ids) - successful,
+        "results": results
+    }
+
+
+# ---------- Search and discovery endpoints ----------
+
+
+class SearchRequest(BaseModel):
+    """Request model for searching across documents."""
+    query: str
+    top_k: int = 10
+    doc_ids: Optional[List[str]] = None
+
+
+@app.post("/api/py/search")
+def search_across_documents(payload: SearchRequest) -> Dict[str, Any]:
+    """
+    Search across all documents or specific documents.
+    
+    Args:
+        payload: Search query and filters
+        
+    Returns:
+        Matching chunks with relevance scores
+    """
+    vs = get_vector_store()
+    
+    if payload.doc_ids and len(payload.doc_ids) > 0:
+        # Search within specific documents
+        all_results = []
+        for doc_id in payload.doc_ids:
+            try:
+                results = vs.query_by_document(
+                    payload.query,
+                    doc_id,
+                    top_k=payload.top_k
+                )
+                
+                documents = (results.get("documents") or [[]])[0]
+                metadatas = (results.get("metadatas") or [[]])[0]
+                ids = (results.get("ids") or [[]])[0]
+                distances = (results.get("distances") or [[]])[0]
+                
+                for chunk_id, doc_text, metadata, distance in zip(
+                    ids, documents, metadatas, distances or [None] * len(documents)
+                ):
+                    similarity = 1 - float(distance) if distance is not None else None
+                    all_results.append(
+                        serialize_chunk_payload(
+                            chunk_id=chunk_id,
+                            doc_text=doc_text,
+                            metadata=metadata,
+                            score=similarity
+                        )
+                    )
+            except Exception as e:
+                print(f"Error searching {doc_id}: {e}")
+                continue
+        
+        # Sort by score
+        all_results.sort(key=lambda x: x.get("score", 0) or 0, reverse=True)
+        all_results = all_results[:payload.top_k]
+    else:
+        # Search across all documents
+        results = vs.query(payload.query, top_k=payload.top_k)
+        
+        documents = (results.get("documents") or [[]])[0]
+        metadatas = (results.get("metadatas") or [[]])[0]
+        ids = (results.get("ids") or [[]])[0]
+        distances = (results.get("distances") or [[]])[0]
+        
+        all_results = []
+        for chunk_id, doc_text, metadata, distance in zip(
+            ids, documents, metadatas, distances or [None] * len(documents)
+        ):
+            similarity = 1 - float(distance) if distance is not None else None
+            all_results.append(
+                serialize_chunk_payload(
+                    chunk_id=chunk_id,
+                    doc_text=doc_text,
+                    metadata=metadata,
+                    score=similarity
+                )
+            )
+    
+    return {
+        "success": True,
+        "query": payload.query,
+        "total_results": len(all_results),
+        "results": all_results
+    }
