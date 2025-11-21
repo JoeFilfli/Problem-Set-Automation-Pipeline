@@ -1,46 +1,59 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { getAllProblemSets, countSubmissions } from '@/lib/api/submissions';
 
 /**
  * Student Problem Sets Page
  * View available problem sets and submissions
  */
 export default function StudentProblemSetsPage() {
-  // Mock data - in production, this would come from a database
-  const [problemSets] = useState([
-    {
-      id: '1',
-      title: 'Thermodynamics Set 1',
-      doc_id: 'Chapter_5_Thermodynamics',
-      num_problems: 5,
-      completed: 5,
-      grade: 92,
-      due_date: '2024-02-01',
-      status: 'graded',
-    },
-    {
-      id: '2',
-      title: 'Fluid Mechanics Set 1',
-      doc_id: 'Chapter_7_Fluid_Mechanics',
-      num_problems: 4,
-      completed: 4,
-      grade: 85,
-      due_date: '2024-02-08',
-      status: 'graded',
-    },
-    {
-      id: '3',
-      title: 'Heat Transfer Set 2',
-      doc_id: 'Chapter_6_Heat_Transfer',
-      num_problems: 6,
-      completed: 3,
-      grade: null,
-      due_date: '2024-02-15',
-      status: 'in_progress',
-    },
-  ]);
+  const [problemSets, setProblemSets] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Load problem sets from backend
+  useEffect(() => {
+    const loadProblemSets = async () => {
+      const allSets = await getAllProblemSets();
+      
+      // Enrich with submission data
+      const enrichedPromises = allSets.map(async (set: any) => {
+        const submissionCounts = await countSubmissions(set.id);
+        
+        // Count completed problems (those with at least one submission)
+        const completedCount = Object.keys(submissionCounts.byProblem).length;
+        
+        // Calculate average grade from graded submissions
+        let totalScore = 0;
+        let gradedCount = 0;
+        Object.values(submissionCounts.byProblem).forEach((problemStats: any) => {
+          if (problemStats.graded > 0) {
+            gradedCount += problemStats.graded;
+          }
+        });
+        
+        const avgGrade = gradedCount > 0 ? null : null; // Grade calculation needs submission grade data
+        
+        return {
+          id: set.id,
+          title: set.title || `${set.doc_id} - Problem Set`,
+          doc_id: set.doc_id,
+          num_problems: set.num_problems,
+          completed: completedCount,
+          grade: avgGrade,
+          due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 7 days from now
+          status: gradedCount >= set.num_problems ? 'graded' : (completedCount > 0 ? 'in_progress' : 'not_started'),
+        };
+      });
+      
+      const enriched = await Promise.all(enrichedPromises);
+      setProblemSets(enriched);
+      setLoading(false);
+    };
+    
+    loadProblemSets();
+  }, []);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -61,6 +74,17 @@ export default function StudentProblemSetsPage() {
     if (grade >= 70) return 'text-orange-600';
     return 'text-red-600';
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="spinner-lg mb-3"></div>
+          <p className="text-gray-600">Loading problem sets...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -110,6 +134,13 @@ export default function StudentProblemSetsPage() {
         <h2 className="text-xl font-semibold text-aub-black mb-4">
           Your Problem Sets
         </h2>
+
+        {problemSets.length === 0 && (
+          <div className="text-center py-12 text-gray-500">
+            <p className="text-lg mb-2">No problem sets available yet</p>
+            <p className="text-sm">Your professor hasn't created any problem sets.</p>
+          </div>
+        )}
 
         <div className="space-y-4">
           {problemSets.map((set) => (

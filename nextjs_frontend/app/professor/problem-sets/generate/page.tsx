@@ -72,7 +72,16 @@ export default function GenerateProblemSetPage() {
         check_quality: checkQuality,
       });
 
-      setProblemSet(result);
+      // Backend now automatically stores the problem set and returns the ID
+      const problemSetId = result.problem_set_id;
+      setProblemSet(result as any);
+
+      // Show success message with link
+      setTimeout(() => {
+        if (confirm('Problem set generated and saved! Would you like to view submissions page?')) {
+          router.push(`/professor/problem-sets/${problemSetId}/submissions`);
+        }
+      }, 1000);
     } catch (err: any) {
       setError(err.message || 'Failed to generate problem set');
     } finally {
@@ -224,8 +233,24 @@ export default function GenerateProblemSetPage() {
               <div className="alert-success">
                 <p className="font-semibold">✅ Problem set generated successfully!</p>
                 <p className="text-sm mt-1">
-                  {problemSet.num_problems} problems created
+                  {problemSet.num_problems} problems created and saved
                 </p>
+              </div>
+
+              {/* Quick Actions */}
+              <div className="space-y-2">
+                <button
+                  onClick={() => router.push(`/professor/problem-sets/${(problemSet as any).id}/submissions`)}
+                  className="btn-primary w-full"
+                >
+                  📝 Go to Grading Page
+                </button>
+                <button
+                  onClick={() => router.push(`/professor/problem-sets/${(problemSet as any).id}`)}
+                  className="btn-secondary w-full"
+                >
+                  👁️ View Problem Set
+                </button>
               </div>
 
               {/* Export Options */}
@@ -237,21 +262,21 @@ export default function GenerateProblemSetPage() {
                   <button
                     onClick={() => handleExport('markdown')}
                     disabled={exporting}
-                    className="btn-secondary w-full"
+                    className="btn-secondary w-full text-sm"
                   >
                     📄 Export as Markdown (with solutions)
                   </button>
                   <button
                     onClick={() => handleExport('problems_only')}
                     disabled={exporting}
-                    className="btn-secondary w-full"
+                    className="btn-secondary w-full text-sm"
                   >
                     📝 Export Problems Only
                   </button>
                   <button
                     onClick={() => handleExport('json')}
                     disabled={exporting}
-                    className="btn-secondary w-full"
+                    className="btn-secondary w-full text-sm"
                   >
                     💾 Export as JSON
                   </button>
@@ -328,4 +353,3 @@ export default function GenerateProblemSetPage() {
     </div>
   );
 }
-

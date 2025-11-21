@@ -1,0 +1,64 @@
+{
+  "id": "ps_447213553d75",
+  "doc_id": "INDE301_Ch1_Notes_24.pdf",
+  "title": "INDE301_Ch1_Notes_24.pdf - Problem Set",
+  "num_problems": 1,
+  "created_at": "2025-11-22T00:27:15.316187",
+  "problem_set": [
+    {
+      "problem": {
+        "id": 1,
+        "difficulty": "medium",
+        "topic": "Evaluating alternatives based on economic analysis",
+        "statement": "A company is considering two alternative projects, Project A and Project B. Project A requires an initial investment of $100,000 and is expected to generate cash flows of $30,000 annually for 5 years. Project B requires an initial investment of $80,000 and is expected to generate cash flows of $25,000 annually for 5 years. The company's minimum acceptable rate of return is 10%. Determine which project the company should select based on the Net Present Value (NPV) method.",
+        "given": [
+          "Initial investment for Project A: $100,000",
+          "Annual cash flows for Project A: $30,000 for 5 years",
+          "Initial investment for Project B: $80,000",
+          "Annual cash flows for Project B: $25,000 for 5 years",
+          "Minimum acceptable rate of return: 10%"
+        ],
+        "required": [
+          "NPV of Project A",
+          "NPV of Project B",
+          "Recommendation based on NPV analysis"
+        ]
+      },
+      "solution": "### 1. Approach & Strategy\n- Calculate the Net Present Value (NPV) for both Project A and Project B using the formula for NPV.\n- Compare the NPVs to determine which project yields a higher return relative to the initial investment.\n\n### 2. Step-by-step Calculations\n#### Step 1: Calculate NPV for Project A\n- The NPV formula is given by:\n$$\nNPV = \\sum_{t=1}^{n} \\frac{C_t}{(1 + r)^t} - C_0\n$$\nwhere:\n- **$C_t$** = cash flow at time $t$\n- **$r$** = discount rate (minimum acceptable rate of return)\n- **$C_0$** = initial investment\n- **$n$** = number of periods\n\n- For Project A:\n  - **Initial investment ($C_0$)**: $100,000\n  - **Annual cash flows ($C_t$)**: $30,000\n  - **Discount rate ($r$)**: 10% or 0.10\n  - **Number of years ($n$)**: 5\n\nThe NPV can be calculated as follows:\n$$\nNPV_A = \\sum_{t=1}^{5} \\frac{30,000}{(1 + 0.10)^t} - 100,000\n$$\n\n#### Step 2: Calculate the Cash Flows for Project A\n- Calculating the present value of each cash flow:\n$$\nNPV_A = \\frac{30,000}{(1.10)^1} + \\frac{30,000}{(1.10)^2} + \\frac{30,000}{(1.10)^3} + \\frac{30,000}{(1.10)^4} + \\frac{30,000}{(1.10)^5} - 100,000\n$$\n\nCalculating each term:\n- Year 1: $\\frac{30,000}{1.10} = 27,272.73$\n- Year 2: $\\frac{30,000}{(1.10)^2} = 24,793.39$\n- Year 3: $\\frac{30,000}{(1.10)^3} = 22,539.77$\n- Year 4: $\\frac{30,000}{(1.10)^4} = 20,490.70$\n- Year 5: $\\frac{30,000}{(1.10)^5} = 18,628.05$\n\nSumming these values:\n$$\nNPV_A = 27,272.73 + 24,793.39 + 22,539.77 + 20,490.70 + 18,628.05 - 100,000\n$$\n$$\nNPV_A = 113,724.64 - 100,000 = **13,724.64**\n$$\n\n#### Step 3: Calculate NPV for Project B\n- For Project B:\n  - **Initial investment ($C_0$)**: $80,000\n  - **Annual cash flows ($C_t$)**: $25,000\n  - **Discount rate ($r$)**: 10% or 0.10\n  - **Number of years ($n$)**: 5\n\nThe NPV can be calculated as follows:\n$$\nNPV_B = \\sum_{t=1}^{5} \\frac{25,000}{(1 + 0.10)^t} - 80,000\n$$\n\n#### Step 4: Calculate the Cash Flows for Project B\n- Calculating the present value of each cash flow:\n$$\nNPV_B = \\frac{25,000}{(1.10)^1} + \\frac{25,000}{(1.10)^2} + \\frac{25,000}{(1.10)^3} + \\frac{25,000}{(1.10)^4} + \\frac{25,000}{(1.10)^5} - 80,000\n$$\n\nCalculating each term:\n- Year 1: $\\frac{25,000}{1.10} = 22,727.27$\n- Year 2: $\\frac{25,000}{(1.10)^2} = 20,661.16$\n- Year 3: $\\frac{25,000}{(1.10)^3} = 18,783.78$\n- Year 4: $\\frac{25,000}{(1.10)^4} = 17,075.07$\n- Year 5: $\\frac{25,000}{(1.10)^5} = 15,523.70$\n\nSumming these values:\n$$\nNPV_B = 22,727.27 + 20,661.16 + 18,783.78 + 17,075.07 + 15,523.70 - 80,000\n$$\n$$\nNPV_B = 94,770.08 - 80,000 = **14,770.08**\n$$\n\n### 3. Final Answer\n- **Answer:** Project B should be selected with an NPV of **$14,770.08** compared to Project A's NPV of **$13,724.64**. \n- **Check:** Since both NPVs are positive, both projects are viable, but Project B has a higher NPV, making it the better choice.",
+      "quality": {
+        "overall_quality": "excellent",
+        "issues": [],
+        "suggestions": []
+      }
+    }
+  ],
+  "analysis": {
+    "topics": [
+      "Engineering Economy",
+      "Decision-Making Process",
+      "Importance of Engineering Economy",
+      "Applications of Engineering Economy"
+    ],
+    "key_formulas": [],
+    "concepts": [
+      "Estimating financial outcomes",
+      "Evaluating alternatives",
+      "Economic comparison techniques",
+      "Decision criteria"
+    ],
+    "difficulty_areas": {
+      "easy": [
+        "Understanding the importance of engineering economy",
+        "Identifying the steps in the decision-making process"
+      ],
+      "medium": [
+        "Evaluating alternatives based on economic analysis",
+        "Defining objectives and criteria"
+      ],
+      "hard": [
+        "Estimating relevant costs for complex projects",
+        "Making decisions among multiple alternatives with significant financial implications"
+      ]
+    }
+  }
+}

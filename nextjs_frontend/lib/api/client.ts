@@ -75,6 +75,19 @@ export async function post<T>(path: string, data: any): Promise<T> {
 }
 
 /**
+ * PUT request with JSON body
+ */
+export async function put<T>(path: string, data: any): Promise<T> {
+  return fetchApi<T>(path, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+}
+
+/**
  * POST request with FormData (for file uploads)
  */
 export async function postFormData<T>(path: string, formData: FormData): Promise<T> {
@@ -153,6 +166,7 @@ export async function uploadWithProgress<T>(
 export default {
   get,
   post,
+  put,
   postFormData,
   del,
   uploadWithProgress,

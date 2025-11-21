@@ -1,31 +1,55 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { getAllProblemSets, countSubmissions } from '@/lib/api/submissions';
 
 /**
  * Problem Sets Page
  * List and manage generated problem sets
- * Note: This is a simplified version. In production, you'd store problem sets in a database.
  */
 export default function ProblemSetsPage() {
-  // Mock data - in production, this would come from a database
-  const [problemSets] = useState([
-    {
-      id: '1',
-      doc_id: 'Chapter_5_Thermodynamics',
-      num_problems: 5,
-      created_at: '2024-01-15',
-      topics: ['Heat Transfer', 'Entropy', 'Cycles'],
-    },
-    {
-      id: '2',
-      doc_id: 'Chapter_7_Fluid_Mechanics',
-      num_problems: 4,
-      created_at: '2024-01-14',
-      topics: ['Bernoulli', 'Viscosity', 'Flow Rate'],
-    },
-  ]);
+  const [problemSets, setProblemSets] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Load problem sets from backend
+  useEffect(() => {
+    const loadProblemSets = async () => {
+      const allSets = await getAllProblemSets();
+      
+      // Enrich with submission counts
+      const enrichedPromises = allSets.map(async (set: any) => {
+        const submissionCounts = await countSubmissions(set.id);
+        
+        return {
+          id: set.id,
+          doc_id: set.doc_id,
+          num_problems: set.num_problems,
+          created_at: set.created_at,
+          topics: set.analysis?.topics || [],
+          submissions: submissionCounts.total,
+          graded: submissionCounts.graded,
+        };
+      });
+      
+      const enriched = await Promise.all(enrichedPromises);
+      setProblemSets(enriched);
+      setLoading(false);
+    };
+    
+    loadProblemSets();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="spinner-lg mb-3"></div>
+          <p className="text-gray-600">Loading problem sets...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -65,6 +89,12 @@ export default function ProblemSetsPage() {
                       <span>{set.num_problems} problems</span>
                       <span>·</span>
                       <span>Created {new Date(set.created_at).toLocaleDateString()}</span>
+                      <span>·</span>
+                      <span className="text-blue-600">{set.submissions} submissions</span>
+                      <span>·</span>
+                      <span className={set.graded === set.submissions ? 'text-green-600' : 'text-orange-600'}>
+                        {set.graded}/{set.submissions} graded
+                      </span>
                     </div>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {set.topics.map((topic, i) => (
@@ -74,13 +104,19 @@ export default function ProblemSetsPage() {
                       ))}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <button className="btn-secondary text-sm">
-                      View
-                    </button>
-                    <button className="btn-secondary text-sm">
-                      Export
-                    </button>
+                  <div className="flex flex-col gap-2">
+                    <Link 
+                      href={`/professor/problem-sets/${set.id}`}
+                      className="btn-secondary text-sm text-center"
+                    >
+                      View Set
+                    </Link>
+                    <Link 
+                      href={`/professor/problem-sets/${set.id}/submissions`}
+                      className="btn-primary text-sm text-center"
+                    >
+                      Grade ({set.submissions})
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -94,10 +130,10 @@ export default function ProblemSetsPage() {
         <h3 className="font-semibold">💡 Tip</h3>
         <p className="mt-1">
           Problem sets are generated from your uploaded course materials using AI. 
-          Each set includes problems, solutions, and quality reviews.
+          Each set includes problems, solutions, and quality reviews. Students can submit 
+          their solutions, and you can grade them automatically using AI.
         </p>
       </div>
     </div>
   );
 }
-

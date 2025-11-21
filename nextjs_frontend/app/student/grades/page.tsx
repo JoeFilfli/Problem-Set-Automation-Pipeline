@@ -1,48 +1,71 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
+import { getAllProblemSets, getAllSubmissionsForSet } from '@/lib/api/submissions';
 
 /**
  * Student Grades Page
  * View all grades and feedback
  */
 export default function StudentGradesPage() {
-  // Mock data - in production, this would come from a database
-  const [grades] = useState([
-    {
-      id: '1',
-      problem_set: 'Thermodynamics Set 1',
-      problem_number: 1,
-      score: 18,
-      max_score: 20,
-      percentage: 90,
-      submitted: '2024-01-28',
-      graded: '2024-01-29',
-      feedback: 'Excellent work! Clear methodology and correct answer.',
-    },
-    {
-      id: '2',
-      problem_set: 'Thermodynamics Set 1',
-      problem_number: 2,
-      score: 19,
-      max_score: 20,
-      percentage: 95,
-      submitted: '2024-01-28',
-      graded: '2024-01-29',
-      feedback: 'Perfect! Great attention to detail.',
-    },
-    {
-      id: '3',
-      problem_set: 'Fluid Mechanics Set 1',
-      problem_number: 1,
-      score: 16,
-      max_score: 20,
-      percentage: 80,
-      submitted: '2024-02-05',
-      graded: '2024-02-06',
-      feedback: 'Good approach, but check your unit conversions.',
-    },
-  ]);
+  const [grades, setGrades] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const studentName = 'Current Student'; // In production, get from auth
+
+  // Load all graded submissions
+  useEffect(() => {
+    async function loadGrades() {
+      try {
+        // Get all problem sets
+        const problemSets = await getAllProblemSets();
+        
+        // Get all submissions for each problem set
+        const allGrades: any[] = [];
+        
+        for (const set of problemSets) {
+          const submissions = await getAllSubmissionsForSet(set.id);
+          
+          // Filter to current student's submissions that are graded
+          const studentSubmissions = submissions.filter(
+            (sub: any) => sub.student_name === studentName && sub.graded && sub.grade
+          );
+          
+          // Transform to grade format
+          studentSubmissions.forEach((sub: any) => {
+            const grade = sub.grade;
+            if (grade && grade.summary) {
+              allGrades.push({
+                id: sub.id,
+                problem_set: set.title || set.doc_id,
+                problem_set_id: set.id,
+                problem_id: sub.problem_id,
+                score: grade.summary.score || 0,
+                max_score: grade.summary.max_score || 100,
+                percentage: grade.summary.percentage || 0,
+                grade_letter: grade.summary.grade || 'N/A',
+                submitted: sub.submitted_at,
+                graded: sub.submitted_at, // Backend doesn't track separate graded time yet
+                feedback: grade.feedback || 'No feedback provided',
+              });
+            }
+          });
+        }
+        
+        setGrades(allGrades);
+      } catch (error) {
+        console.error('Error loading grades:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    loadGrades();
+  }, [studentName]);
 
   const getGradeColor = (percentage: number) => {
     if (percentage >= 90) return 'text-green-600 bg-green-50';
@@ -62,8 +85,20 @@ export default function StudentGradesPage() {
     return 'D';
   };
 
-  const avgGrade =
-    grades.reduce((sum, g) => sum + g.percentage, 0) / grades.length;
+  const avgGrade = grades.length > 0
+    ? grades.reduce((sum, g) => sum + g.percentage, 0) / grades.length
+    : 0;
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="spinner-lg mb-3"></div>
+          <p className="text-gray-600">Loading grades...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -74,134 +109,147 @@ export default function StudentGradesPage() {
         </p>
       </div>
 
-      {/* Overall Stats */}
-      <div className="grid md:grid-cols-3 gap-6">
-        <div className="card text-center">
-          <div className="text-2xl font-bold text-aub-black">
-            {Math.round(avgGrade)}%
-          </div>
-          <div className="text-sm text-gray-600 mt-1">Overall Average</div>
-          <div className="text-lg font-semibold text-aub-gray-dark mt-2">
-            Grade: {getGradeLetter(avgGrade)}
-          </div>
+      {grades.length === 0 ? (
+        <div className="card text-center py-12">
+          <p className="text-lg text-gray-600 mb-2">No graded submissions yet</p>
+          <p className="text-sm text-gray-500">
+            Complete problem sets and wait for your professor to grade them
+          </p>
         </div>
+      ) : (
+        <>
+          {/* Overall Stats */}
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="card text-center">
+              <div className="text-2xl font-bold text-aub-black">
+                {Math.round(avgGrade)}%
+              </div>
+              <div className="text-sm text-gray-600 mt-1">Overall Average</div>
+              <div className="text-lg font-semibold text-aub-gray-dark mt-2">
+                Grade: {getGradeLetter(avgGrade)}
+              </div>
+            </div>
 
-        <div className="card text-center">
-          <div className="text-2xl font-bold text-green-600">
-            {grades.filter((g) => g.percentage >= 90).length}
+            <div className="card text-center">
+              <div className="text-2xl font-bold text-green-600">
+                {grades.filter((g) => g.percentage >= 90).length}
+              </div>
+              <div className="text-sm text-gray-600 mt-1">A Grades</div>
+              <div className="text-xs text-gray-500 mt-2">
+                {grades.length > 0 
+                  ? Math.round((grades.filter((g) => g.percentage >= 90).length / grades.length) * 100)
+                  : 0}% of submissions
+              </div>
+            </div>
+
+            <div className="card text-center">
+              <div className="text-2xl font-bold text-aub-black">
+                {grades.length}
+              </div>
+              <div className="text-sm text-gray-600 mt-1">Total Submissions</div>
+              <div className="text-xs text-gray-500 mt-2">All graded</div>
+            </div>
           </div>
-          <div className="text-sm text-gray-600 mt-1">A Grades</div>
-          <div className="text-xs text-gray-500 mt-2">
-            {Math.round((grades.filter((g) => g.percentage >= 90).length / grades.length) * 100)}% of submissions
+
+          {/* Grades Table */}
+          <div className="card">
+            <h2 className="text-xl font-semibold text-aub-black mb-4">
+              Submission History
+            </h2>
+
+            <div className="overflow-x-auto">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Problem Set</th>
+                    <th>Problem #</th>
+                    <th>Score</th>
+                    <th>Percentage</th>
+                    <th>Grade</th>
+                    <th>Submitted</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {grades.map((grade) => (
+                    <tr key={grade.id}>
+                      <td>
+                        <span className="font-medium text-gray-900">
+                          {grade.problem_set}
+                        </span>
+                      </td>
+                      <td className="text-center">{grade.problem_id}</td>
+                      <td>
+                        <span className="text-sm">
+                          {grade.score} / {grade.max_score}
+                        </span>
+                      </td>
+                      <td>
+                        <span
+                          className={`inline-flex items-center px-2 py-1 rounded text-sm font-medium ${getGradeColor(
+                            grade.percentage
+                          )}`}
+                        >
+                          {grade.percentage}%
+                        </span>
+                      </td>
+                      <td>
+                        <span className="font-bold text-aub-gray-dark">
+                          {grade.grade_letter}
+                        </span>
+                      </td>
+                      <td className="text-sm text-gray-600">
+                        {new Date(grade.submitted).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
 
-        <div className="card text-center">
-          <div className="text-2xl font-bold text-aub-black">
-            {grades.length}
-          </div>
-          <div className="text-sm text-gray-600 mt-1">Total Submissions</div>
-          <div className="text-xs text-gray-500 mt-2">All graded</div>
-        </div>
-      </div>
+          {/* Recent Feedback */}
+          <div className="card">
+            <h2 className="text-xl font-semibold text-aub-black mb-4">
+              Recent Feedback
+            </h2>
 
-      {/* Grades Table */}
-      <div className="card">
-        <h2 className="text-xl font-semibold text-aub-black mb-4">
-          Submission History
-        </h2>
-
-        <div className="overflow-x-auto">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Problem Set</th>
-                <th>Problem #</th>
-                <th>Score</th>
-                <th>Percentage</th>
-                <th>Grade</th>
-                <th>Submitted</th>
-                <th>Details</th>
-              </tr>
-            </thead>
-            <tbody>
-              {grades.map((grade) => (
-                <tr key={grade.id}>
-                  <td>
-                    <span className="font-medium text-gray-900">
-                      {grade.problem_set}
-                    </span>
-                  </td>
-                  <td className="text-center">{grade.problem_number}</td>
-                  <td>
-                    <span className="text-sm">
-                      {grade.score} / {grade.max_score}
-                    </span>
-                  </td>
-                  <td>
-                    <span
-                      className={`inline-flex items-center px-2 py-1 rounded text-sm font-medium ${getGradeColor(
+            <div className="space-y-4">
+              {grades.slice(0, 3).map((grade) => (
+                <div
+                  key={grade.id}
+                  className="border border-gray-200 rounded-aub p-4"
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <div>
+                      <h4 className="font-medium text-gray-900">
+                        {grade.problem_set} - Problem {grade.problem_id}
+                      </h4>
+                      <p className="text-sm text-gray-500">
+                        Graded on {new Date(grade.graded).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div
+                      className={`px-3 py-1 rounded-full text-sm font-medium ${getGradeColor(
                         grade.percentage
                       )}`}
                     >
                       {grade.percentage}%
-                    </span>
-                  </td>
-                  <td>
-                    <span className="font-bold text-aub-gray-dark">
-                      {getGradeLetter(grade.percentage)}
-                    </span>
-                  </td>
-                  <td className="text-sm text-gray-600">
-                    {new Date(grade.submitted).toLocaleDateString()}
-                  </td>
-                  <td>
-                    <button className="text-aub-red hover:text-aub-black text-sm font-medium">
-                      View Feedback
-                    </button>
-                  </td>
-                </tr>
+                    </div>
+                  </div>
+                  <div className="prose prose-sm max-w-none text-gray-800 [&_.katex]:text-base [&_.katex-display]:my-4">
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm, remarkMath]}
+                      rehypePlugins={[rehypeKatex]}
+                    >
+                      {grade.feedback.replace(/\\\[/g, '$$').replace(/\\\]/g, '$$').replace(/\\\(/g, '$').replace(/\\\)/g, '$')}
+                    </ReactMarkdown>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Recent Feedback */}
-      <div className="card">
-        <h2 className="text-xl font-semibold text-aub-black mb-4">
-          Recent Feedback
-        </h2>
-
-        <div className="space-y-4">
-          {grades.slice(0, 3).map((grade) => (
-            <div
-              key={grade.id}
-              className="border border-gray-200 rounded-aub p-4"
-            >
-              <div className="flex items-start justify-between mb-2">
-                <div>
-                  <h4 className="font-medium text-gray-900">
-                    {grade.problem_set} - Problem {grade.problem_number}
-                  </h4>
-                  <p className="text-sm text-gray-500">
-                    Graded on {new Date(grade.graded).toLocaleDateString()}
-                  </p>
-                </div>
-                <div
-                  className={`px-3 py-1 rounded-full text-sm font-medium ${getGradeColor(
-                    grade.percentage
-                  )}`}
-                >
-                  {grade.percentage}%
-                </div>
-              </div>
-              <p className="text-sm text-gray-700">{grade.feedback}</p>
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
-

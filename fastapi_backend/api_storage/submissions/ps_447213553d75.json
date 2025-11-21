@@ -1,0 +1,136 @@
+{
+  "problem_set_id": "ps_447213553d75",
+  "submissions": [
+    {
+      "id": "sub_b02c749760f0",
+      "problem_id": 1,
+      "student_name": "Current Student",
+      "solution": "asdfasdf",
+      "submitted_at": "2025-11-22T00:29:13.017915",
+      "graded": true,
+      "grade": {
+        "student_name": "Current Student",
+        "problem": {
+          "id": 1,
+          "difficulty": "medium",
+          "topic": "Evaluating alternatives based on economic analysis",
+          "statement": "A company is considering two alternative projects, Project A and Project B. Project A requires an initial investment of $100,000 and is expected to generate cash flows of $30,000 annually for 5 years. Project B requires an initial investment of $80,000 and is expected to generate cash flows of $25,000 annually for 5 years. The company's minimum acceptable rate of return is 10%. Determine which project the company should select based on the Net Present Value (NPV) method.",
+          "given": [
+            "Initial investment for Project A: $100,000",
+            "Annual cash flows for Project A: $30,000 for 5 years",
+            "Initial investment for Project B: $80,000",
+            "Annual cash flows for Project B: $25,000 for 5 years",
+            "Minimum acceptable rate of return: 10%"
+          ],
+          "required": [
+            "NPV of Project A",
+            "NPV of Project B",
+            "Recommendation based on NPV analysis"
+          ]
+        },
+        "rubric": {
+          "total_points": 30,
+          "criteria": [
+            {
+              "step": "Calculate NPV for Project A",
+              "points": 10,
+              "requirements": [
+                "Correctly apply the NPV formula",
+                "Accurately calculate cash flows for each year"
+              ],
+              "partial_credit": {
+                "Correct formula application but incorrect cash flow calculation": 5,
+                "Incorrect formula application but correct cash flow values": 3
+              }
+            },
+            {
+              "step": "Calculate NPV for Project B",
+              "points": 10,
+              "requirements": [
+                "Correctly apply the NPV formula",
+                "Accurately calculate cash flows for each year"
+              ],
+              "partial_credit": {
+                "Correct formula application but incorrect cash flow calculation": 5,
+                "Incorrect formula application but correct cash flow values": 3
+              }
+            },
+            {
+              "step": "Compare NPVs and make a recommendation",
+              "points": 5,
+              "requirements": [
+                "Clearly state which project is recommended based on NPV comparison",
+                "Provide reasoning for the recommendation"
+              ],
+              "partial_credit": {
+                "Correct recommendation but lacks clear reasoning": 3,
+                "Incorrect recommendation but correct reasoning": 2
+              }
+            },
+            {
+              "step": "Final answer presentation",
+              "points": 5,
+              "requirements": [
+                "Clearly present the final NPVs for both projects",
+                "Use appropriate formatting for monetary values"
+              ],
+              "partial_credit": {
+                "Correct NPVs but poor formatting": 3,
+                "Incorrect NPVs but correct formatting": 2
+              }
+            }
+          ]
+        },
+        "evaluation": {
+          "score": 0,
+          "max_score": 30,
+          "percentage": 0,
+          "criteria_scores": [
+            {
+              "criterion": "Calculate NPV for Project A",
+              "earned": 0,
+              "possible": 10,
+              "correct": false,
+              "notes": "The student did not provide any calculations or application of the NPV formula for Project A."
+            },
+            {
+              "criterion": "Calculate NPV for Project B",
+              "earned": 0,
+              "possible": 10,
+              "correct": false,
+              "notes": "The student did not provide any calculations or application of the NPV formula for Project B."
+            },
+            {
+              "criterion": "Compare NPVs and make a recommendation",
+              "earned": 0,
+              "possible": 5,
+              "correct": false,
+              "notes": "The student did not compare NPVs or make any recommendation."
+            },
+            {
+              "criterion": "Final answer presentation",
+              "earned": 0,
+              "possible": 5,
+              "correct": false,
+              "notes": "The student did not present any final answers or values."
+            }
+          ],
+          "strengths": [],
+          "errors": [
+            "No calculations or application of the NPV formula provided.",
+            "No comparison of NPVs or recommendation made.",
+            "No final answer presentation."
+          ],
+          "overall_assessment": "The student's submission does not contain any relevant work or calculations related to the problem, resulting in a score of zero."
+        },
+        "feedback": "Thank you for your submission! I appreciate your effort in tackling this problem, and I want to encourage you to keep working on your understanding of Net Present Value (NPV) analysis. It’s a crucial concept in evaluating investment projects, and with some practice, you can definitely master it.\n\n### What You Did Well:\nWhile your submission did not include any calculations or analysis, I want to acknowledge that you attempted to engage with the problem. Recognizing the importance of NPV in decision-making is a great starting point. \n\n### Areas for Improvement:\n1. **Understanding NPV Calculation**: It seems that you may have missed the opportunity to apply the NPV formula. Remember, NPV is calculated using the formula:\n   \\[\n   NPV = \\sum \\left( \\frac{C_t}{(1 + r)^t} \\right) - C_0\n   \\]\n   where \\(C_t\\) is the cash flow at time \\(t\\), \\(r\\) is the discount rate (in this case, 10%), and \\(C_0\\) is the initial investment. \n\n2. **Step-by-Step Approach**: When approaching problems like this, it can be helpful to break it down into smaller steps:\n   - Calculate the NPV for Project A using its cash flows and initial investment.\n   - Repeat the calculation for Project B.\n   - Compare the two NPVs to determine which project is more favorable.\n\n3. **Final Recommendation**: After calculating the NPVs, make sure to clearly state which project the company should select based on your findings. This is an essential part of the analysis.\n\n### Suggestions for Next Steps:\n- **Practice Calculating NPV**: Try working through the calculations for both projects on your own. Write out each step clearly, and don’t hesitate to ask for help if you get stuck.\n- **Review Examples**: Look for examples of NPV calculations in your textbook or online resources. Seeing how others approach similar problems can provide valuable insights.\n- **Ask Questions**: If there are specific parts of the NPV calculation or the concept that you find confusing, please reach out! I’m here to help clarify any misunderstandings.\n\n### Encouragement:\nI know this can be a challenging topic, but with continued practice and engagement, you will improve. Don’t be discouraged by this initial attempt; every step you take is a step toward mastering the material. Keep up the effort, and I look forward to seeing your next submission!",
+        "summary": {
+          "score": 0,
+          "max_score": 30,
+          "percentage": 0,
+          "grade": "F"
+        }
+      }
+    }
+  ]
+}
