@@ -23,10 +23,14 @@ from pdf_extractor import extract_pdf_text_from_bytes
 STORAGE_DIR = Path("api_storage")
 PROBLEM_SETS_DIR = STORAGE_DIR / "problem_sets"
 SUBMISSIONS_DIR = STORAGE_DIR / "submissions"
+SAVED_MCQS_DIR = STORAGE_DIR / "saved_mcqs"
+EXAMS_DIR = STORAGE_DIR / "exams"
 
 # Create storage directories
 PROBLEM_SETS_DIR.mkdir(parents=True, exist_ok=True)
 SUBMISSIONS_DIR.mkdir(parents=True, exist_ok=True)
+SAVED_MCQS_DIR.mkdir(parents=True, exist_ok=True)
+EXAMS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 ### Create FastAPI instance with custom docs and openapi url
@@ -54,6 +58,21 @@ class GenerateProblemSetRequest(BaseModel):
     doc_id: str
     num_problems: int = 5
     check_quality: bool = True
+
+
+class GenerateMCQRequest(BaseModel):
+    doc_id: str
+    num_mcqs: int = 5
+
+
+class SaveMCQRequest(BaseModel):
+    mcq: Dict[str, Any]
+    chapter: str
+
+
+class GenerateExamRequest(BaseModel):
+    mcq_ids: List[str]
+    exam_title: Optional[str] = None
 
 
 class StudentSubmission(BaseModel):
@@ -99,8 +118,58 @@ DOC_ID_SANITIZER = re.compile(r"[^a-zA-Z0-9_.-]+")
 
 # ---------- Helper factories (avoid re-creating heavy objects per call) ----------
 
+_vector_store_instance = None
+_vector_store_error_logged = False
+
 def get_vector_store() -> RAGVectorStore:
-    return RAGVectorStore()
+    """Get or create vector store instance with error handling."""
+    global _vector_store_instance, _vector_store_error_logged
+    
+    if _vector_store_instance is None:
+        import os
+        
+        # Check if we should use in-memory mode
+        use_memory = os.environ.get("CHROMA_USE_MEMORY", "false").lower() == "true"
+        
+        if not use_memory:
+            try:
+                _vector_store_instance = RAGVectorStore()
+            except (ValueError, AttributeError) as e:
+                # Catch tenant/database errors and switch to in-memory
+                error_str = str(e).lower()
+                if any(keyword in error_str for keyword in [
+                    "tenant", "bindings", "could not connect", "does not exist"
+                ]):
+                    if not _vector_store_error_logged:
+                        print("[API] ChromaDB error detected, automatically switching to in-memory mode")
+                        print(f"[API] Error: {str(e)[:200]}")
+                        _vector_store_error_logged = True
+                    
+                    # Force in-memory mode and retry
+                    os.environ["CHROMA_USE_MEMORY"] = "true"
+                    _vector_store_instance = RAGVectorStore()
+                else:
+                    raise
+            except Exception as e:
+                # For any other error, also try in-memory as fallback
+                error_str = str(e).lower()
+                if any(keyword in error_str for keyword in [
+                    "panic", "range", "corrupt"
+                ]):
+                    if not _vector_store_error_logged:
+                        print("[API] ChromaDB corruption detected, switching to in-memory mode")
+                        print(f"[API] Error: {str(e)[:200]}")
+                        _vector_store_error_logged = True
+                    
+                    os.environ["CHROMA_USE_MEMORY"] = "true"
+                    _vector_store_instance = RAGVectorStore()
+                else:
+                    raise
+        else:
+            # Already set to use memory
+            _vector_store_instance = RAGVectorStore()
+    
+    return _vector_store_instance
 
 
 def get_problem_set_orchestrator(vs: RAGVectorStore) -> ProblemSetOrchestrator:
@@ -238,11 +307,18 @@ def list_chapters() -> Dict[str, List[str]]:
     List all available chapter document IDs from the vector store.
     These IDs typically correspond to PDF filenames that were ingested.
     """
-    vs = get_vector_store()
-    chapters = vs.get_all_documents()
-    # Filter out syllabus-like docs to mirror CLI behaviour
-    chapters = [c for c in chapters if "syllabus" not in c.lower()]
-    return {"chapters": chapters}
+    try:
+        vs = get_vector_store()
+        chapters = vs.get_all_documents()
+        # Filter out syllabus-like docs to mirror CLI behaviour
+        chapters = [c for c in chapters if "syllabus" not in c.lower()]
+        return {"chapters": chapters}
+    except (ValueError, AttributeError) as e:
+        # ChromaDB error - return empty list
+        error_str = str(e).lower()
+        if any(kw in error_str for kw in ["tenant", "bindings", "could not connect"]):
+            return {"chapters": []}
+        raise
 
 
 @app.post("/api/py/generate-problem-set")
@@ -586,8 +662,19 @@ def list_all_documents() -> Dict[str, Any]:
     Returns:
         List of documents with chunk counts and statistics
     """
-    vs = get_vector_store()
-    all_docs = vs.get_all_documents()
+    try:
+        vs = get_vector_store()
+        all_docs = vs.get_all_documents()
+    except (ValueError, AttributeError) as e:
+        # ChromaDB error - return empty list
+        error_str = str(e).lower()
+        if any(kw in error_str for kw in ["tenant", "bindings", "could not connect"]):
+            return {
+                "success": True,
+                "total_documents": 0,
+                "documents": []
+            }
+        raise
     
     # Get metadata for each document
     doc_info = []
@@ -1361,5 +1448,202 @@ def grade_batch_and_store(
         raise
     except Exception as e:
         print(f"[API] Error in grade_batch_and_store: {repr(e)}")
+        print(f"[API] Traceback:\n{traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ---------- MCQ Generation and Management endpoints ----------
+
+
+@app.post("/api/py/generate-mcqs")
+def generate_mcqs(payload: GenerateMCQRequest) -> Dict[str, Any]:
+    """
+    Generate multiple choice questions for a specific chapter document.
+    
+    Args:
+        payload: Request with doc_id and num_mcqs
+        
+    Returns:
+        Generated MCQ set
+    """
+    try:
+        vs = get_vector_store()
+        orchestrator = get_problem_set_orchestrator(vs)
+        
+        result = orchestrator.generate_mcq_set(
+            doc_id=payload.doc_id,
+            num_mcqs=payload.num_mcqs
+        )
+        
+        if not result:
+            raise HTTPException(
+                status_code=404, detail=f"No content found for {payload.doc_id}"
+            )
+        
+        encoded = jsonable_encoder(result)
+        
+        return {
+            "success": True,
+            "mcq_set": encoded
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[API] Error in generate_mcqs: {repr(e)}")
+        print(f"[API] Traceback:\n{traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/py/save-mcq")
+def save_mcq(payload: SaveMCQRequest) -> Dict[str, Any]:
+    """
+    Save a selected MCQ question for later use in exam generation.
+    
+    Args:
+        payload: MCQ data and chapter info
+        
+    Returns:
+        Saved MCQ with ID
+    """
+    try:
+        mcq_id = f"mcq_{uuid.uuid4().hex[:12]}"
+        
+        saved_mcq = {
+            "id": mcq_id,
+            "mcq": payload.mcq,
+            "chapter": payload.chapter,
+            "saved_at": datetime.now().isoformat()
+        }
+        
+        # Save to file
+        mcq_file = SAVED_MCQS_DIR / f"{mcq_id}.json"
+        with open(mcq_file, 'w', encoding='utf-8') as f:
+            json.dump(saved_mcq, f, indent=2, ensure_ascii=False)
+        
+        return {
+            "success": True,
+            "mcq_id": mcq_id,
+            "mcq": saved_mcq
+        }
+    except Exception as e:
+        print(f"[API] Error saving MCQ: {repr(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/py/saved-mcqs")
+def list_saved_mcqs() -> Dict[str, Any]:
+    """
+    List all saved MCQ questions.
+    
+    Returns:
+        List of saved MCQs
+    """
+    try:
+        saved_mcqs = []
+        
+        for mcq_file in SAVED_MCQS_DIR.glob("*.json"):
+            try:
+                with open(mcq_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                saved_mcqs.append(data)
+            except Exception as e:
+                print(f"[API] Error loading {mcq_file}: {e}")
+                continue
+        
+        # Sort by save date (newest first)
+        saved_mcqs.sort(key=lambda x: x.get("saved_at", ""), reverse=True)
+        
+        return {
+            "success": True,
+            "total": len(saved_mcqs),
+            "mcqs": saved_mcqs
+        }
+    except Exception as e:
+        print(f"[API] Error listing saved MCQs: {repr(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/api/py/saved-mcqs/{mcq_id}")
+def delete_saved_mcq(mcq_id: str) -> Dict[str, Any]:
+    """
+    Delete a saved MCQ.
+    
+    Args:
+        mcq_id: MCQ ID to delete
+        
+    Returns:
+        Success confirmation
+    """
+    try:
+        mcq_file = SAVED_MCQS_DIR / f"{mcq_id}.json"
+        
+        if not mcq_file.exists():
+            raise HTTPException(status_code=404, detail=f"MCQ '{mcq_id}' not found")
+        
+        mcq_file.unlink()
+        
+        return {
+            "success": True,
+            "message": f"MCQ '{mcq_id}' deleted"
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[API] Error deleting MCQ: {repr(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/py/generate-exam-pdf")
+def generate_exam_pdf(payload: GenerateExamRequest) -> StreamingResponse:
+    """
+    Generate a PDF exam from saved MCQ questions.
+    
+    Args:
+        payload: List of MCQ IDs and optional exam title
+        
+    Returns:
+        PDF file as streaming response
+    """
+    try:
+        # Load all requested MCQs
+        mcqs = []
+        for mcq_id in payload.mcq_ids:
+            mcq_file = SAVED_MCQS_DIR / f"{mcq_id}.json"
+            if not mcq_file.exists():
+                continue
+            with open(mcq_file, 'r', encoding='utf-8') as f:
+                mcq_data = json.load(f)
+                mcqs.append(mcq_data["mcq"])
+        
+        if not mcqs:
+            raise HTTPException(status_code=404, detail="No valid MCQs found")
+        
+        # Generate PDF
+        try:
+            from pdf_generator import generate_exam_pdf as gen_pdf
+        except ImportError:
+            raise HTTPException(
+                status_code=500,
+                detail="PDF generation module not available. Please install required dependencies."
+            )
+        
+        pdf_bytes = gen_pdf(
+            mcqs=mcqs,
+            exam_title=payload.exam_title or "Exam"
+        )
+        
+        exam_filename = f"exam_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+        
+        return StreamingResponse(
+            iter([pdf_bytes]),
+            media_type="application/pdf",
+            headers={
+                "Content-Disposition": f'attachment; filename="{exam_filename}"'
+            }
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[API] Error generating exam PDF: {repr(e)}")
         print(f"[API] Traceback:\n{traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=str(e))

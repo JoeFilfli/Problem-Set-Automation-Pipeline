@@ -17,8 +17,43 @@ class RAGVectorStore:
     def __init__(self, db_path="rag_db"):
         self.client = OpenAI()
         
-        # Use the new PersistentClient API
-        self.chroma = chromadb.PersistentClient(path=db_path)
+        # Initialize ChromaDB with automatic fallback to in-memory on corruption
+        import os
+        
+        # Check for environment variable to force in-memory mode
+        use_memory = os.environ.get("CHROMA_USE_MEMORY", "false").lower() == "true"
+        
+        if use_memory:
+            print("   [INFO] Using in-memory ChromaDB (CHROMA_USE_MEMORY=true)")
+            print("   [NOTE] Data will not persist between server restarts")
+            self.chroma = chromadb.Client()
+        else:
+            # Try persistent client with error handling
+            # Note: Rust panics cannot be caught, but ChromaDB converts them to ValueError
+            abs_db_path = os.path.abspath(db_path)
+            os.makedirs(abs_db_path, exist_ok=True)
+            
+            try:
+                self.chroma = chromadb.PersistentClient(path=abs_db_path)
+                # Test it works
+                _ = self.chroma.list_collections()
+            except (ValueError, AttributeError) as e:
+                # ChromaDB converted panic to ValueError - switch to in-memory
+                error_str = str(e).lower()
+                if any(kw in error_str for kw in ["tenant", "bindings", "could not connect", "does not exist"]):
+                    print("   [WARNING] Persistent database failed, automatically using in-memory mode")
+                    print(f"   [ERROR] {str(e)[:150]}")
+                    self.chroma = chromadb.Client()
+                else:
+                    raise
+            except Exception as e:
+                # Any other error - also try in-memory as fallback
+                error_str = str(e).lower()
+                if "panic" in error_str or "range" in error_str:
+                    print("   [WARNING] Database corruption detected, using in-memory mode")
+                    self.chroma = chromadb.Client()
+                else:
+                    raise
         
         self.collection = self.chroma.get_or_create_collection(
             name="course_materials",

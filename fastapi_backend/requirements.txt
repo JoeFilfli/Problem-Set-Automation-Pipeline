@@ -5,3 +5,16 @@ PyMuPDF==1.26.6
 python-dotenv==1.2.1
 python-multipart==0.0.9
 uvicorn==0.30.6
+reportlab==4.0.7
+# NumPy 2.x has pre-built wheels for Python 3.13 on Windows
+numpy>=2.0.0
+# Matplotlib works with numpy 2.x
+matplotlib>=3.7.0,<4.0.0
+pillow>=9.0.0
+
+# Installation Notes:
+# On Windows, if you encounter build errors with numpy/matplotlib:
+#   1. Install numpy first: pip install numpy
+#   2. Install matplotlib with wheels: pip install --only-binary :all: matplotlib
+#   3. Then install the rest: pip install -r requirements.txt
+# Or use the install script: .\install_requirements.ps1
