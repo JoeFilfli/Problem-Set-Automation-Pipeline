@@ -152,6 +152,21 @@ export interface RAGResponse {
   retrieved_chunks: Chunk[];
 }
 
+export interface ChatHistoryMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+export type RAGStreamEvent =
+  | {
+      type: 'metadata';
+      prompt: string;
+      retrieved_chunks: Chunk[];
+    }
+  | { type: 'token'; value: string }
+  | { type: 'done'; answer?: string }
+  | { type: 'error'; message: string };
+
 // Analytics Types
 export interface PerformanceData {
   problem_set_id: string;
@@ -232,6 +247,7 @@ export interface RAGQueryRequest {
   query: string;
   doc_id?: string;
   top_k?: number;
+  history?: ChatHistoryMessage[];
 }
 
 export interface SearchRequest {

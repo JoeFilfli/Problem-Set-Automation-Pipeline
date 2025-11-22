@@ -28,7 +28,7 @@ export default function MaterialsPanel({
         setError(null);
         const data = await getMaterials();
         setMaterials(data);
-        
+
         // Auto-select first material if available
         if (data.length > 0 && !selectedMaterial) {
           onSelectMaterial(data[0]);
@@ -46,7 +46,7 @@ export default function MaterialsPanel({
     <div className="panel h-full flex flex-col custom-scrollbar">
       {/* Header */}
       <div className="panel-header">
-        <h3 className="font-semibold text-aub-black">📚 Course Materials</h3>
+        <h3 className="font-semibold text-aub-black">Course Materials</h3>
       </div>
 
       {/* Content */}
@@ -93,12 +93,9 @@ export default function MaterialsPanel({
       {/* Footer Hint */}
       {materials.length > 0 && (
         <div className="p-3 border-t border-gray-200 bg-aub-beige/50">
-          <p className="text-xs text-gray-600">
-            💡 Select a material to start chatting
-          </p>
+          <p className="text-xs text-gray-600">Select a material to start chatting</p>
         </div>
       )}
     </div>
   );
 }
-
