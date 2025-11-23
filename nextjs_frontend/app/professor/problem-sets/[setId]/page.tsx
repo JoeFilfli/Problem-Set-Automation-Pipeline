@@ -7,7 +7,7 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
-import { getProblemSet } from '@/lib/api/submissions';
+import { getProblemSet, deleteProblemSet } from '@/lib/api/submissions';
 import { ProblemSetItem } from '@/lib/types';
 
 /**
@@ -29,9 +29,25 @@ export default function ProfessorProblemSetViewPage() {
       setProblemSet(data);
       setLoading(false);
     }
-    
+
     loadData();
   }, [setId]);
+
+  const handleDelete = async () => {
+    if (!problemSet) return;
+
+    if (!confirm(`Are you sure you want to delete "${problemSet.title}"? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      await deleteProblemSet(setId);
+      router.push('/professor/problem-sets');
+    } catch (error) {
+      console.error('Failed to delete problem set:', error);
+      alert('Failed to delete problem set. Please try again.');
+    }
+  };
 
   if (loading) {
     return (
@@ -70,10 +86,16 @@ export default function ProfessorProblemSetViewPage() {
             </p>
           </div>
           <div className="flex gap-2">
+            <button
+              onClick={handleDelete}
+              className="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors border border-red-200"
+            >
+              🗑️ Delete Set
+            </button>
             <button className="btn-secondary">
               📤 Export Set
             </button>
-            <button 
+            <button
               onClick={() => router.push(`/professor/problem-sets/${setId}/submissions`)}
               className="btn-primary"
             >
@@ -177,7 +199,7 @@ export default function ProfessorProblemSetViewPage() {
             </div>
           );
         })}
-      </div>
+      </div >
     </div>
   );
 }

@@ -1,0 +1,566 @@
+{
+  "problem_set_id": "ps_1c486dd1586f",
+  "submissions": [
+    {
+      "id": "sub_dc96d4b5438c",
+      "problem_id": 1,
+      "student_name": "Current Student",
+      "solution": "\n![test.png](/api/py/images/img_5967a002c63447a4)\n",
+      "images": [],
+      "submitted_at": "2025-11-23T18:14:28.571990",
+      "graded": true,
+      "grade": {
+        "student_name": "Current Student",
+        "problem": {
+          "id": 1,
+          "difficulty": "easy",
+          "topic": "Single Payment Factors",
+          "statement": "Calculate the future value of $2,000 invested at an interest rate of 6% for 4 years.",
+          "given": [
+            "Initial investment: $2,000",
+            "Interest rate: 6%",
+            "Time period: 4 years"
+          ],
+          "required": [
+            "Future value of the investment"
+          ]
+        },
+        "rubric": {
+          "total_points": 20,
+          "criteria": [
+            {
+              "step": "Identify Given Values",
+              "points": 4,
+              "requirements": [
+                "List the initial investment (P) correctly.",
+                "List the interest rate (i) correctly.",
+                "List the time period (n) correctly."
+              ],
+              "partial_credit": {
+                "Correctly identifies 2 out of 3 values": 2,
+                "Correctly identifies 1 out of 3 values": 1
+              }
+            },
+            {
+              "step": "Apply the Future Value Formula",
+              "points": 5,
+              "requirements": [
+                "Write the future value formula correctly.",
+                "Substitute the identified values into the formula correctly."
+              ],
+              "partial_credit": {
+                "Writes the formula correctly but makes an error in substitution": 3,
+                "Writes the formula incorrectly but substitutes correctly": 2
+              }
+            },
+            {
+              "step": "Calculate the Future Value",
+              "points": 8,
+              "requirements": [
+                "Calculate \\( (1 + i)^n \\) correctly.",
+                "Multiply the result by the initial investment (P) correctly.",
+                "Round the final answer to two decimal places correctly."
+              ],
+              "partial_credit": {
+                "Calculates \\( (1 + i)^n \\) correctly but makes an error in multiplication": 4,
+                "Calculates \\( (1 + i)^n \\) incorrectly but multiplies correctly": 3,
+                "Rounds incorrectly but has the correct unrounded value": 2
+              }
+            },
+            {
+              "step": "Final Answer Presentation",
+              "points": 3,
+              "requirements": [
+                "Present the final answer clearly.",
+                "Include the correct units ($)."
+              ],
+              "partial_credit": {
+                "Presents the answer but omits units": 1,
+                "Presents the answer with incorrect rounding": 2
+              }
+            }
+          ]
+        },
+        "evaluation": {
+          "score": 0,
+          "max_score": 20,
+          "percentage": 0,
+          "criteria_scores": [
+            {
+              "criterion": "Identify Given Values",
+              "earned": 0,
+              "possible": 4,
+              "correct": false,
+              "notes": "Image could not be processed by the automated grading system"
+            },
+            {
+              "criterion": "Apply the Future Value Formula",
+              "earned": 0,
+              "possible": 5,
+              "correct": false,
+              "notes": "Image could not be processed by the automated grading system"
+            },
+            {
+              "criterion": "Calculate the Future Value",
+              "earned": 0,
+              "possible": 8,
+              "correct": false,
+              "notes": "Image could not be processed by the automated grading system"
+            },
+            {
+              "criterion": "Final Answer Presentation",
+              "earned": 0,
+              "possible": 3,
+              "correct": false,
+              "notes": "Image could not be processed by the automated grading system"
+            }
+          ],
+          "strengths": [],
+          "errors": [
+            "Automated image processing failed"
+          ],
+          "overall_assessment": "The image(s) in your submission could not be processed by the automated grading system. This may be due to image format issues or safety filters. Please either: (1) Type your solution in the text box instead of relying solely on images, or (2) Request manual grading from your instructor. If you typed your solution as text, it will be graded normally."
+        },
+        "feedback": "Thank you for your effort in tackling the problem of calculating the future value of an investment! I appreciate your willingness to engage with the material, and I can see that you are working hard to understand the concepts involved.\n\nHowever, it seems that there was an issue with your submission that prevented it from being processed correctly. The automated grading system could not read the image you provided. This is a common challenge when using images for mathematical solutions, as they can sometimes be difficult for the system to interpret.\n\nHere are some specific suggestions to improve your submission in the future:\n\n1. **Use Text Instead of Images**: Whenever possible, try to type your solution directly into the text box. This ensures that your work is clearly visible and can be accurately graded. You can write out the future value formula and show your calculations step by step.\n\n2. **Future Value Formula**: Make sure you are familiar with the future value formula, which is typically expressed as:\n   \\[\n   FV = P(1 + r)^n\n   \\]\n   where \\(FV\\) is the future value, \\(P\\) is the principal amount (initial investment), \\(r\\) is the interest rate (as a decimal), and \\(n\\) is the number of periods (years). \n\n3. **Identify Given Values Clearly**: When you write out your solution, clearly state the values you are using:\n   - Initial investment: $2,000\n   - Interest rate: 6% (which you would convert to 0.06 for calculations)\n   - Time period: 4 years\n\n4. **Show Your Work**: After applying the formula, show each step of your calculation. This not only helps you keep track of your work but also allows others (including your instructor) to follow your thought process.\n\n5. **Final Answer Presentation**: Clearly label your final answer. For example, you might write, \"The future value of the investment is $X,\" where $X is your calculated result.\n\nI encourage you to try again, using these tips to guide your work. Remember, practice is key, and each attempt is a step toward mastering these concepts. Keep up the great effort, and I look forward to seeing your next submission!",
+        "summary": {
+          "score": 0,
+          "max_score": 20,
+          "percentage": 0,
+          "grade": "F"
+        }
+      }
+    },
+    {
+      "id": "sub_c1685f51c8ae",
+      "problem_id": 2,
+      "student_name": "Current Student",
+      "solution": "\n![test.png](/api/py/images/img_763b826f753b4511)\n",
+      "images": [],
+      "submitted_at": "2025-11-23T18:19:36.237353",
+      "graded": true,
+      "grade": {
+        "student_name": "Current Student",
+        "problem": {
+          "id": 2,
+          "difficulty": "medium",
+          "topic": "Geometric Gradient Factors",
+          "statement": "Calculate the present value of a cash flow series starting at $1,200 and increasing by 3% each year for 5 years at an interest rate of 7%.",
+          "given": [
+            "Initial cash flow: $1,200",
+            "Growth rate: 3%",
+            "Interest rate: 7%",
+            "Number of years: 5"
+          ],
+          "required": [
+            "Present value of the cash flow series"
+          ]
+        },
+        "rubric": {
+          "total_points": 20,
+          "criteria": [
+            {
+              "step": "Identify Given Values",
+              "points": 3,
+              "requirements": [
+                "Correctly identify initial cash flow ($A_1$)",
+                "Correctly identify growth rate ($g$)",
+                "Correctly identify interest rate ($i$)",
+                "Correctly identify number of years ($n$)"
+              ],
+              "partial_credit": {
+                "Identifying 2 out of 4 values correctly": 2,
+                "Identifying 1 out of 4 values correctly": 1
+              }
+            },
+            {
+              "step": "Apply the Geometric Gradient Formula",
+              "points": 5,
+              "requirements": [
+                "Correctly state the geometric gradient formula",
+                "Correctly substitute the given values into the formula"
+              ],
+              "partial_credit": {
+                "Correct formula stated but incorrect substitution": 3,
+                "Incorrect formula stated but correct substitution": 2
+              }
+            },
+            {
+              "step": "Calculate the Components",
+              "points": 5,
+              "requirements": [
+                "Correctly calculate $(1 + g)^n$",
+                "Correctly calculate $(1 + i)^n$",
+                "Correctly substitute these values into the formula"
+              ],
+              "partial_credit": {
+                "Correct calculation of one component": 2,
+                "Correct calculation of both components but incorrect substitution": 3
+              }
+            },
+            {
+              "step": "Final Calculation",
+              "points": 5,
+              "requirements": [
+                "Correctly calculate the numerator",
+                "Correctly calculate the denominator",
+                "Correctly compute the present value"
+              ],
+              "partial_credit": {
+                "Correct numerator or denominator calculation but incorrect final value": 3,
+                "Correct final value but incorrect sign": 2
+              }
+            },
+            {
+              "step": "Final Answer",
+              "points": 2,
+              "requirements": [
+                "State the final answer with correct formatting",
+                "Provide the answer in terms of present value"
+              ],
+              "partial_credit": {
+                "Final answer stated but incorrect value": 1
+              }
+            }
+          ]
+        },
+        "evaluation": {
+          "score": 0,
+          "max_score": 20,
+          "percentage": 0,
+          "criteria_scores": [
+            {
+              "criterion": "Identify Given Values",
+              "earned": 0,
+              "possible": 3,
+              "correct": false,
+              "notes": "The student did not identify any of the required values related to the cash flow series."
+            },
+            {
+              "criterion": "Apply the Geometric Gradient Formula",
+              "earned": 0,
+              "possible": 5,
+              "correct": false,
+              "notes": "The student did not state or apply the geometric gradient formula."
+            },
+            {
+              "criterion": "Calculate the Components",
+              "earned": 0,
+              "possible": 5,
+              "correct": false,
+              "notes": "The student did not calculate any components related to the formula."
+            },
+            {
+              "criterion": "Final Calculation",
+              "earned": 0,
+              "possible": 5,
+              "correct": false,
+              "notes": "The student did not perform any calculations related to the present value."
+            },
+            {
+              "criterion": "Final Answer",
+              "earned": 0,
+              "possible": 2,
+              "correct": false,
+              "notes": "The student did not provide a final answer related to the present value of the cash flow series."
+            }
+          ],
+          "strengths": [],
+          "errors": [
+            "No identification of given values.",
+            "No application of the geometric gradient formula.",
+            "No calculations performed.",
+            "No final answer provided."
+          ],
+          "overall_assessment": "The student's submission does not address the problem requirements and lacks any relevant calculations or answers."
+        },
+        "feedback": "Thank you for your effort in tackling this problem! I appreciate your willingness to engage with the topic of Geometric Gradient Factors, which can be quite challenging. Let’s break down your submission and identify some areas for improvement, as well as what you can focus on moving forward.\n\n### What You Did Well:\n- **Engagement with the Problem**: It's clear that you attempted to approach the problem, which is a great first step. Engaging with complex topics like this is essential for learning.\n\n### Areas for Improvement:\n1. **Identifying Given Values**: It seems that you did not clearly identify the given values from the problem statement. Remember, the initial cash flow, growth rate, interest rate, and number of years are crucial for your calculations. Try to list these values explicitly before moving on to calculations.\n\n2. **Applying the Geometric Gradient Formula**: The geometric gradient formula is key to solving this problem. Make sure to familiarize yourself with it and understand how it applies to cash flows that grow at a constant rate. You might want to review the formula and how to derive it from the cash flow series.\n\n3. **Calculating Components**: Once you have the formula, break down the calculation into manageable parts. Start by calculating the future cash flows for each year based on the growth rate. This will help you visualize how the cash flows change over time.\n\n4. **Final Calculation**: After calculating the future cash flows, you will need to discount them back to present value using the interest rate. Ensure you apply the correct discounting method for each cash flow.\n\n5. **Providing a Final Answer**: Once you have completed your calculations, summarize your findings with a clear final answer. This will help you communicate your results effectively.\n\n### Next Steps:\n- **Review the Geometric Gradient Formula**: Take some time to understand the formula and how it applies to cash flows that increase over time. There are many resources available, including textbooks and online tutorials, that can provide additional explanations and examples.\n\n- **Practice with Similar Problems**: Try solving similar problems to reinforce your understanding. Start with simpler cash flow scenarios before moving on to more complex ones.\n\n- **Break Down the Problem**: When faced with a problem, break it down into smaller steps. Write out what you know, what you need to find, and the formulas that apply.\n\nRemember, learning complex concepts takes time and practice, so don’t get discouraged! Keep pushing forward, and I’m confident you’ll improve with each attempt. If you have any questions or need further clarification on any of the concepts, feel free to reach out!",
+        "summary": {
+          "score": 0,
+          "max_score": 20,
+          "percentage": 0,
+          "grade": "F"
+        }
+      }
+    },
+    {
+      "id": "sub_ad7b39556dbf",
+      "problem_id": 3,
+      "student_name": "Current Student",
+      "solution": "\n![test.png](/api/py/images/img_65a2f70d480f47a9)\n",
+      "images": [],
+      "submitted_at": "2025-11-23T18:22:59.993841",
+      "graded": true,
+      "grade": {
+        "student_name": "Current Student",
+        "problem": {
+          "id": 3,
+          "difficulty": "medium",
+          "topic": "Arithmetic Gradient Factors",
+          "statement": "If a machine has maintenance costs starting at $500 and increasing by $50 each year for 4 years, calculate the present value of these costs at an interest rate of 6%.",
+          "given": [
+            "Initial maintenance cost: $500",
+            "Annual increase: $50",
+            "Interest rate: 6%",
+            "Number of years: 4"
+          ],
+          "required": [
+            "Present value of the maintenance costs"
+          ]
+        },
+        "rubric": {
+          "total_points": 30,
+          "criteria": [
+            {
+              "step": "Identify Given Values",
+              "points": 5,
+              "requirements": [
+                "Correctly identify initial maintenance cost",
+                "Correctly identify annual increase",
+                "Correctly identify interest rate",
+                "Correctly identify number of years"
+              ],
+              "partial_credit": {
+                "Identifying 2 out of 4 values": 2,
+                "Identifying 3 out of 4 values": 3
+              }
+            },
+            {
+              "step": "Calculate Present Value of Initial Cash Flows",
+              "points": 10,
+              "requirements": [
+                "Correctly apply the present value formula for uniform cash flows",
+                "Correctly substitute values into the formula",
+                "Accurate calculation of present value"
+              ],
+              "partial_credit": {
+                "Correct formula but incorrect substitution": 5,
+                "Correct substitution but incorrect calculation": 7
+              }
+            },
+            {
+              "step": "Calculate Present Value of Gradient Cash Flows",
+              "points": 10,
+              "requirements": [
+                "Correctly apply the present value formula for gradient cash flows",
+                "Correctly substitute values into the gradient formula",
+                "Accurate calculation of present value of gradient cash flows"
+              ],
+              "partial_credit": {
+                "Correct formula but incorrect substitution": 5,
+                "Correct substitution but incorrect calculation": 7
+              }
+            },
+            {
+              "step": "Calculate Total Present Value",
+              "points": 5,
+              "requirements": [
+                "Correctly sum the present values of initial and gradient cash flows",
+                "Provide final answer with appropriate units"
+              ],
+              "partial_credit": {
+                "Correct sum but incorrect final answer": 3,
+                "Correct final answer but incorrect sum": 4
+              }
+            }
+          ]
+        },
+        "evaluation": {
+          "score": 0,
+          "max_score": 30,
+          "percentage": 0,
+          "criteria_scores": [
+            {
+              "criterion": "Identify Given Values",
+              "earned": 0,
+              "possible": 5,
+              "correct": false,
+              "notes": "The student did not identify any of the given values correctly."
+            },
+            {
+              "criterion": "Calculate Present Value of Initial Cash Flows",
+              "earned": 0,
+              "possible": 10,
+              "correct": false,
+              "notes": "The student did not apply the present value formula or provide any relevant calculations."
+            },
+            {
+              "criterion": "Calculate Present Value of Gradient Cash Flows",
+              "earned": 0,
+              "possible": 10,
+              "correct": false,
+              "notes": "The student did not attempt to calculate the present value of gradient cash flows."
+            },
+            {
+              "criterion": "Calculate Total Present Value",
+              "earned": 0,
+              "possible": 5,
+              "correct": false,
+              "notes": "The student did not provide a total present value calculation."
+            }
+          ],
+          "strengths": [],
+          "errors": [
+            "No relevant calculations or steps provided.",
+            "Did not follow the problem statement or rubric requirements."
+          ],
+          "overall_assessment": "The student's submission does not address the problem requirements and lacks any relevant calculations or understanding of the concepts involved."
+        },
+        "feedback": "Thank you for your effort in tackling this problem on Arithmetic Gradient Factors! I appreciate your willingness to engage with the material, and I want to help you improve your understanding and skills in this area.\n\n### What You Did Well:\nWhile your submission did not include specific calculations or steps, I can see that you attempted to approach the problem. Engaging with challenging topics like present value and gradient cash flows is a great step toward mastering these concepts. \n\n### Areas for Improvement:\n1. **Identifying Given Values**: It’s crucial to clearly identify and list the given values from the problem statement. In this case, the initial maintenance cost, annual increase, interest rate, and number of years are key components. Make sure to write these down before proceeding with calculations.\n\n2. **Understanding Present Value**: The present value (PV) concept is fundamental in finance. It involves discounting future cash flows back to their value today. Familiarize yourself with the present value formula:\n   \\[\n   PV = \\frac{C}{(1 + r)^n}\n   \\]\n   where \\(C\\) is the cash flow, \\(r\\) is the interest rate, and \\(n\\) is the year. \n\n3. **Calculating Gradient Cash Flows**: Since the maintenance costs increase each year, you will need to calculate the present value of both the initial cash flow and the gradient cash flows. The formula for the present value of a gradient series can be helpful here. \n\n4. **Step-by-Step Calculations**: When you work through problems, try to break them down into smaller steps. For example, calculate the present value of the initial cost first, then calculate the present value of the increasing amounts separately, and finally sum them up for the total present value.\n\n### Suggested Next Steps:\n- **Review the Concepts**: Take some time to review the definitions and formulas related to present value and gradient cash flows. There are many resources available, including textbooks and online tutorials, that can provide additional explanations and examples.\n  \n- **Practice with Similar Problems**: Try solving similar problems to reinforce your understanding. Start with simpler examples and gradually increase the complexity as you become more comfortable.\n\n- **Show Your Work**: In future submissions, make sure to show all your calculations and reasoning. This not only helps you keep track of your thought process but also allows for better feedback.\n\n### Encouragement:\nRemember, learning complex topics takes time and practice. Don’t be discouraged by this initial setback; every mistake is an opportunity to learn and grow. Keep pushing forward, and I’m confident you’ll improve with continued effort. If you have any questions or need further clarification on any concepts, feel free to reach out!",
+        "summary": {
+          "score": 0,
+          "max_score": 30,
+          "percentage": 0,
+          "grade": "F"
+        }
+      }
+    },
+    {
+      "id": "sub_8ce194614880",
+      "problem_id": 4,
+      "student_name": "Current Student",
+      "solution": "\n![test.png](/api/py/images/img_458ef51cbcf545ba)\n",
+      "images": [],
+      "submitted_at": "2025-11-23T18:27:33.881677",
+      "graded": true,
+      "grade": {
+        "student_name": "Current Student",
+        "problem": {
+          "id": 4,
+          "difficulty": "hard",
+          "topic": "Uniform Series Factors",
+          "statement": "Calculate the present value of receiving $5,000 annually for 10 years at an interest rate of 7%.",
+          "given": [
+            "Annual payment: $5,000",
+            "Interest rate: 7%",
+            "Number of years: 10"
+          ],
+          "required": [
+            "Present value of the annuity"
+          ]
+        },
+        "rubric": {
+          "total_points": 20,
+          "criteria": [
+            {
+              "step": "Identify Given Values",
+              "points": 3,
+              "requirements": [
+                "Correctly identify annual payment (A)",
+                "Correctly identify interest rate (i)",
+                "Correctly identify number of years (n)"
+              ],
+              "partial_credit": {
+                "Identified 2 out of 3 values": 2,
+                "Identified 1 out of 3 values": 1
+              }
+            },
+            {
+              "step": "Substitute into the Present Value Formula",
+              "points": 5,
+              "requirements": [
+                "Correctly write the present value formula",
+                "Correctly substitute values into the formula"
+              ],
+              "partial_credit": {
+                "Correct formula but incorrect substitution": 3,
+                "Incorrect formula but correct substitution": 2
+              }
+            },
+            {
+              "step": "Calculate Intermediate Values",
+              "points": 4,
+              "requirements": [
+                "Correctly calculate (1 + i)^{-n}",
+                "Show intermediate steps clearly"
+              ],
+              "partial_credit": {
+                "Correct calculation of (1 + i)^{-n}": 3,
+                "Intermediate steps shown but calculation incorrect": 2
+              }
+            },
+            {
+              "step": "Final Calculation of Present Value",
+              "points": 5,
+              "requirements": [
+                "Correctly simplify the numerator",
+                "Correctly perform the final multiplication to find present value"
+              ],
+              "partial_credit": {
+                "Correct numerator but incorrect final value": 3,
+                "Incorrect numerator but correct final multiplication": 2
+              }
+            },
+            {
+              "step": "Final Answer and Check",
+              "points": 3,
+              "requirements": [
+                "Provide the correct final answer",
+                "Check calculations for accuracy"
+              ],
+              "partial_credit": {
+                "Correct answer but no check provided": 2,
+                "Incorrect answer but check shows understanding": 1
+              }
+            }
+          ]
+        },
+        "evaluation": {
+          "score": 0,
+          "max_score": 20,
+          "percentage": 0,
+          "criteria_scores": [
+            {
+              "criterion": "Identify Given Values",
+              "earned": 0,
+              "possible": 3,
+              "correct": false,
+              "notes": "The student did not identify any of the required values for the problem."
+            },
+            {
+              "criterion": "Substitute into the Present Value Formula",
+              "earned": 0,
+              "possible": 5,
+              "correct": false,
+              "notes": "The student did not provide the present value formula or any substitution."
+            },
+            {
+              "criterion": "Calculate Intermediate Values",
+              "earned": 0,
+              "possible": 4,
+              "correct": false,
+              "notes": "No calculations for intermediate values were shown."
+            },
+            {
+              "criterion": "Final Calculation of Present Value",
+              "earned": 0,
+              "possible": 5,
+              "correct": false,
+              "notes": "There were no final calculations or results provided."
+            },
+            {
+              "criterion": "Final Answer and Check",
+              "earned": 0,
+              "possible": 3,
+              "correct": false,
+              "notes": "No final answer or check was provided."
+            }
+          ],
+          "strengths": [],
+          "errors": [
+            "No identification of given values.",
+            "No application of the present value formula.",
+            "No calculations or final answer provided."
+          ],
+          "overall_assessment": "The student's submission does not address the problem or demonstrate any relevant calculations or understanding of the present value of an annuity."
+        },
+        "feedback": "Thank you for your effort in tackling this problem! I appreciate your willingness to engage with a challenging topic like the present value of an annuity. Let's take a closer look at your submission and identify some areas for improvement, as well as what you can focus on moving forward.\n\n### What You Did Well:\n- **Engagement with the Topic**: It's great to see you attempting to solve a problem related to Uniform Series Factors. This shows you're willing to challenge yourself with complex financial concepts.\n\n### Areas for Improvement:\n1. **Identification of Given Values**: It seems that you didn't explicitly list the given values from the problem statement. Remember, clearly identifying the annual payment, interest rate, and number of years is crucial as it sets the foundation for your calculations. Try writing these values out in your own words before moving on to the formula.\n\n2. **Using the Present Value Formula**: The formula for calculating the present value of an annuity is essential for this problem. Make sure to include it in your work. The formula is:\n   \\[\n   PV = P \\times \\left( \\frac{1 - (1 + r)^{-n}}{r} \\right)\n   \\]\n   where \\(PV\\) is the present value, \\(P\\) is the annual payment, \\(r\\) is the interest rate per period, and \\(n\\) is the number of periods. \n\n3. **Substitution and Calculation**: After identifying the values and writing down the formula, the next step is to substitute the values into the formula. This is where you can show your calculations step-by-step. For example, substitute \\(P = 5000\\), \\(r = 0.07\\), and \\(n = 10\\) into the formula.\n\n4. **Final Calculation and Answer**: Once you've substituted the values, perform the calculations to find the present value. Make sure to clearly show each step of your calculation so that it's easy to follow your thought process.\n\n### Next Steps:\n- **Practice**: Try working through a few more examples of present value calculations. This will help reinforce your understanding of the formula and how to apply it.\n- **Check Your Work**: After completing a problem, take a moment to review your calculations and ensure that you have included all necessary components, such as the final answer and any checks for accuracy.\n\n### Encouragement:\nI know this topic can be tricky, but with practice and by following these steps, you will gain confidence in your ability to solve these types of problems. Keep pushing yourself, and don't hesitate to reach out if you have questions or need further clarification. You're on the right path, and I believe you can master this concept!",
+        "summary": {
+          "score": 0,
+          "max_score": 20,
+          "percentage": 0,
+          "grade": "F"
+        }
+      }
+    }
+  ]
+}

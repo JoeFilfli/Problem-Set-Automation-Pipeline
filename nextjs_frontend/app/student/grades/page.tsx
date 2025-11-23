@@ -15,6 +15,7 @@ import { getAllProblemSets, getAllSubmissionsForSet } from '@/lib/api/submission
 export default function StudentGradesPage() {
   const [grades, setGrades] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [expandedFeedback, setExpandedFeedback] = useState<Set<string>>(new Set());
   const studentName = 'Current Student'; // In production, get from auth
 
   // Load all graded submissions
@@ -23,18 +24,18 @@ export default function StudentGradesPage() {
       try {
         // Get all problem sets
         const problemSets = await getAllProblemSets();
-        
+
         // Get all submissions for each problem set
         const allGrades: any[] = [];
-        
+
         for (const set of problemSets) {
           const submissions = await getAllSubmissionsForSet(set.id);
-          
+
           // Filter to current student's submissions that are graded
           const studentSubmissions = submissions.filter(
             (sub: any) => sub.student_name === studentName && sub.graded && sub.grade
           );
-          
+
           // Transform to grade format
           studentSubmissions.forEach((sub: any) => {
             const grade = sub.grade;
@@ -55,7 +56,7 @@ export default function StudentGradesPage() {
             }
           });
         }
-        
+
         setGrades(allGrades);
       } catch (error) {
         console.error('Error loading grades:', error);
@@ -63,7 +64,7 @@ export default function StudentGradesPage() {
         setLoading(false);
       }
     }
-    
+
     loadGrades();
   }, [studentName]);
 
@@ -88,6 +89,21 @@ export default function StudentGradesPage() {
   const avgGrade = grades.length > 0
     ? grades.reduce((sum, g) => sum + g.percentage, 0) / grades.length
     : 0;
+
+  const toggleFeedback = (gradeId: string) => {
+    const newExpanded = new Set(expandedFeedback);
+    if (newExpanded.has(gradeId)) {
+      newExpanded.delete(gradeId);
+    } else {
+      newExpanded.add(gradeId);
+    }
+    setExpandedFeedback(newExpanded);
+  };
+
+  const truncateFeedback = (feedback: string, maxLength: number = 200) => {
+    if (feedback.length <= maxLength) return feedback;
+    return feedback.substring(0, maxLength) + '...';
+  };
 
   if (loading) {
     return (
@@ -136,7 +152,7 @@ export default function StudentGradesPage() {
               </div>
               <div className="text-sm text-gray-600 mt-1">A Grades</div>
               <div className="text-xs text-gray-500 mt-2">
-                {grades.length > 0 
+                {grades.length > 0
                   ? Math.round((grades.filter((g) => g.percentage >= 90).length / grades.length) * 100)
                   : 0}% of submissions
               </div>
@@ -213,40 +229,86 @@ export default function StudentGradesPage() {
               Recent Feedback
             </h2>
 
-            <div className="space-y-4">
-              {grades.slice(0, 3).map((grade) => (
-                <div
-                  key={grade.id}
-                  className="border border-gray-200 rounded-aub p-4"
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <h4 className="font-medium text-gray-900">
-                        {grade.problem_set} - Problem {grade.problem_id}
-                      </h4>
-                      <p className="text-sm text-gray-500">
-                        Graded on {new Date(grade.graded).toLocaleDateString()}
-                      </p>
+            <div className="space-y-3">
+              {grades.slice(0, 5).map((grade) => {
+                const isExpanded = expandedFeedback.has(grade.id);
+                const feedbackPreview = truncateFeedback(grade.feedback);
+                const hasLongFeedback = grade.feedback.length > 200;
+
+                return (
+                  <div
+                    key={grade.id}
+                    className="border border-gray-200 rounded-aub overflow-hidden hover:border-aub-red transition-colors"
+                  >
+                    {/* Header */}
+                    <div className="bg-gray-50 px-4 py-3 flex items-center justify-between">
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-gray-900 text-sm">
+                          {grade.problem_set}
+                        </h4>
+                        <div className="flex items-center gap-3 mt-1">
+                          <span className="text-xs text-gray-600">
+                            Problem {grade.problem_id}
+                          </span>
+                          <span className="text-xs text-gray-400">•</span>
+                          <span className="text-xs text-gray-600">
+                            {new Date(grade.graded).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`px-3 py-1 rounded-full text-sm font-bold ${getGradeColor(
+                            grade.percentage
+                          )}`}
+                        >
+                          {grade.percentage}%
+                        </div>
+                        {hasLongFeedback && (
+                          <button
+                            onClick={() => toggleFeedback(grade.id)}
+                            className="text-aub-red hover:text-aub-black font-medium text-sm transition-colors"
+                          >
+                            {isExpanded ? '▼ Collapse' : '▶ Expand'}
+                          </button>
+                        )}
+                      </div>
                     </div>
-                    <div
-                      className={`px-3 py-1 rounded-full text-sm font-medium ${getGradeColor(
-                        grade.percentage
-                      )}`}
-                    >
-                      {grade.percentage}%
+
+                    {/* Feedback Content */}
+                    <div className="px-4 py-3">
+                      <div className="prose prose-sm max-w-none text-gray-700 [&_.katex]:text-base [&_.katex-display]:my-2">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm, remarkMath]}
+                          rehypePlugins={[rehypeKatex]}
+                        >
+                          {(isExpanded || !hasLongFeedback
+                            ? grade.feedback
+                            : feedbackPreview
+                          ).replace(/\\\[/g, '$$').replace(/\\\]/g, '$$').replace(/\\\(/g, '$').replace(/\\\)/g, '$')}
+                        </ReactMarkdown>
+                      </div>
+                      {hasLongFeedback && !isExpanded && (
+                        <button
+                          onClick={() => toggleFeedback(grade.id)}
+                          className="text-aub-red hover:text-aub-black text-sm font-medium mt-2"
+                        >
+                          Read full feedback →
+                        </button>
+                      )}
                     </div>
                   </div>
-                  <div className="prose prose-sm max-w-none text-gray-800 [&_.katex]:text-base [&_.katex-display]:my-4">
-                    <ReactMarkdown
-                      remarkPlugins={[remarkGfm, remarkMath]}
-                      rehypePlugins={[rehypeKatex]}
-                    >
-                      {grade.feedback.replace(/\\\[/g, '$$').replace(/\\\]/g, '$$').replace(/\\\(/g, '$').replace(/\\\)/g, '$')}
-                    </ReactMarkdown>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
+
+            {grades.length > 5 && (
+              <div className="mt-4 text-center">
+                <p className="text-sm text-gray-600">
+                  Showing 5 most recent feedback items. View all in Submission History above.
+                </p>
+              </div>
+            )}
           </div>
         </>
       )}

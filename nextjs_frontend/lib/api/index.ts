@@ -8,4 +8,5 @@ export * from './problemSets';
 export * from './rag';
 export * from './grading';
 export * from './mcqs';
+export * from './analytics';
 

@@ -56,6 +56,7 @@ export async function deleteProblemSet(problemSetId: string): Promise<void> {
 
 /**
  * Store a student submission
+ * Images are now URL references (/api/py/images/IMAGE_ID), not base64
  */
 export async function storeSubmission(
   problemSetId: string,
@@ -69,7 +70,7 @@ export async function storeSubmission(
       problem_set_id: problemSetId,
       problem_id: problemId,
       student_name: studentName,
-      solution: solution
+      solution: solution  // Contains image URLs like ![](/ api/py/images/img_123)
     }
   );
   return response.submission;
@@ -86,7 +87,7 @@ export async function getSubmissions(
     const url = problemId
       ? `${API_BASE}/submissions/${problemSetId}?problem_id=${problemId}`
       : `${API_BASE}/submissions/${problemSetId}`;
-    
+
     const response = await get<{ success: boolean; submissions: any[] }>(url);
     return response.submissions || [];
   } catch (error) {
@@ -127,7 +128,7 @@ export async function updateSubmissionGrade(
   // First, get the submission ID
   const submissions = await getSubmissions(problemSetId, problemId);
   const submission = submissions.find(s => s.student_name === studentName);
-  
+
   if (submission) {
     await put(
       `${API_BASE}/submissions/${submission.id}/grade`,
@@ -170,7 +171,7 @@ export async function countSubmissions(problemSetId: string): Promise<{
 }> {
   const allSubs = await getAllSubmissionsForSet(problemSetId);
   const graded = allSubs.filter(s => s.graded).length;
-  
+
   // Count by problem
   const byProblem: { [problemId: number]: { total: number; graded: number } } = {};
   allSubs.forEach(sub => {
@@ -183,7 +184,7 @@ export async function countSubmissions(problemSetId: string): Promise<{
       byProblem[probId].graded++;
     }
   });
-  
+
   return {
     total: allSubs.length,
     graded,

@@ -16,11 +16,11 @@ export default function ProblemSetsPage() {
   useEffect(() => {
     const loadProblemSets = async () => {
       const allSets = await getAllProblemSets();
-      
+
       // Enrich with submission counts
       const enrichedPromises = allSets.map(async (set: any) => {
         const submissionCounts = await countSubmissions(set.id);
-        
+
         return {
           id: set.id,
           doc_id: set.doc_id,
@@ -31,14 +31,16 @@ export default function ProblemSetsPage() {
           graded: submissionCounts.graded,
         };
       });
-      
+
       const enriched = await Promise.all(enrichedPromises);
       setProblemSets(enriched);
       setLoading(false);
     };
-    
+
     loadProblemSets();
   }, []);
+
+
 
   if (loading) {
     return (
@@ -105,13 +107,13 @@ export default function ProblemSetsPage() {
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <Link 
+                    <Link
                       href={`/professor/problem-sets/${set.id}`}
                       className="btn-secondary text-sm text-center"
                     >
                       View Set
                     </Link>
-                    <Link 
+                    <Link
                       href={`/professor/problem-sets/${set.id}/submissions`}
                       className="btn-primary text-sm text-center"
                     >
@@ -129,8 +131,8 @@ export default function ProblemSetsPage() {
       <div className="alert-info">
         <h3 className="font-semibold">💡 Tip</h3>
         <p className="mt-1">
-          Problem sets are generated from your uploaded course materials using AI. 
-          Each set includes problems, solutions, and quality reviews. Students can submit 
+          Problem sets are generated from your uploaded course materials using AI.
+          Each set includes problems, solutions, and quality reviews. Students can submit
           their solutions, and you can grade them automatically using AI.
         </p>
       </div>

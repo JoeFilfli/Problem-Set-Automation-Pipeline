@@ -437,6 +437,13 @@
   .scrollbar-aub::-webkit-scrollbar-thumb:hover {
     @apply bg-aub-red-light;
   }
+
+  /* Markdown Editor Toolbar */
+  .toolbar-btn {
+    @apply px-2 py-1 text-sm font-medium text-gray-700 hover:text-gray-900 
+           hover:bg-gray-100 rounded transition-colors disabled:opacity-50 
+           disabled:cursor-not-allowed;
+  }
 }
 
 @layer utilities {

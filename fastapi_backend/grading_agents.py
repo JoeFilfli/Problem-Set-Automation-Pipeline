@@ -91,9 +91,48 @@ Return ONLY valid JSON as specified in your role."""
             start = response.find("{")
             end = response.rfind("}") + 1
             json_str = response[start:end]
-            return json.loads(json_str)
+            
+            # Try to parse directly first
+            try:
+                return json.loads(json_str)
+            except json.JSONDecodeError as je:
+                # If JSON has escape issues, try to fix common problems
+                print(f"   [WARNING] Initial JSON parse failed: {je}")
+                print(f"   [INFO] Attempting to fix JSON formatting...")
+                
+                # Try using json.JSONDecoder with strict=False
+                import json as json_module
+                try:
+                    # Replace problematic escape sequences
+                    fixed_json = json_str.replace('\\', '\\\\')  # Escape backslashes
+                    # But don't double-escape already valid ones
+                    fixed_json = fixed_json.replace('\\\\n', '\\n')
+                    fixed_json = fixed_json.replace('\\\\t', '\\t')
+                    fixed_json = fixed_json.replace('\\\\r', '\\r')
+                    fixed_json = fixed_json.replace('\\\\\\\\', '\\\\')
+                    
+                    return json.loads(fixed_json)
+                except:
+                    # If still failing, ask AI to regenerate with stricter instructions
+                    print(f"   [INFO] Requesting corrected JSON from AI...")
+                    retry_task = f"""The previous JSON response had formatting errors. Please return ONLY valid JSON with proper escaping.
+
+PROBLEM:
+{json.dumps(problem, indent=2)}
+
+CORRECT SOLUTION:
+{correct_solution}
+
+Return ONLY a valid JSON rubric. Ensure all strings are properly escaped."""
+                    
+                    retry_response = self.run(retry_task)
+                    retry_start = retry_response.find("{")
+                    retry_end = retry_response.rfind("}") + 1
+                    retry_json = retry_response[retry_start:retry_end]
+                    return json.loads(retry_json)
+                    
         except Exception as e:
-            print(f"   [WARNING] Failed to parse rubric JSON: {e}")
+            print(f"   [WARNING] Failed to parse rubric JSON after retries: {e}")
             return {"total_points": 10, "criteria": [], "error": str(e)}
 
 
@@ -131,16 +170,212 @@ Return evaluation as JSON:
 }"""
         )
     
+    def _extract_text_from_images(self, image_urls: List[str], images_dir) -> str:
+        """
+        Extract text from images using OCR (via OpenAI Vision API).
+        This uses a simple text extraction prompt to avoid safety filters.
+        """
+        import base64
+        from pathlib import Path
+        
+        all_extracted_text = []
+        
+        for url in image_urls:
+            try:
+                # Extract image ID from URL
+                image_id = url.split('/')[-1]
+                matching_files = list(images_dir.glob(f"{image_id}.*"))
+                
+                if not matching_files:
+                    print(f"   [WARNING] Image file not found for OCR: {image_id}")
+                    continue
+                
+                image_path = matching_files[0]
+                
+                # Read and encode image
+                with open(image_path, "rb") as f:
+                    image_bytes = f.read()
+                
+                b64 = base64.b64encode(image_bytes).decode("utf-8")
+                
+                # Determine MIME type
+                ext = image_path.suffix.lower()
+                mime_types = {
+                    ".png": "image/png",
+                    ".jpg": "image/jpeg",
+                    ".jpeg": "image/jpeg",
+                    ".gif": "image/gif",
+                    ".webp": "image/webp"
+                }
+                mime = mime_types.get(ext, "image/png")
+                
+                # Use simple OCR-focused prompt (similar to pdf_extractor)
+                response = self.client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": [
+                                {
+                                    "type": "text",
+                                    "text": """Extract all text from this image, including handwritten content.
+
+IMPORTANT for accuracy:
+- Preserve the structure and layout as much as possible
+- Include all mathematical equations, formulas, and calculations
+- Represent equations in plain math notation (e.g., F = P(1+i)^n)
+- If you see numbered steps, clearly mark them as "Step 1:", "Step 2:", etc.
+- If you see calculations, preserve the sequence (formula → substitution → result)
+- If the handwriting is unclear, make your best interpretation
+- Include any diagrams or drawings described in text form
+
+Return ONLY the extracted text, no commentary or analysis."""
+                                },
+                                {
+                                    "type": "image_url",
+                                    "image_url": {
+                                        "url": f"data:{mime};base64,{b64}",
+                                        "detail": "high"
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    max_tokens=2000,
+                    temperature=0.1
+                )
+                
+                extracted = response.choices[0].message.content
+                if extracted and len(extracted.strip()) > 0:
+                    all_extracted_text.append(extracted)
+                    print(f"   [INFO] OCR extracted {len(extracted)} chars from {image_path.name}")
+                
+            except Exception as e:
+                print(f"   [ERROR] OCR extraction failed for image: {e}")
+                continue
+        
+        return "\n\n".join(all_extracted_text)
+    
     def evaluate_solution(
         self,
         problem: Dict[str, Any],
         correct_solution: str,
         student_solution: str,
-        rubric: Dict[str, Any]
+        rubric: Dict[str, Any],
+        image_urls: List[str] = None
     ) -> Dict[str, Any]:
-        """Evaluate student's solution against rubric."""
+        """Evaluate student's solution against rubric, with optional vision support."""
         
-        task = f"""Evaluate this student's solution:
+        # Check if student used images
+        has_images = image_urls and len(image_urls) > 0
+        
+        if has_images:
+            # OPTIMIZED APPROACH: Go directly to OCR since vision grading consistently fails
+            # This is faster, more reliable, and cheaper (fewer API calls)
+            print(f"   [Solution Evaluator] Processing {len(image_urls)} image(s) via OCR...")
+            
+            import base64
+            from pathlib import Path
+            from api.dependencies import STORAGE_DIR
+            
+            IMAGES_DIR = STORAGE_DIR / "images"
+            
+            # Extract text from images using OCR
+            extracted_text = self._extract_text_from_images(image_urls, IMAGES_DIR)
+            
+            if extracted_text and len(extracted_text.strip()) > 20:
+                print(f"   [INFO] OCR extracted {len(extracted_text)} characters")
+                print(f"   [DEBUG] Extracted text preview: {extracted_text[:300]}...")
+                print(f"   [DEBUG] Grading problem: {problem.get('text', problem.get('description', 'N/A'))[:100]}...")
+                
+                # Combine with any text the student typed
+                combined_solution = student_solution + "\n\n[Extracted from image(s)]:\n" + extracted_text
+                
+                # Grade using text-only evaluation
+                task = f"""Evaluate this student's solution:
+
+PROBLEM:
+{json.dumps(problem, indent=2)}
+
+CORRECT SOLUTION:
+{correct_solution}
+
+STUDENT SOLUTION:
+{combined_solution}
+
+IMPORTANT NOTES:
+- The student submitted their work as an image. The text above was extracted using OCR.
+- The OCR text may have minor formatting differences, but the mathematical content and calculations are what matter.
+- Evaluate the work shown: formulas used, calculations performed, and reasoning demonstrated.
+- Give credit for correct mathematical approach and accurate results, even if formatting varies.
+- If the student's work addresses the problem and shows valid mathematical reasoning, award appropriate points.
+
+GRADING RUBRIC:
+{json.dumps(rubric, indent=2)}
+
+Carefully evaluate the student's work against each rubric criterion.
+Focus on the mathematical correctness, not OCR formatting artifacts.
+Return ONLY valid JSON as specified in your role."""
+                
+                result = self.run(task)
+            else:
+                # OCR failed or insufficient text extracted
+                print(f"   [WARNING] OCR extraction failed or returned insufficient text")
+                
+                # Check if student provided any meaningful text solution
+                import re
+                text_only = re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', '', student_solution).strip()
+                
+                if len(text_only) < 20:
+                    # No text at all - provide helpful error
+                    print(f"   [WARNING] No processable content found")
+                    result = json.dumps({
+                        "score": 0,
+                        "max_score": rubric.get("total_points", 10),
+                        "percentage": 0,
+                        "criteria_scores": [
+                            {
+                                "criterion": criterion.get("step", "Unknown"),
+                                "earned": 0,
+                                "possible": criterion.get("points", 0),
+                                "correct": False,
+                                "notes": "Image could not be processed by the automated grading system"
+                            }
+                            for criterion in rubric.get("criteria", [])
+                        ],
+                        "strengths": [],
+                        "errors": ["Automated image processing failed"],
+                        "overall_assessment": "The image(s) in your submission could not be processed. Please type your solution as text instead, or request manual grading from your instructor."
+                    })
+                else:
+                    # Grade the typed text
+                    task = f"""Evaluate this student's solution:
+
+
+PROBLEM:
+{json.dumps(problem, indent=2)}
+
+CORRECT SOLUTION:
+{correct_solution}
+
+STUDENT SOLUTION:
+{student_solution}
+
+IMPORTANT: Student uploaded images but they could not be processed by the vision system.
+Only grade based on any text that is present. If there is insufficient text to evaluate,
+assign a very low score and note that images could not be processed.
+
+GRADING RUBRIC:
+{json.dumps(rubric, indent=2)}
+
+Carefully evaluate the student's work against each rubric criterion.
+Return ONLY valid JSON as specified in your role."""
+                    
+                    result = self.run(task)
+            
+        else:
+            # Use text-only model (original implementation)
+            task = f"""Evaluate this student's solution:
 
 PROBLEM:
 {json.dumps(problem, indent=2)}
@@ -156,20 +391,52 @@ GRADING RUBRIC:
 
 Carefully evaluate the student's work against each rubric criterion.
 Return ONLY valid JSON as specified in your role."""
+            
+            result = self.run(task)
         
-        response = self.run(task)
-        
+        # Parse JSON response (same for both paths)
         try:
-            start = response.find("{")
-            end = response.rfind("}") + 1
-            json_str = response[start:end]
-            return json.loads(json_str)
+            # Debug: print the raw response
+            print(f"   [DEBUG] Raw AI response length: {len(result)} chars")
+            print(f"   [DEBUG] First 200 chars: {result[:200]}")
+            
+            # Remove markdown code blocks if present (```json ... ```)
+            import re
+            result_cleaned = re.sub(r'```json\s*', '', result)
+            result_cleaned = re.sub(r'```\s*$', '', result_cleaned)
+            result_cleaned = result_cleaned.strip()
+            
+            start = result_cleaned.find("{")
+            end = result_cleaned.rfind("}") + 1
+            
+            if start == -1 or end == 0:
+                print(f"   [ERROR] No JSON found in response!")
+                print(f"   [DEBUG] Full response:\n{result_cleaned}")
+                raise ValueError("No JSON object found in AI response")
+            
+            json_str = result_cleaned[start:end]
+            parsed = json.loads(json_str)
+            
+            # Ensure required fields exist
+            if "criteria_scores" not in parsed:
+                parsed["criteria_scores"] = []
+            if "strengths" not in parsed:
+                parsed["strengths"] = []
+            if "errors" not in parsed:
+                parsed["errors"] = []
+                
+            return parsed
         except Exception as e:
             print(f"   [WARNING] Failed to parse evaluation JSON: {e}")
+            print(f"   [DEBUG] Full response that failed:\n{result}")
             return {
                 "score": 0,
                 "max_score": rubric.get("total_points", 10),
                 "percentage": 0,
+                "criteria_scores": [],
+                "strengths": [],
+                "errors": ["Failed to parse AI response"],
+                "overall_assessment": "Error during grading",
                 "error": str(e)
             }
 
@@ -231,7 +498,8 @@ class GradingOrchestrator:
         student_solution: str,
         student_name: str = "Student",
         generate_rubric: bool = True,
-        existing_rubric: Dict[str, Any] = None
+        existing_rubric: Dict[str, Any] = None,
+        image_urls: List[str] = None
     ) -> Dict[str, Any]:
         """
         Grade a single student submission.
@@ -243,6 +511,7 @@ class GradingOrchestrator:
             student_name: Student identifier
             generate_rubric: Whether to generate a new rubric
             existing_rubric: Pre-existing rubric to use
+            image_urls: Optional list of image URLs for vision-based grading
             
         Returns:
             Complete grading result with score, evaluation, and feedback
@@ -260,13 +529,14 @@ class GradingOrchestrator:
             rubric = existing_rubric
             print(f"[Step 1] Using existing rubric ({rubric.get('total_points', 0)} points)\n")
         
-        # Step 2: Evaluate student's solution
+        # Step 2: Evaluate student's solution (with images if provided)
         print("[Step 2] Evaluating student solution...")
         evaluation = self.evaluator.evaluate_solution(
             problem,
             correct_solution,
             student_solution,
-            rubric
+            rubric,
+            image_urls=image_urls  # Pass images to evaluator
         )
         score = evaluation.get('score', 0)
         max_score = evaluation.get('max_score', rubric.get('total_points', 10))
@@ -331,13 +601,22 @@ class GradingOrchestrator:
         results = []
         for i, submission in enumerate(student_submissions, 1):
             print(f"Processing {i}/{len(student_submissions)}...")
+            
+            # Extract image URLs from markdown
+            import re
+            solution_text = submission['solution']
+            image_pattern = r'!\[([^\]]*)\]\((/api/py/images/[^)]+)\)'
+            image_urls = re.findall(image_pattern, solution_text)
+            image_urls = [url[1] for url in image_urls]  # Extract just the URLs
+            
             result = self.grade_submission(
                 problem=problem,
                 correct_solution=correct_solution,
                 student_solution=submission['solution'],
                 student_name=submission['name'],
                 generate_rubric=False,
-                existing_rubric=rubric
+                existing_rubric=rubric,
+                image_urls=image_urls if image_urls else None  # Pass extracted images
             )
             results.append(result)
         

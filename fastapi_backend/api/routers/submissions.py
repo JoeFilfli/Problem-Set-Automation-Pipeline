@@ -36,6 +36,7 @@ class StoreSubmissionRequest(BaseModel):
     problem_id: int
     student_name: str
     solution: str
+    images: Optional[List[str]] = []  # List of base64 encoded images
 
 
 @router.post("/grade-submissions")
@@ -95,6 +96,7 @@ def store_submission(payload: StoreSubmissionRequest) -> Dict[str, Any]:
             "problem_id": payload.problem_id,
             "student_name": payload.student_name,
             "solution": payload.solution,
+            "images": payload.images or [],  # Store images separately
             "submitted_at": datetime.now().isoformat(),
             "graded": False,
             "grade": None
@@ -324,7 +326,11 @@ def grade_batch_and_store(
         
         # Format for grading
         student_submissions = [
-            {"name": s["student_name"], "solution": s["solution"]}
+            {
+                "name": s["student_name"], 
+                "solution": s["solution"],
+                "images": s.get("images", [])  # Include images for vision-based grading
+            }
             for s in problem_submissions
         ]
         

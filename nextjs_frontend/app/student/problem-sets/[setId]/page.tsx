@@ -8,11 +8,12 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 
-import { 
-  getProblemSet, 
-  storeSubmission, 
-  getStudentSubmission 
+import {
+  getProblemSet,
+  storeSubmission,
+  getStudentSubmission
 } from '@/lib/api/submissions';
+import MarkdownEditor from '@/components/MarkdownEditor';
 
 /**
  * Student Problem Set View
@@ -34,6 +35,7 @@ export default function StudentProblemSetPage() {
   const [submittedProblems, setSubmittedProblems] = useState<Set<number>>(new Set());
   const [showSolutions, setShowSolutions] = useState<Set<number>>(new Set());
   const [submissionData, setSubmissionData] = useState<{ [key: number]: any }>({});
+  const [feedbackTab, setFeedbackTab] = useState<{ [key: number]: string }>({});
 
   // Load problem set and existing submissions
   useEffect(() => {
@@ -44,7 +46,7 @@ export default function StudentProblemSetPage() {
 
         // Get problem set from backend
         const problemSetData = await getProblemSet(setId);
-        
+
         if (!problemSetData) {
           setError('Problem set not found');
           setLoading(false);
@@ -57,13 +59,14 @@ export default function StudentProblemSetPage() {
         const submitted = new Set<number>();
         const existingSubmissions: { [key: number]: string } = {};
         const submissionDetails: { [key: number]: any } = {};
-        
+
         for (const item of problemSetData.problem_set) {
           const problemId = item.problem.id;
           const existing = await getStudentSubmission(setId, problemId, studentName);
           if (existing) {
             submitted.add(problemId);
-            existingSubmissions[problemId] = existing.solution;
+            // Solution already contains image URLs - no reconstruction needed
+            existingSubmissions[problemId] = existing.solution || '';
             submissionDetails[problemId] = existing; // Store full submission data including grade
           }
         }
@@ -92,7 +95,7 @@ export default function StudentProblemSetPage() {
     try {
       // Store submission via backend
       await storeSubmission(setId, problemId, studentName, submissions[problemId]);
-      
+
       // Mark as submitted
       setSubmittedProblems(new Set([...Array.from(submittedProblems), problemId]));
       alert('Solution submitted successfully! Your professor will grade it soon.');
@@ -250,103 +253,210 @@ export default function StudentProblemSetPage() {
               {/* Solution Input */}
               <div className="mb-4">
                 <label className="label">Your Solution:</label>
-                <textarea
+                <MarkdownEditor
                   value={submissions[problem.id] || ''}
-                  onChange={(e) =>
-                    setSubmissions({ ...submissions, [problem.id]: e.target.value })
+                  onChange={(value) =>
+                    setSubmissions({ ...submissions, [problem.id]: value })
                   }
-                  placeholder="Type your solution here... Show all your work and calculations."
-                  rows={8}
+                  placeholder="Write your solution here... You can use markdown formatting, LaTeX math ($x^2$ or $$E=mc^2$$), and upload images!"
                   disabled={isSubmitted}
-                  className="textarea text-gray-900"
+                  minHeight="350px"
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  Tip: Write clearly and show all steps for full credit
-                </p>
               </div>
 
               {/* Grading Status */}
               {isGraded && grade && (
-                <div className={`mb-4 p-4 rounded-aub border-2 ${
-                  grade.summary?.percentage >= 90 ? 'bg-green-50 border-green-500' :
-                  grade.summary?.percentage >= 80 ? 'bg-blue-50 border-blue-500' :
-                  grade.summary?.percentage >= 70 ? 'bg-yellow-50 border-yellow-500' :
-                  'bg-orange-50 border-orange-500'
-                }`}>
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-lg font-bold text-gray-900">
-                      ✅ Graded
-                    </h3>
-                    <div className="text-right">
-                      <div className="text-2xl font-bold text-gray-900">
-                        {grade.summary?.percentage?.toFixed(1)}%
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        {grade.summary?.score}/{grade.summary?.max_score} points
-                      </div>
-                      <div className="text-lg font-semibold text-aub-red">
-                        Grade: {grade.summary?.grade}
+                <div className={`mb-4 rounded-aub border-2 overflow-hidden ${grade.summary?.percentage >= 90 ? 'border-green-500' :
+                  grade.summary?.percentage >= 80 ? 'border-blue-500' :
+                    grade.summary?.percentage >= 70 ? 'border-yellow-500' :
+                      'border-orange-500'
+                  }`}>
+                  {/* Header Section */}
+                  <div className={`px-4 py-3 ${grade.summary?.percentage >= 90 ? 'bg-green-50' :
+                    grade.summary?.percentage >= 80 ? 'bg-blue-50' :
+                      grade.summary?.percentage >= 70 ? 'bg-yellow-50' :
+                        'bg-orange-50'
+                    }`}>
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                        <span>✅</span>
+                        <span>Graded</span>
+                      </h3>
+                      <div className="text-right">
+                        <div className="text-3xl font-bold text-gray-900">
+                          {grade.summary?.percentage?.toFixed(0)}%
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          {grade.summary?.score}/{grade.summary?.max_score} points · Grade: {grade.summary?.grade}
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Rubric Breakdown */}
-                  {grade.evaluation?.criteria_scores && grade.evaluation.criteria_scores.length > 0 && (
-                    <div className="mb-3">
-                      <h4 className="font-semibold text-gray-900 mb-2 text-sm">Rubric Breakdown:</h4>
-                      <div className="space-y-1">
-                        {grade.evaluation.criteria_scores.map((criterion: any, idx: number) => (
-                          <div key={idx} className="flex items-center justify-between text-sm">
-                            <span className={criterion.correct ? 'text-green-700' : 'text-gray-700'}>
-                              {criterion.correct ? '✓' : '○'} {criterion.criterion}
-                            </span>
-                            <span className="font-medium">
-                              {criterion.earned}/{criterion.possible} pts
-                            </span>
+                  {/* Tabs Navigation */}
+                  <div className="bg-white border-b border-gray-200">
+                    <div className="flex gap-1 px-2 pt-2">
+                      {['overview', 'rubric', 'strengths', 'feedback'].map((tab) => {
+                        const currentTab = feedbackTab[problem.id] || 'overview';
+                        const isActive = currentTab === tab;
+                        const labels = {
+                          overview: '📊 Overview',
+                          rubric: '📋 Rubric',
+                          strengths: '💡 Insights',
+                          feedback: '💬 Feedback'
+                        };
+
+                        return (
+                          <button
+                            key={tab}
+                            onClick={() => setFeedbackTab({ ...feedbackTab, [problem.id]: tab })}
+                            className={`px-4 py-2 text-sm font-medium rounded-t-lg transition-colors ${isActive
+                              ? 'bg-white text-aub-red border-t border-x border-gray-200'
+                              : 'bg-gray-50 text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                              }`}
+                          >
+                            {labels[tab as keyof typeof labels]}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Tab Content */}
+                  <div className="bg-white px-4 py-4">
+                    {/* Overview Tab */}
+                    {(!feedbackTab[problem.id] || feedbackTab[problem.id] === 'overview') && (
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="p-3 bg-gray-50 rounded-lg">
+                            <div className="text-xs text-gray-600 mb-1">Your Score</div>
+                            <div className="text-2xl font-bold text-gray-900">
+                              {grade.summary?.score}/{grade.summary?.max_score}
+                            </div>
                           </div>
-                        ))}
+                          <div className="p-3 bg-gray-50 rounded-lg">
+                            <div className="text-xs text-gray-600 mb-1">Letter Grade</div>
+                            <div className="text-2xl font-bold text-aub-red">
+                              {grade.summary?.grade}
+                            </div>
+                          </div>
+                        </div>
+                        {grade.evaluation?.criteria_scores && grade.evaluation.criteria_scores.length > 0 && (
+                          <div>
+                            <h4 className="font-semibold text-gray-900 mb-2 text-sm">Quick Summary:</h4>
+                            <div className="flex flex-wrap gap-2">
+                              {grade.evaluation.criteria_scores.map((criterion: any, idx: number) => (
+                                <span
+                                  key={idx}
+                                  className={`px-2 py-1 rounded text-xs font-medium ${criterion.correct
+                                    ? 'bg-green-100 text-green-800'
+                                    : 'bg-gray-100 text-gray-700'
+                                    }`}
+                                >
+                                  {criterion.correct ? '✓' : '○'} {criterion.criterion}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {/* Strengths */}
-                  {grade.evaluation?.strengths && grade.evaluation.strengths.length > 0 && (
-                    <div className="mb-3">
-                      <h4 className="font-semibold text-green-900 mb-1 text-sm">✨ Strengths:</h4>
-                      <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
-                        {grade.evaluation.strengths.map((strength: string, idx: number) => (
-                          <li key={idx}>{strength}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {/* Areas for Improvement */}
-                  {grade.evaluation?.errors && grade.evaluation.errors.length > 0 && (
-                    <div className="mb-3">
-                      <h4 className="font-semibold text-orange-900 mb-1 text-sm">📝 Areas for Improvement:</h4>
-                      <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
-                        {grade.evaluation.errors.map((error: string, idx: number) => (
-                          <li key={idx}>{error}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {/* Feedback */}
-                  {grade.feedback && (
-                    <div className="border-t pt-3 mt-3">
-                      <h4 className="font-semibold text-gray-900 mb-2 text-sm">💬 Personalized Feedback:</h4>
-                      <div className="prose prose-sm max-w-none text-gray-800 [&_.katex]:text-base [&_.katex-display]:my-4">
-                        <ReactMarkdown
-                          remarkPlugins={[remarkGfm, remarkMath]}
-                          rehypePlugins={[rehypeKatex]}
-                        >
-                          {grade.feedback.replace(/\\\[/g, '$$').replace(/\\\]/g, '$$').replace(/\\\(/g, '$').replace(/\\\)/g, '$')}
-                        </ReactMarkdown>
+                    {/* Rubric Tab */}
+                    {feedbackTab[problem.id] === 'rubric' && (
+                      <div>
+                        {grade.evaluation?.criteria_scores && grade.evaluation.criteria_scores.length > 0 ? (
+                          <div className="space-y-2">
+                            {grade.evaluation.criteria_scores.map((criterion: any, idx: number) => (
+                              <div
+                                key={idx}
+                                className={`p-3 rounded-lg border ${criterion.correct
+                                  ? 'border-green-200 bg-green-50'
+                                  : 'border-gray-200 bg-gray-50'
+                                  }`}
+                              >
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-2">
+                                    <span className={`text-lg ${criterion.correct ? 'text-green-600' : 'text-gray-400'}`}>
+                                      {criterion.correct ? '✓' : '○'}
+                                    </span>
+                                    <span className="font-medium text-gray-900">{criterion.criterion}</span>
+                                  </div>
+                                  <span className="font-bold text-gray-900">
+                                    {criterion.earned}/{criterion.possible} pts
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-gray-600 text-sm">No rubric details available.</p>
+                        )}
                       </div>
-                    </div>
-                  )}
+                    )}
+
+                    {/* Strengths & Improvements Tab */}
+                    {feedbackTab[problem.id] === 'strengths' && (
+                      <div className="space-y-4">
+                        {grade.evaluation?.strengths && grade.evaluation.strengths.length > 0 && (
+                          <div>
+                            <h4 className="font-semibold text-green-900 mb-2 flex items-center gap-2">
+                              <span>✨</span>
+                              <span>What You Did Well</span>
+                            </h4>
+                            <ul className="space-y-2">
+                              {grade.evaluation.strengths.map((strength: string, idx: number) => (
+                                <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+                                  <span className="text-green-600 mt-0.5">▪</span>
+                                  <span>{strength}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {grade.evaluation?.errors && grade.evaluation.errors.length > 0 && (
+                          <div>
+                            <h4 className="font-semibold text-orange-900 mb-2 flex items-center gap-2">
+                              <span>📝</span>
+                              <span>Areas for Improvement</span>
+                            </h4>
+                            <ul className="space-y-2">
+                              {grade.evaluation.errors.map((error: string, idx: number) => (
+                                <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+                                  <span className="text-orange-600 mt-0.5">▪</span>
+                                  <span>{error}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {(!grade.evaluation?.strengths || grade.evaluation.strengths.length === 0) &&
+                          (!grade.evaluation?.errors || grade.evaluation.errors.length === 0) && (
+                            <p className="text-gray-600 text-sm">No detailed insights available.</p>
+                          )}
+                      </div>
+                    )}
+
+                    {/* Detailed Feedback Tab */}
+                    {feedbackTab[problem.id] === 'feedback' && (
+                      <div>
+                        {grade.feedback ? (
+                          <div className="prose prose-sm max-w-none text-gray-800 [&_.katex]:text-base [&_.katex-display]:my-4">
+                            <ReactMarkdown
+                              remarkPlugins={[remarkGfm, remarkMath]}
+                              rehypePlugins={[rehypeKatex]}
+                            >
+                              {grade.feedback.replace(/\\\[/g, '$$').replace(/\\\]/g, '$$').replace(/\\\(/g, '$').replace(/\\\)/g, '$')}
+                            </ReactMarkdown>
+                          </div>
+                        ) : (
+                          <p className="text-gray-600 text-sm">No additional feedback provided.</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 
