@@ -1,0 +1,58 @@
+{
+  "id": "ps_f877210aacf7",
+  "doc_id": "INDE301_Ch1_Notes_24.pdf",
+  "title": "INDE301_Ch1_Notes_24.pdf - Problem Set",
+  "num_problems": 1,
+  "created_at": "2025-11-23T15:22:43.269170",
+  "problem_set": [
+    {
+      "problem": {
+        "id": 1,
+        "difficulty": "medium",
+        "topic": "Estimating relevant costs",
+        "statement": "A company is considering two alternatives for a new production line. Alternative A has an initial investment of $500,000 and annual operating costs of $100,000. Alternative B has an initial investment of $600,000 but lower annual operating costs of $80,000. If the expected lifespan of both alternatives is 10 years, calculate the total cost for each alternative and determine which option is more economical.",
+        "given": [
+          "Initial investment for Alternative A: $500,000",
+          "Annual operating costs for Alternative A: $100,000",
+          "Initial investment for Alternative B: $600,000",
+          "Annual operating costs for Alternative B: $80,000",
+          "Lifespan of both alternatives: 10 years"
+        ],
+        "required": [
+          "Total cost for Alternative A",
+          "Total cost for Alternative B",
+          "Which alternative is more economical?"
+        ]
+      },
+      "solution": "### 1. Approach & Strategy\n- Calculate the total cost for each alternative by summing the initial investment and the total operating costs over the lifespan.\n- Compare the total costs to determine which alternative is more economical.\n\n### 2. Step-by-step Calculations\n#### Step 1: Calculate Total Cost for Alternative A\n- The total cost for Alternative A includes the initial investment and the total operating costs over 10 years.\n- **Given values:**\n  - **Initial investment for Alternative A:** $500,000\n  - **Annual operating costs for Alternative A:** $100,000\n  - **Lifespan:** 10 years\n\nThe total operating costs for Alternative A can be calculated as:\n$$\n\\text{Total Operating Costs} = \\text{Annual Operating Costs} \\times \\text{Lifespan} = 100,000 \\times 10\n$$\n\nCalculating the total operating costs:\n$$\n\\text{Total Operating Costs} = 1,000,000\n$$\n\nNow, we can find the total cost for Alternative A:\n$$\n\\text{Total Cost for A} = \\text{Initial Investment} + \\text{Total Operating Costs} = 500,000 + 1,000,000\n$$\n\nCalculating the total cost:\n$$\n\\text{Total Cost for A} = 1,500,000\n$$\n\n#### Step 2: Calculate Total Cost for Alternative B\n- Similar to Alternative A, we will calculate the total cost for Alternative B.\n- **Given values:**\n  - **Initial investment for Alternative B:** $600,000\n  - **Annual operating costs for Alternative B:** $80,000\n  - **Lifespan:** 10 years\n\nThe total operating costs for Alternative B can be calculated as:\n$$\n\\text{Total Operating Costs} = \\text{Annual Operating Costs} \\times \\text{Lifespan} = 80,000 \\times 10\n$$\n\nCalculating the total operating costs:\n$$\n\\text{Total Operating Costs} = 800,000\n$$\n\nNow, we can find the total cost for Alternative B:\n$$\n\\text{Total Cost for B} = \\text{Initial Investment} + \\text{Total Operating Costs} = 600,000 + 800,000\n$$\n\nCalculating the total cost:\n$$\n\\text{Total Cost for B} = 1,400,000\n$$\n\n#### Step 3: Compare Total Costs\n- Now we will compare the total costs of both alternatives to determine which is more economical.\n- **Total Cost for A:** **$1,500,000**\n- **Total Cost for B:** **$1,400,000**\n\nSince **$1,400,000 < $1,500,000**, Alternative B is the more economical option.\n\n### 3. Final Answer\n- **Answer:** Alternative B is more economical with a total cost of **$1,400,000**.\n- **Check:** The calculations confirm that the total costs were computed correctly based on the given investments and operating costs."
+    }
+  ],
+  "analysis": {
+    "topics": [
+      "Decision-Making Process in Engineering Economy",
+      "Importance of Engineering Economy",
+      "Applications of Engineering Economy"
+    ],
+    "key_formulas": [],
+    "concepts": [
+      "Estimating financial outcomes",
+      "Evaluating alternatives",
+      "Economic comparison",
+      "Decision-making criteria"
+    ],
+    "difficulty_areas": {
+      "easy": [
+        "Understanding the importance of engineering economy",
+        "Identifying the steps in the decision-making process"
+      ],
+      "medium": [
+        "Estimating relevant costs",
+        "Evaluating alternatives based on defined criteria"
+      ],
+      "hard": [
+        "Formulating complex economic comparisons",
+        "Implementing and monitoring solutions in real-world scenarios"
+      ]
+    }
+  }
+}

@@ -163,7 +163,7 @@ export async function uploadWithProgress<T>(
   });
 }
 
-export default {
+const apiClient = {
   get,
   post,
   put,
@@ -171,3 +171,5 @@ export default {
   del,
   uploadWithProgress,
 };
+
+export default apiClient;

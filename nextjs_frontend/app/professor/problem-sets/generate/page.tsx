@@ -73,7 +73,7 @@ export default function GenerateProblemSetPage() {
       });
 
       // Backend now automatically stores the problem set and returns the ID
-      const problemSetId = result.problem_set_id;
+      const problemSetId = result.id;
       setProblemSet(result as any);
 
       // Show success message with link

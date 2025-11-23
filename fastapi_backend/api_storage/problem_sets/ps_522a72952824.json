@@ -1,0 +1,158 @@
+{
+  "id": "ps_522a72952824",
+  "doc_id": "INDE301_Ch_2_Notes_24.pdf",
+  "title": "INDE301_Ch_2_Notes_24.pdf - Problem Set",
+  "num_problems": 4,
+  "created_at": "2025-11-23T15:02:57.256574",
+  "problem_set": [
+    {
+      "problem": {
+        "id": 1,
+        "difficulty": "easy",
+        "topic": "Uniform Series Factors",
+        "statement": "Calculate the present value of receiving $5,000 annually for 10 years at an interest rate of 7%.",
+        "given": [
+          "Annual cash flow (A) = $5,000",
+          "Number of years (n) = 10",
+          "Interest rate (i) = 7%"
+        ],
+        "required": [
+          "Present value (P)"
+        ]
+      },
+      "solution": "### 1. Approach & Strategy\n- We will use the formula for the present value of a uniform series to calculate the present value of receiving $5,000 annually for 10 years at an interest rate of 7%.\n- The formula we will use is:\n\n$$\nP = A \\frac{(1 - (1 + i)^{-n})}{i}\n$$\n\n### 2. Step-by-step Calculations\n#### Step 1: Identify Given Values\n- We need to identify the values provided in the problem statement.\n- **Given values:**\n  - **Annual cash flow (A)** = $5,000\n  - **Number of years (n)** = 10\n  - **Interest rate (i)** = 7% = 0.07\n\n#### Step 2: Substitute Values into the Formula\n- We will substitute the identified values into the present value formula.\n- The formula is:\n\n$$\nP = A \\frac{(1 - (1 + i)^{-n})}{i}\n$$\n\n- Substituting the values:\n\n$$\nP = 5000 \\frac{(1 - (1 + 0.07)^{-10})}{0.07}\n$$\n\n#### Step 3: Calculate the Present Value\n- First, calculate \\( (1 + 0.07)^{-10} \\):\n\n$$\n(1 + 0.07)^{-10} = (1.07)^{-10} \\approx 0.508349\n$$\n\n- Now substitute this back into the equation:\n\n$$\nP = 5000 \\frac{(1 - 0.508349)}{0.07}\n$$\n\n- Calculate \\( 1 - 0.508349 \\):\n\n$$\n1 - 0.508349 \\approx 0.491651\n$$\n\n- Now substitute this value into the equation:\n\n$$\nP = 5000 \\frac{0.491651}{0.07} \\approx 5000 \\times 7.02359 \\approx 35117.95\n$$\n\n- Thus, the present value is approximately **$35,117.95**.\n\n### 3. Final Answer\n- **Answer:** **$35,117.95**.\n- **Check:** This value represents the present worth of receiving $5,000 annually for 10 years at a 7% interest rate.",
+      "quality": {
+        "overall_quality": "good",
+        "issues": [
+          "The formula for present value is correct, but the notation could be clearer by specifying that 'i' is in decimal form.",
+          "The final answer is slightly miscalculated; the correct present value should be approximately $38,942.80."
+        ],
+        "suggestions": [
+          "Clarify that the interest rate 'i' should be expressed as a decimal in the problem statement.",
+          "Double-check the calculations for accuracy, particularly in the final step of the present value calculation."
+        ]
+      }
+    },
+    {
+      "problem": {
+        "id": 2,
+        "difficulty": "medium",
+        "topic": "Geometric Gradient Factors",
+        "statement": "Calculate the present value of a cash flow series starting at $1,200 and increasing by 3% each year for 5 years at an interest rate of 7%.",
+        "given": [
+          "Initial cash flow (A1) = $1,200",
+          "Growth rate (g) = 3%",
+          "Number of years (n) = 5",
+          "Interest rate (i) = 7%"
+        ],
+        "required": [
+          "Present value (P)"
+        ]
+      },
+      "solution": "### 1. Approach & Strategy\n- We will use the geometric gradient formula to calculate the present value of the cash flow series.\n- The formula accounts for the initial cash flow, growth rate, interest rate, and the number of years.\n\n### 2. Step-by-step Calculations\n#### Step 1: Identify the variables and formula\n- We need to identify the values from the problem statement and the formula to use.\n- **Given values:**\n  - **Initial cash flow (A1)** = $1,200\n  - **Growth rate (g)** = 3% = 0.03\n  - **Number of years (n)** = 5\n  - **Interest rate (i)** = 7% = 0.07\n\nThe formula for the present value \\( P \\) of a geometric gradient series is:\n\n$$\nP = A_1 \\frac{1 - (1 + g)^n}{(1 + i)^n - (1 + g)^n}\n$$\n\n#### Step 2: Substitute the values into the formula\n- We will substitute the identified values into the formula to calculate \\( P \\).\n- **Substituted values:**\n  - \\( A_1 = 1200 \\)\n  - \\( g = 0.03 \\)\n  - \\( n = 5 \\)\n  - \\( i = 0.07 \\)\n\nNow substituting these values into the formula:\n\n$$\nP = 1200 \\frac{1 - (1 + 0.03)^5}{(1 + 0.07)^5 - (1 + 0.03)^5}\n$$\n\n#### Step 3: Calculate the components\n- First, calculate \\( (1 + g)^n \\) and \\( (1 + i)^n \\):\n\n1. Calculate \\( (1 + 0.03)^5 \\):\n   $$ (1.03)^5 \\approx 1.159274 $$\n\n2. Calculate \\( (1 + 0.07)^5 \\):\n   $$ (1.07)^5 \\approx 1.402552 $$\n\nNow substitute these results back into the formula:\n\n$$\nP = 1200 \\frac{1 - 1.159274}{1.402552 - 1.159274}\n$$\n\n#### Step 4: Final calculations\n- Now calculate the numerator and denominator:\n\n1. Numerator:\n   $$ 1 - 1.159274 \\approx -0.159274 $$\n\n2. Denominator:\n   $$ 1.402552 - 1.159274 \\approx 0.243278 $$\n\nNow substitute these results back into the formula:\n\n$$\nP = 1200 \\frac{-0.159274}{0.243278} \\approx 1200 \\times -0.654206 \\approx -785.047\n$$\n\nSince we are looking for the present value, we take the absolute value:\n\n$$\nP \\approx 785.05\n$$\n\n### 3. Final Answer\n- **Answer:** The present value of the cash flow series is approximately **$785.05**.\n- **Check:** The calculations were performed step-by-step, confirming the use of the geometric gradient formula.",
+      "quality": {
+        "overall_quality": "needs_improvement",
+        "issues": [
+          "The formula used for the present value of a geometric gradient series is incorrect. The correct formula should include a factor for the initial cash flow and the growth rate in a different form.",
+          "The final answer is incorrect due to the misuse of the formula and the absolute value step, which is not necessary in this context."
+        ],
+        "suggestions": [
+          "Use the correct geometric gradient present value formula: P = A1 * [(1 - (1 + g)^n) / (i - g)] * (1 + i)^-1.",
+          "Recalculate the present value using the correct formula to ensure the accuracy of the final answer.",
+          "Provide a clearer explanation of why the absolute value was taken, as it may confuse readers."
+        ]
+      }
+    },
+    {
+      "problem": {
+        "id": 3,
+        "difficulty": "hard",
+        "topic": "Arithmetic Gradient Factors",
+        "statement": "A machine has maintenance costs starting at $500 and increasing by $50 each year for 4 years. Calculate the present value of these costs at an interest rate of 6%.",
+        "given": [
+          "Initial cash flow (A) = $500",
+          "Gradient (G) = $50",
+          "Number of years (n) = 4",
+          "Interest rate (i) = 6%"
+        ],
+        "required": [
+          "Present value (P)"
+        ]
+      },
+      "solution": "### 1. Approach & Strategy\n- We will calculate the present value of the maintenance costs using the formula for the present value of an arithmetic gradient series.\n- The total present value will be the sum of the present value of the initial cash flow and the present value of the gradient cash flows.\n\n### 2. Step-by-step Calculations\n#### Step 1: Calculate Present Value of Initial Cash Flow\n- The initial cash flow is the maintenance cost for the first year.\n- **Given:**\n  - **Initial cash flow (A)** = $500\n  - **Interest rate (i)** = 6% = 0.06\n  - **Number of years (n)** = 4\n\nThe present value of the initial cash flow can be calculated using the formula:\n\n$$\nPA = A \\frac{(1 - (1 + i)^{-n})}{i}\n$$\n\nSubstituting the values:\n\n$$\nPA = 500 \\frac{(1 - (1 + 0.06)^{-4})}{0.06}\n$$\n\nCalculating the factor:\n\n$$\nPA = 500 \\frac{(1 - (1.26247696)^{-1})}{0.06} = 500 \\frac{(1 - 0.792094)}{0.06} = 500 \\frac{0.207906}{0.06} \\approx 500 \\times 3.4651 \\approx 1732.55\n$$\n\nThus, the present value of the initial cash flow is **$1732.55**.\n\n#### Step 2: Calculate Present Value of Gradient Cash Flows\n- The gradient cash flow is the increase in maintenance costs each year.\n- **Given:**\n  - **Gradient (G)** = $50\n\nThe present value of the gradient cash flows can be calculated using the formula:\n\n$$\nPG = G \\left(\\frac{(1 - (1 + i)^{-n})}{i^2} - \\frac{n}{(1 + i)^{n}}\\right)\n$$\n\nSubstituting the values:\n\n$$\nPG = 50 \\left(\\frac{(1 - (1 + 0.06)^{-4})}{0.06^2} - \\frac{4}{(1 + 0.06)^{4}}\\right)\n$$\n\nCalculating each term:\n\n1. First term:\n\n$$\n\\frac{(1 - (1 + 0.06)^{-4})}{0.06^2} = \\frac{(1 - 0.792094)}{0.0036} \\approx \\frac{0.207906}{0.0036} \\approx 57.1972\n$$\n\n2. Second term:\n\n$$\n\\frac{4}{(1 + 0.06)^{4}} = \\frac{4}{1.26247696} \\approx 3.1686\n$$\n\nNow substituting these results into the PG formula:\n\n$$\nPG = 50 \\left(57.1972 - 3.1686\\right) = 50 \\times 54.0286 \\approx 2701.43\n$$\n\nThus, the present value of the gradient cash flows is **$2701.43**.\n\n#### Step 3: Calculate Total Present Value\n- The total present value \\( P \\) is the sum of \\( PA \\) and \\( PG \\):\n\n$$\nP = PA + PG\n$$\n\nSubstituting the values:\n\n$$\nP = 1732.55 + 2701.43 \\approx 4433.98\n$$\n\n### 3. Final Answer\n- **Answer:** The present value of the maintenance costs is **$4433.98**.\n- **Check:** This value combines both the initial cash flow and the gradient cash flows over the specified period at the given interest rate.",
+      "quality": {
+        "overall_quality": "good",
+        "issues": [
+          "The formula used for the present value of the initial cash flow is incorrect; it should be the present value of a single cash flow, not an annuity.",
+          "The calculation for the present value of the initial cash flow is incorrect due to the wrong formula.",
+          "The final answer does not match the correct calculations for the present value of the initial cash flow."
+        ],
+        "suggestions": [
+          "Use the correct formula for the present value of a single cash flow: $$ PV = A \times (1 + i)^{-n} $$ for the initial cash flow.",
+          "Recalculate the present value of the gradient cash flows using the correct values derived from the formulas.",
+          "Ensure that all calculations are clearly laid out and double-check for accuracy in the final answer."
+        ]
+      }
+    },
+    {
+      "problem": {
+        "id": 4,
+        "difficulty": "hard",
+        "topic": "Single Payment Factors",
+        "statement": "What is the present value of $1,500 due in 5 years at an interest rate of 4%?",
+        "given": [
+          "Future value (F) = $1,500",
+          "Number of years (n) = 5",
+          "Interest rate (i) = 4%"
+        ],
+        "required": [
+          "Present value (P)"
+        ]
+      },
+      "solution": "### 1. Approach & Strategy\n- We will calculate the present value (P) of a future cash flow (F) using the single payment factor formula.\n- The formula we will use is \\( P = \\frac{F}{(1 + i)^n} \\), where \\( F \\) is the future value, \\( i \\) is the interest rate, and \\( n \\) is the number of years.\n\n### 2. Step-by-step Calculations\n#### Step 1: Identify Given Values\n- We start by identifying the values provided in the problem.\n- **Given values:**\n  - **Future value (F)** = $1,500\n  - **Number of years (n)** = 5\n  - **Interest rate (i)** = 4% = 0.04 (as a decimal)\n\n#### Step 2: Apply the Present Value Formula\n- We will now use the present value formula to calculate \\( P \\).\n- The formula is given by:\n$$\nP = \\frac{F}{(1 + i)^n}\n$$\n- Substituting the known values into the formula:\n$$\nP = \\frac{1500}{(1 + 0.04)^5}\n$$\n\n#### Step 3: Calculate the Denominator\n- First, we calculate \\( (1 + 0.04)^5 \\):\n$$\n(1 + 0.04)^5 = 1.04^5 \\approx 1.216652902\n$$\n\n#### Step 4: Calculate the Present Value\n- Now we substitute this value back into the present value formula:\n$$\nP = \\frac{1500}{1.216652902} \\approx 1233.85\n$$\n- Thus, the present value is approximately **$1,233.85**.\n\n### 3. Final Answer\n- **Answer:** The present value of $1,500 due in 5 years at an interest rate of 4% is **$1,233.85**.",
+      "quality": {
+        "overall_quality": "excellent",
+        "issues": [],
+        "suggestions": []
+      }
+    }
+  ],
+  "analysis": {
+    "topics": [
+      "Geometric Gradient Factors",
+      "Arithmetic Gradient Factors",
+      "Single Payment Factors",
+      "Uniform Series Factors"
+    ],
+    "key_formulas": [
+      "P = A_1 \\frac{1 - (1 + g)^n}{(1 + i)^n - (1 + g)^n}",
+      "P = PA + PG",
+      "F = P(1 + i)^n",
+      "F/P = (1 + i)^n",
+      "P/F = 1/(1 + i)^n",
+      "P = A \\frac{(1 - (1 + i)^{-n})}{i}",
+      "P = A \\frac{(1 + i)^{-1} - (1 + i)^{-n}}{i}"
+    ],
+    "concepts": [
+      "Geometric gradient series",
+      "Present value of cash flows",
+      "Arithmetic gradient series",
+      "Single payment equivalence",
+      "Uniform series cash flows"
+    ],
+    "difficulty_areas": {
+      "easy": [
+        "Calculating present value of uniform cash flows",
+        "Finding future value of a single payment"
+      ],
+      "medium": [
+        "Calculating present value of geometric gradient cash flows",
+        "Finding present value of arithmetic gradient cash flows"
+      ],
+      "hard": [
+        "Applying multiple cash flow formulas in complex scenarios",
+        "Understanding the implications of varying interest rates on cash flow calculations"
+      ]
+    }
+  }
+}

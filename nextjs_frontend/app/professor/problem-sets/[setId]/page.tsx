@@ -8,6 +8,7 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 import { getProblemSet } from '@/lib/api/submissions';
+import { ProblemSetItem } from '@/lib/types';
 
 /**
  * Professor Problem Set View
@@ -103,7 +104,7 @@ export default function ProfessorProblemSetViewPage() {
 
       {/* Problems */}
       <div className="space-y-6">
-        {problemSet.problem_set.map((item, index) => {
+        {problemSet.problem_set.map((item: ProblemSetItem, index: number) => {
           const problem = item.problem;
           const solution = item.solution;
 

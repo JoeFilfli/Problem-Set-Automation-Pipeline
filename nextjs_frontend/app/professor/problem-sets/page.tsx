@@ -97,7 +97,7 @@ export default function ProblemSetsPage() {
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-2 mt-2">
-                      {set.topics.map((topic, i) => (
+                      {set.topics.map((topic: string, i: number) => (
                         <span key={i} className="badge-green">
                           {topic}
                         </span>

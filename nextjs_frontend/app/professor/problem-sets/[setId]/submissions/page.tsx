@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { gradeSubmissions, getGradeLetter, getGradeColor } from '@/lib/api';
 import { getProblemSet, getSubmissions, updateSubmissionGrade } from '@/lib/api/submissions';
-import type { GradingResult } from '@/lib/types';
+import type { GradingResult, Problem } from '@/lib/types';
 
 /**
  * Professor Submissions Grading Page
@@ -75,7 +75,7 @@ export default function SubmissionsPage() {
 
   // Filter submissions by selected problem
   const problemSubmissions = submissions.filter(s => s.problemId === selectedProblem);
-  const currentProblem = problemSet?.problems?.find(p => p.id === selectedProblem);
+  const currentProblem = problemSet?.problems?.find((p: Problem) => p.id === selectedProblem);
 
   // Handle grading
   const handleGradeAll = async () => {
@@ -167,7 +167,7 @@ export default function SubmissionsPage() {
       <div className="card">
         <h3 className="font-semibold text-aub-black mb-3">Select Problem:</h3>
         <div className="flex gap-2">
-          {problemSet?.problems?.map((problem) => {
+          {problemSet?.problems?.map((problem: Problem) => {
             const problemSubs = submissions.filter(s => s.problemId === problem.id);
             const gradedCount = problemSubs.filter(s => s.graded).length;
 
@@ -359,7 +359,7 @@ export default function SubmissionsPage() {
 
               {!submission.graded && (
                 <div className="text-center py-2 text-gray-500 text-sm">
-                  Not graded yet - use "Grade All Submissions" button above
+                  Not graded yet - use &quot;Grade All Submissions&quot; button above
                 </div>
               )}
             </div>

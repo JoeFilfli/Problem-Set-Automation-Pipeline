@@ -138,7 +138,7 @@ export default function StudentProblemSetsPage() {
         {problemSets.length === 0 && (
           <div className="text-center py-12 text-gray-500">
             <p className="text-lg mb-2">No problem sets available yet</p>
-            <p className="text-sm">Your professor hasn't created any problem sets.</p>
+            <p className="text-sm">Your professor hasn&apos;t created any problem sets.</p>
           </div>
         )}
 

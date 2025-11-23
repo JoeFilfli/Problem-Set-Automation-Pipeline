@@ -40,7 +40,7 @@ export default function MaterialsPanel({
       }
     }
     loadMaterials();
-  }, []);
+  }, [onSelectMaterial, selectedMaterial]);
 
   return (
     <div className="panel h-full flex flex-col custom-scrollbar">
