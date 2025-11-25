@@ -8,6 +8,7 @@ from api.routers.rag import router as rag_router
 from api.routers.mcqs import router as mcqs_router
 from api.routers.analytics import router as analytics_router
 from api.routers.images import router as images_router
+from api.routers.guided_solve import router as guided_solve_router
 
 __all__ = [
     "materials_router",
@@ -17,4 +18,5 @@ __all__ = [
     "mcqs_router",
     "analytics_router",
     "images_router",
+    "guided_solve_router",
 ]

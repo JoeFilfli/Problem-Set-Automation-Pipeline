@@ -17,6 +17,7 @@ from api.routers import (
     mcqs_router,
     analytics_router,
     images_router,
+    guided_solve_router,
 )
 from api.dependencies import get_vector_store
 
@@ -40,6 +41,7 @@ app.include_router(rag_router)
 app.include_router(mcqs_router)
 app.include_router(analytics_router)
 app.include_router(images_router)
+app.include_router(guided_solve_router)
 
 
 # Core endpoints

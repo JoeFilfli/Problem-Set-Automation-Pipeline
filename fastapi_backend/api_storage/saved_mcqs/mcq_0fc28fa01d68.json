@@ -1,0 +1,19 @@
+{
+  "id": "mcq_0fc28fa01d68",
+  "mcq": {
+    "id": 1,
+    "difficulty": "easy",
+    "topic": "Decision-Making Process",
+    "question": "What is the first step in the decision-making process according to engineering economy?",
+    "options": {
+      "A": "Understand the problem and define the objective.",
+      "B": "Collect relevant information.",
+      "C": "Define alternatives and estimate relevant costs.",
+      "D": "Evaluate each alternative."
+    },
+    "correct_answer": "A",
+    "explanation": "The first step in the decision-making process is to understand the problem and define the objective, which sets the foundation for all subsequent steps."
+  },
+  "chapter": "INDE301_Ch1_Notes_24.pdf",
+  "saved_at": "2025-11-25T18:45:53.316403"
+}

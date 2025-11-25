@@ -1,0 +1,19 @@
+{
+  "id": "mcq_c24dfb87b66f",
+  "mcq": {
+    "id": 2,
+    "difficulty": "hard",
+    "topic": "Economic Analysis in Engineering",
+    "question": "In the context of engineering economy, which of the following is a crucial step after evaluating each alternative?",
+    "options": {
+      "A": "Select the best alternative.",
+      "B": "Define alternatives and estimate relevant costs.",
+      "C": "Collect relevant information.",
+      "D": "Understand the problem and define the objective."
+    },
+    "correct_answer": "A",
+    "explanation": "After evaluating each alternative, the next crucial step is to select the best alternative, which is essential for effective decision-making in engineering economy."
+  },
+  "chapter": "INDE301_Ch1_Notes_24.pdf",
+  "saved_at": "2025-11-25T18:45:55.913346"
+}

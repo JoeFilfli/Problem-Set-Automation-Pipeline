@@ -194,9 +194,12 @@ export default function StudentProblemSetsPage() {
                   >
                     View Set
                   </Link>
-                  {set.status === 'in_progress' && (
-                    <button className="btn-secondary text-sm">Continue</button>
-                  )}
+                  <Link
+                    href={`/student/solve?problemSetId=${set.id}`}
+                    className="btn-secondary text-sm text-center flex items-center justify-center gap-1"
+                  >
+                    🤖 Solve with AI
+                  </Link>
                 </div>
               </div>
             </div>
