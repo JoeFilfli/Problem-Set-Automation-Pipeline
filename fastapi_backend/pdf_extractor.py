@@ -82,7 +82,7 @@ def extract_pdf_with_ocr(path: str, use_gpt4_vision: bool = True) -> str:
             print(f"   [OCR] Processing page {page_num}/{total_pages}...")
             
             # Use OpenAI Vision API to extract text
-            model = "gpt-4o" if use_gpt4_vision else "gpt-4o-mini"
+            model = "gpt-4o"
             response = client.chat.completions.create(
                 model=model,
                 messages=[
@@ -113,8 +113,7 @@ Return ONLY the extracted text, no commentary or analysis."""
                         ]
                     }
                 ],
-                max_tokens=2000,
-                temperature=0.1
+                max_tokens=2000
             )
             
             page_text = response.choices[0].message.content

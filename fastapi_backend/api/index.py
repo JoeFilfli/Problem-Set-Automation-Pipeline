@@ -18,6 +18,7 @@ from api.routers import (
     analytics_router,
     images_router,
     guided_solve_router,
+    beat_ai_router,
 )
 from api.dependencies import get_vector_store
 
@@ -42,6 +43,7 @@ app.include_router(mcqs_router)
 app.include_router(analytics_router)
 app.include_router(images_router)
 app.include_router(guided_solve_router)
+app.include_router(beat_ai_router)
 
 
 # Core endpoints
@@ -78,7 +80,7 @@ def health_check() -> Dict[str, Any]:
         client = OpenAI()
         # Simple test call
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4o",
             messages=[{"role": "user", "content": "test"}],
             max_tokens=5
         )

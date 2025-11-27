@@ -1,0 +1,238 @@
+{
+  "id": "ps_b09bde113fb7",
+  "doc_id": "INDE301_Ch_3_Notes_24.pdf",
+  "title": "INDE301_Ch_3_Notes_24.pdf - Problem Set",
+  "num_problems": 5,
+  "created_at": "2025-11-27T20:28:08.867760",
+  "problem_set": [
+    {
+      "problem": {
+        "id": 1,
+        "difficulty": "easy",
+        "topic": "Uniform series: present and future worth",
+        "statement": "A maintenance contract pays a uniform amount A = $1,000 per year for 5 years, with payments at the end of each year. The annual interest rate is i = 8%. Compute the present worth P and the future worth F of this cash flow.",
+        "given": [
+          "A = 1,000 per year",
+          "n = 5 years",
+          "payments at end of each year",
+          "i = 8%"
+        ],
+        "required": [
+          "Present worth P",
+          "Future worth F"
+        ]
+      },
+      "solution": "### 1. Approach & Strategy\n- Recognize this as a uniform series (annuity-immediate) with payments at the end of each year for n = 5 years.\n- Use present-worth and future-worth factors for a uniform series: \n  - \\(P = A \\cdot (P/A,i,n)\\) with \\((P/A,i,n) = \\dfrac{1 - (1+i)^{-n}}{i}\\).\n  - \\(F = A \\cdot (F/A,i,n)\\) with \\((F/A,i,n) = \\dfrac{(1+i)^n - 1}{i}\\).\n- Compute numerical values for \\(i = 8\\%\\) and \\(n = 5\\), then obtain \\(P\\) and \\(F\\).\n\n### 2. Step-by-step Calculations\n#### Step 1: Identify formulas and compute factors\n- **Givens/Derived values:**\n  - **A** = 1,000 per year\n  - **n** = 5 years\n  - **payments at end of each year** (annuity-immediate)\n  - **i** = 8%\n- The relevant factors:\n$$\n(P/A,i,n) = \\frac{1 - (1+i)^{-n}}{i}, \\qquad\n(F/A,i,n) = \\frac{(1+i)^n - 1}{i}\n$$\n- The corresponding present and future worth relations:\n$$\nP = A \\cdot (P/A,i,n), \\qquad\nF = A \\cdot (F/A,i,n)\n$$\n\n#### Step 2: Present worth \\(P\\)\n- **Equation with substituted numbers:**\n$$\n(P/A,0.08,5) = \\frac{1 - (1.08)^{-5}}{0.08}\n$$\n- **Numerical substitution and evaluation:**\n$$\n(P/A,0.08,5) \\approx \\frac{1 - 0.680583}{0.08} \\approx 3.992709\n$$\n- **Present worth:**\n$$\nP = A \\cdot (P/A,0.08,5) = 1000 \\cdot 3.992709 \\approx 3{,}992.71\n$$\n\n#### Step 3: Future worth \\(F\\)\n- **Equation with substituted numbers:**\n$$\n(F/A,0.08,5) = \\frac{(1.08)^5 - 1}{0.08}\n$$\n- **Numerical substitution and evaluation:**\n$$\n(F/A,0.08,5) \\approx \\frac{1.469328 - 1}{0.08} \\approx 5.866601\n$$\n- **Future worth:**\n$$\nF = A \\cdot (F/A,0.08,5) = 1000 \\cdot 5.866601 \\approx 5{,}866.60\n$$\n\n> Quick consistency check: Since \\(P\\) is the present value of the same cash flows, accumulating \\(P\\) forward 5 years gives \\(P(1+i)^n \\approx 3{,}992.71 \\times 1.469328 \\approx 5{,}866.60 = F\\). This confirms the results.\n\n### 3. Final Answer\n- **Answer:** \n  - Present worth \\(P \\approx \\$3{,}992.71\\)\n  - Future worth \\(F \\approx \\$5{,}866.60\\)\n- **Check:** Verified by computing both \\(P = A(P/A,i,n)\\) and \\(F = A(F/A,i,n)\\), and the forward-accumulation relation \\(F = P(1+i)^n\\) holds for these values.",
+      "quality": {
+        "overall_quality": "excellent",
+        "issues": [],
+        "suggestions": [
+          "Consider including a brief per-payment present value calculation (PV of each $1,000 payment) to reinforce the concept of PV of a uniform series.",
+          "Explicitly note that F = P(1+i)^n holds exactly (without rounding) for annuity-immediate cash flows, and show the algebraic relationship F = A[(1+i)^n - 1]/i = P(1+i)^n.",
+          "Present final results to two decimal places (currency) and mention the rounding convention used.",
+          "Optionally provide the factor values (P/A and F/A) with more decimal places to illustrate precision and help verification. "
+        ]
+      }
+    },
+    {
+      "problem": {
+        "id": 2,
+        "difficulty": "medium",
+        "topic": "Uniform series plus arithmetic gradient: total present worth and total annual series",
+        "statement": "A project consists of a base uniform payment of A = $200 per year for n = 6 years (end of each year). In addition, there is an arithmetic gradient of G = $100 per year starting in year 2 and ending in year 6 (i.e., the payments are 200 + 100, 200 + 200, 200 + 300, 200 + 400, 200 + 500 for years 2–6). The discount rate is i = 10%. Compute the total present worth P_T and the total annual series A_T for the combined cash flow.",
+        "given": [
+          "A = 200",
+          "G = 100",
+          "n = 6",
+          "gradient terms = 5 (years 2–6)",
+          "i = 10%"
+        ],
+        "required": [
+          "P_T (total present worth) of combined flows",
+          "A_T (total equivalent uniform annual series) of combined flows"
+        ]
+      },
+      "solution": "### 1. Approach & Strategy\n- Decompose the cash flow into a base uniform series and an arithmetic gradient, then sum their present worths.\n- Convert the total present worth to an equivalent uniform annual series over the project horizon.\n\n### 2. Step-by-step Calculations\n#### Step 1: Present worth of the base uniform series\n- **Givens:** **A = 200**, **i = 0.10**, **n = 6**.\n- The present worth of a uniform series is\n$$\nP_A = A \\left( \\frac{1 - (1+i)^{-n}}{i} \\right).\n$$\n- Substitute numbers:\n$$\nP_A = 200 \\left( \\frac{1 - (1.1)^{-6}}{0.1} \\right).\n$$\n- Since $(1.1)^{-6} \\approx 0.56447393$,\n$$\nP_A \\approx 200 \\left( \\frac{1 - 0.56447393}{0.1} \\right)\n= 200 \\times 4.3552607 \\approx \\mathbf{871.05}.\n$$\n\n#### Step 2: Present worth of the arithmetic gradient\n- **Givens:** **G = 100**, gradient terms = 5 (years 2–6), **i = 0.10**.\n- The gradient increments are 100, 200, 300, 400, 500 at years 2–6 respectively. Let \\(v = \\frac{1}{1+i} = \\frac{1}{1.1}\\).\n$$\nP_G = \\sum_{t=2}^{6} 100 (t-1) \\, v^{t}.\n$$\n- Compute powers:  \n  \\(v^2 \\approx 0.82644628\\), \\(v^3 \\approx 0.75131480\\), \\(v^4 \\approx 0.68301346\\), \\(v^5 \\approx 0.62092132\\), \\(v^6 \\approx 0.56447393\\).\n- Term-by-term:\n\\[\n\\begin{aligned}\nt=2:&\\; 100(1) v^2 \\approx 82.64463,\\\\\nt=3:&\\; 200 v^3 \\approx 150.26296,\\\\\nt=4:&\\; 300 v^4 \\approx 204.90404,\\\\\nt=5:&\\; 400 v^5 \\approx 248.36853,\\\\\nt=6:&\\; 500 v^6 \\approx 282.23697.\n\\end{aligned}\n\\]\n- Sum:\n$$\nP_G \\approx 82.64463 + 150.26296 + 204.90404 + 248.36853 + 282.23697 \\approx \\mathbf{968.42}.\n$$\n\n#### Step 3: Total present worth\n- **Derivation:** \\(P_T = P_A + P_G\\).\n$$\nP_T \\approx 871.05 + 968.42 = \\mathbf{1839.47}.\n$$\n\n#### Step 4: Total equivalent uniform annual series\n- The equivalent annual amount satisfies \\(P_T = A_T \\cdot (P/A, i, n)\\) with \\(n=6\\) and \\(i=0.10\\).\n- Compute the A/P factor:\n$$\n(A/P)_{i,n} = \\frac{i(1+i)^n}{(1+i)^n - 1} = \\frac{0.1 \\cdot 1.771561}{1.771561 - 1} \\approx \\mathbf{0.229607}.\n$$\n- Then\n$$\nA_T = P_T \\cdot (A/P)_{i,n} \\approx 1839.46926 \\cdot 0.229607 \\approx \\mathbf{422.36 \\text{ per year}}.\n$$\n\n### 3. Final Answer\n- **P_T:** **$1,839.47** (present worth of the combined cash flow).\n- **A_T:** **$422.36 per year** (total equivalent uniform annual series).\n- **Check:** Using \\(A_T \\cdot (P/A,i,n) \\approx 422.36 \\times 4.35526 \\approx 1,839.47\\), which matches \\(P_T\\) within rounding.",
+      "quality": {
+        "overall_quality": "excellent",
+        "issues": [
+          "Minor notational inconsistency: the solution references both P/A and A/P factors in different parts (P_T = A_T · (P/A,i,n) vs using (A/P,i,n) to compute A_T). The numeric results are correct, but clarifying that A_T = P_T · (A/P,i,n) would avoid confusion."
+        ],
+        "suggestions": [
+          "Consider providing a closed-form expression for the present worth of an arithmetic gradient (or at least noting the general form) to justify the gradient PV step instead of listing term-by-term calculations.",
+          "State all final results with explicit units and consistent rounding (e.g., P_T = $1,839.47, AT = $422.36 per year).",
+          "Add a brief sanity check or intuition (e.g., compare the undiscounted total payments with the present-worth result) to help readers verify the magnitude of the results."
+        ]
+      }
+    },
+    {
+      "problem": {
+        "id": 3,
+        "difficulty": "hard",
+        "topic": "Shifted uniform series and shift rules",
+        "statement": "A uniform series of A = $500 per year begins at year 4 and lasts for n = 6 years (years 4 through 9). The interest rate is i = 8%. Using four equivalent methods described for shifted uniform series, determine the present worth P_0 of the series.",
+        "given": [
+          "A = 500",
+          "start year = 4",
+          "n = 6 (years 4–9)",
+          "i = 8%"
+        ],
+        "required": [
+          "Method (a): Direct summation to year 0",
+          "Method (b): Move to year end with F/P then discount to year 0",
+          "Method (c): Use F/A to compute F then discount to year 0",
+          "Method (d): Use P/A to obtain P_3 at year 3 and then discount to year 0 with P/F",
+          "All four methods should yield the same P_0; show the setup and final numeric value"
+        ]
+      },
+      "solution": "### 1. Approach & Strategy\n- Treat the six uniform payments of A = 500 as a shifted uniform series beginning in year 4 and ending in year 9, with interest i = 8%.\n- Apply four equivalent methods for shifted uniform series to obtain the present worth P0, showing setup and numeric result for each:\n  - (a) Direct summation to year 0.\n  - (b) Move to year 9 (end of the series) with F/P, then discount to year 0.\n  - (c) Use F/A to compute the future value of the six payments, then discount to year 0.\n  - (d) Use P/A to find P3 at year 3, then discount to year 0 with P/F.\n- Verify that all methods give the same P0 (within rounding).\n\n### 2. Step-by-step Calculations\n#### Step 1: Direct summation to year 0 (Method (a))\n- **Givens:**\n  - **A = 500**\n  - **start year = 4**\n  - **n = 6 (years 4–9)**\n  - **i = 8%**\n- Equation (direct sum):\n$$\nP_0 = \\sum_{t=4}^{9} A(1+i)^{-t} .\n$$\n- Alternative compact form:\n$$\nP_0 = A (1+i)^{-4} \\sum_{k=0}^{5} (1+i)^{-k}\n   = A (1+i)^{-4} \\frac{1 - (1+i)^{-6}}{1 - (1+i)^{-1}} .\n$$\n- Substituting numbers (with calculator-ready approximations):\n$$\n(1+i) = 1.08,\\quad (1+i)^{-4} \\approx 0.7350,\\quad (1+i)^{-6} \\approx 0.6302,\\quad (1+i)^{-1} \\approx 0.9259.\n$$\n$$\nP_0 \\approx 500 \\times 0.7350 \\times \\frac{1 - 0.6302}{1 - 0.9259}\n       \\approx 500 \\times 0.7350 \\times \\frac{0.3698}{0.0741}\n       \\approx 500 \\times 0.7350 \\times 4.993\n       \\approx 1{,}835 \\quad \\text{(approximately)}.\n$$\n- **Result (a):** **P0 ≈ $1,835** (present worth from direct summation).\n\n#### Step 2: Move to year end with F/P then discount to year 0 (Method (b))\n- **Givens:**\n  - **A = 500**\n  - **i = 8%**\n  - **n = 6** (six payments)\n- Future worth at year 9 of the six payments:\n$$\nF_9 = A\\,\\frac{(1+i)^{6} - 1}{i}.\n$$\n- Discount F9 back to year 0 using P/F for 9 years:\n$$\nP_0 = \\frac{F_9}{(1+i)^9}.\n$$\n- Substituting numbers:\n$$\n(1+i)^{6} \\approx 1.586874,\\quad (1+i)^{9} \\approx 1.999005,\\quad\n\\frac{(1+i)^{6}-1}{i} \\approx \\frac{0.586874}{0.08} \\approx 7.33593.\n$$\n$$\nF_9 \\approx 500 \\times 7.33593 \\approx 3{,}667.96,\\quad\nP_0 \\approx \\frac{3{,}667.96}{1.999005} \\approx 1{,}835.\n$$\n- **Result (b):** **P0 ≈ $1,835** (via F/P then discount).\n\n#### Step 3: Use F/A to compute F then discount to year 0 (Method (c))\n- **Givens:**\n  - **A = 500**\n  - **i = 8%**\n  - **n = 6**\n- First compute F from the six payments using F/A:\n$$\nF = A\\,\\frac{(1+i)^{6} - 1}{i} = 500 \\times 7.33593 \\approx 3{,}667.96.\n$$\n- Then discount F to year 0 with P/F (9 years):\n$$\nP_0 = \\frac{F}{(1+i)^9} \\approx \\frac{3{,}667.96}{1.999005} \\approx 1{,}835.\n$$\n- **Result (c):** **P0 ≈ $1,835** (via F/A then discount).\n\n#### Step 4: Use P/A to obtain P3 at year 3 and then discount to year 0 with P/F (Method (d))\n- **Givens:**\n  - **A = 500**\n  - **i = 8%**\n  - **n = 6**\n- Present value at year 3 of the remaining payments (years 4–9) using P/A:\n$$\nP_3 = A\\,\\frac{1 - (1+i)^{-n}}{i} = 500 \\times \\frac{1 - (1+i)^{-6}}{i}.\n$$\n- Then discount P3 back to year 0 using P/F for 3 years (i.e., multiply by (1+i)^{-3}):\n$$\nP_0 = P_3 \\, (1+i)^{-3} = A\\,\\frac{1 - (1+i)^{-6}}{i} \\cdot (1+i)^{-3}.\n$$\n- Substituting numbers:\n$$\n(1+i)^{-6} \\approx 0.6302,\\quad\n\\frac{1 - (1+i)^{-6}}{i} \\approx \\frac{1 - 0.6302}{0.08} \\approx 4.62289,\n$$\n$$\nP_3 \\approx 500 \\times 4.62289 \\approx 2{,}311.44,\\quad\n(1+i)^{-3} \\approx 0.79383.\n$$\n$$\nP_0 \\approx 2{,}311.44 \\times 0.79383 \\approx 1{,}835.\n$$\n- **Result (d):** **P0 ≈ $1,835** (via P/A to P3 then P/F).\n\n### 3. Final Answer\n- **Answer:** **$1,835 (approximately)** present worth P0 of the shifted uniform series.\n- **Check:** All four methods (a)–(d) yield essentially the same present worth to within rounding error (≈ $1,835).",
+      "quality": {
+        "overall_quality": "excellent",
+        "issues": [
+          "A minor ambiguity: the problem assumes payments occur at the end of each year (end-of-year payments). This should be stated explicitly to avoid misinterpretation.",
+          "Methods (b) and (c) are essentially equivalent in result since both rely on the same future value F obtained from the annuity; explicitly noting this redundancy can help learners understand the distinction between presenting via F/P vs F/A.",
+          "Final numeric values are given to the nearest dollar; consider reporting a consistent two-decimal result (e.g., 1,834.89) to avoid rounding confusion and to reflect typical engineering/accounting conventions.",
+          "A brief explicit check or a small table showing that all four methods yield the same P0 (within rounding) would strengthen the validation."
+        ],
+        "suggestions": [
+          "Explicitly state that payments occur at the end of years 4 through 9 (i.e., t = 4, 5, 6, 7, 8, 9).",
+          "Provide a compact table or a side calculation showing intermediate PV/FV values for each method to aid verification and transparency.",
+          "Present the final P0 with two decimal places (e.g., P0 = 1,834.89) and state the rounding convention used.",
+          "Add a short remark clarifying why methods (b) and (c) yield the same F and consequently the same P0, to clarify the methodological differences for students.",
+          "Optionally, include the exact symbolic expressions for each method before numerical substitution to emphasize their equivalence and aid checking."
+        ]
+      }
+    },
+    {
+      "problem": {
+        "id": 4,
+        "difficulty": "easy",
+        "topic": "NPV and PMT in spreadsheet-based cash flow analysis",
+        "statement": "A project yields the following cash flows: Year 0: -$50,000; Year 1: $12,000; Year 2: $16,000; Year 3: $20,000; Year 4: $8,000. The discount rate is i = 9%. Using spreadsheet-style methods, (a) compute the net present value (NPV) of the project; (b) determine the equivalent uniform annual amount A over 4 years (years 1–4) that would yield the same NPV, using the PMT approach.",
+        "given": [
+          "CF0 = -50,000",
+          "CF1 = 12,000",
+          "CF2 = 16,000",
+          "CF3 = 20,000",
+          "CF4 = 8,000",
+          "i = 9%"
+        ],
+        "required": [
+          "NPV at i = 9%",
+          "Equivalent uniform annual amount A over 4 years that matches the NPV"
+        ]
+      },
+      "solution": "### 1. Approach & Strategy\n- Compute the project NPV at i = 9% by discounting all future cash inflows and combining with the outflow at t = 0.\n- Then, find the uniform annual amount A over 4 years that yields the same NPV by using the PMT/present-value relationship for a 4-year annuity.\n\n### 2. Step-by-step Calculations\n#### Step 1: NPV at i = 9%\n- Explanation: The NPV is the sum of the initial outlay plus the present value of each subsequent cash flow.\n- **GIVEN:**\n  - **CF0** = -50,000\n  - **CF1** = 12,000\n  - **CF2** = 16,000\n  - **CF3** = 20,000\n  - **CF4** = 8,000\n  - **i** = 9%\n- **DERIVED:**\n  - **PV1** = $\\dfrac{CF1}{1+i} = \\dfrac{12{,}000}{1.09} \\approx 11{,}009.17$\n  - **PV2** = $\\dfrac{CF2}{(1+i)^2} = \\dfrac{16{,}000}{1.09^2} \\approx 13{,}466.91$\n  - **PV3** = $\\dfrac{CF3}{(1+i)^3} = \\dfrac{20{,}000}{1.09^3} \\approx 15{,}432.26$\n  - **PV4** = $\\dfrac{CF4}{(1+i)^4} = \\dfrac{8{,}000}{1.09^4} \\approx 5{,}667.40$\n  - **Sum PV inflows** ≈ $11{,}009.17 + 13{,}466.91 + 15{,}432.26 + 5{,}667.40 \\approx 45{,}575.75$\n  - **NPV** = **NPV** = CF0 + Sum PV inflows ≈ $-50{,}000 + 45{,}575.75 \\approx -4{,}424.25$\n  - Therefore, **NPV at i = 9% ≈ -\\$4,424.25**.\n\n$$\n\\text{NPV} = CF_0 + \\sum_{t=1}^{4} \\frac{CF_t}{(1+i)^t}\n$$\n\n#### Step 2: Equivalent uniform annual amount A over 4 years (PMT approach)\n- Explanation: Let A be the annual payment in years 1–4 that produces the same NPV. The PV of A as a 4-year annuity is $A \\cdot P/A(i,4)$, so we solve for A from\n$$\n\\text{NPV} = CF_0 + A \\cdot \\left(\\frac{1 - (1+i)^{-4}}{i}\\right)\n$$\n- **GIVEN:**\n  - **i** = 9%\n  - **NPV** from Step 1 ≈ -4,424.25\n- **DERIVED:**\n  - **P/A(i,4)** factor: $\\displaystyle P/A = \\frac{1 - (1+i)^{-4}}{i} = \\frac{1 - (1.09)^{-4}}{0.09} \\approx 3.23972$\n  - Solve for A:\n    $$\n    A = \\frac{\\text{NPV} - CF_0}{P/A} = \\frac{-4{,}424.25 - (-50{,}000)}{3.23972} = \\frac{45{,}575.75}{3.23972} \\approx 14{,}067.74\n    $$\n  - Rounded, **A ≈ \\$14,068 per year** (years 1–4).\n\n### 3. Final Answer\n- **Answer:** \n  - **NPV at i = 9%:** **-\\$4,424.25**.\n  - **Equivalent uniform annual amount A:** **\\$14,068 per year** (over years 1–4) to match the same NPV.\n- **Check:** If we compute the PV of the annual amount A:\n  - $A \\cdot P/A \\approx 14{,}067.74 \\times 3.23972 \\approx 45{,}575.75$, and adding CF0 gives NPV ≈ -\\$4,424.25, matching the result from Step 1.",
+      "quality": {
+        "overall_quality": "excellent",
+        "issues": [
+          "Minor rounding differences in PV4 and the sum of present values depending on the rounding precision, which can lead to small discrepancies in the NPV and A. Use consistent rounding (e.g., two decimals) throughout.",
+          "It would strengthen clarity to explicitly state and show the P/A(i,4) value (≈3.23972) before solving for A, to help readers follow the PMT step without recomputing."
+        ],
+        "suggestions": [
+          "Present intermediate values with two decimal places and show the final NPV to two decimals.",
+          "Optionally demonstrate the spreadsheet formulas (e.g., using NPV or PV functions for each CF, and PMT or the P/A factor for the A calculation).",
+          "Clarify that the 'PMT approach' here uses end-of-year payments (ordinary annuity).",
+          "Add a small robustness note: if i were 8% or 10%, what would A be roughly, to illustrate sensitivity."
+        ]
+      }
+    },
+    {
+      "problem": {
+        "id": 5,
+        "difficulty": "hard",
+        "topic": "Partitioning flows into gradient and remainder; P_T and A_T",
+        "statement": "A cash flow consists of a base uniform series of A = $150 per year for n = 7 years (years 1–7) plus an arithmetic gradient G = $50 per year starting in year 2 through year 7. The interest rate is i = 12%. Compute the total present worth P_T and total annual series A_T for the combined cash flow. Also partition the result into the gradient component and the remainder: report P_G, P_base, A_G, and A_base.",
+        "given": [
+          "A_base = 150",
+          "n = 7",
+          "G = 50",
+          "gradient terms = 6 (years 2–7)",
+          "i = 12%"
+        ],
+        "required": [
+          "P_T",
+          "A_T",
+          "P_G",
+          "P_base",
+          "A_G",
+          "A_base"
+        ]
+      },
+      "solution": "### 1. Approach & Strategy\n- Compute the present worth of the base uniform series and the arithmetic gradient separately, then sum for the total present worth \\(P_T\\).\n- Convert \\(P_T\\) to an equivalent uniform annual series \\(A_T\\) over the 7-year horizon.\n- Partition the result into gradient and base components by converting \\(P_G\\) to an annual series \\(A_G\\) over 7 years and combining with \\(A_{\\text{base}}\\).\n\n### 2. Step-by-step Calculations\n#### Step 1: Present worth of the base uniform series\n- Explanation: The base amount is a level series \\(A_{\\text{base}} = 150\\) for \\(n=7\\) years.\n- Given/Derived values:\n  - **\\(A_{\\text{base}} = 150\\)**\n  - **\\(i = 12\\% = 0.12\\)**\n  - **\\(n = 7\\)**\n- Formula:\n$$\nP_{\\text{base}} = A_{\\text{base}} \\left( \\frac{1 - (1+i)^{-n}}{i} \\right)\n$$\n- Substitution and calculation:\n$$\nP_{\\text{base}} = 150 \\left( \\frac{1 - (1.12)^{-7}}{0.12} \\right) \\approx 150 \\times 4.561 \\approx \\mathbf{684.15}\n$$\n\n#### Step 2: Present worth of the arithmetic gradient\n- Explanation: The gradient \\(G=50\\) starts in year 2 and continues through year 7 (6 terms).\n- Given/Derived values:\n  - **\\(G = 50\\)**\n  - **\\(i = 0.12\\)**\n  - **gradient terms \\(n_g = 6\\) (years 2–7)**\n- Formula:\n$$\nP_G = \\sum_{t=2}^{7} G \\frac{t-1}{(1+i)^t}\n$$\n- Substitution and calculation (terms for \\(t=2,\\dots,7\\)):\n\\[\n\\begin{aligned}\nt=2 &: \\quad 50\\frac{1}{(1.12)^2} \\approx 39.86 \\\\\nt=3 &: \\quad 50\\frac{2}{(1.12)^3} \\approx 71.18 \\\\\nt=4 &: \\quad 50\\frac{3}{(1.12)^4} \\approx 95.33 \\\\\nt=5 &: \\quad 50\\frac{4}{(1.12)^5} \\approx 113.54 \\\\\nt=6 &: \\quad 50\\frac{5}{(1.12)^6} \\approx 126.73 \\\\\nt=7 &: \\quad 50\\frac{6}{(1.12)^7} \\approx 135.83 \\\\\n\\end{aligned}\n\\]\n- Sum:\n$$\nP_G \\approx 39.86 + 71.18 + 95.33 + 113.54 + 126.73 + 135.83 \\approx \\mathbf{582.34}\n$$\n\n#### Step 3: Total present worth and total annual series\n- Explanation: The total present worth is the sum \\(P_T = P_{\\text{base}} + P_G\\). The total annual series \\(A_T\\) is the annual amount that yields \\(P_T\\) over 7 years, i.e., \\(A_T = P_T \\cdot (A/P, i, n)\\) with \\(n=7\\).\n- Substitutions and calculations:\n$$\nP_T = P_{\\text{base}} + P_G \\approx 684.15 + 582.34 \\approx \\mathbf{1266.49}\n$$\n- Annualization factor:\n$$\n(A/P, i, n) = \\frac{i}{1 - (1+i)^{-n}} \\quad \\Rightarrow \\quad\n(i=0.12, n=7): \\frac{0.12}{1 - (1.12)^{-7}} \\approx 0.2195\n$$\n- Convert to a uniform annual series:\n$$\nA_T = P_T \\cdot (A/P, i, 7) \\approx 1266.49 \\times 0.2195 \\approx \\mathbf{277.89}\n$$\n\n#### Step 4: Gradient partition: \\(A_G\\) and \\(A_{\\text{base}}\\)\n- Explanation: Convert \\(P_G\\) to an annual series over 7 years to partition the total annual stream.\n- Gradient portion:\n$$\nA_G = P_G \\cdot (A/P, i, 7) \\approx 582.34 \\times 0.2195 \\approx \\mathbf{127.89}\n$$\n- Base portion:\n$$\nA_{\\text{base}} = 150 \\quad (\\text{given})\n$$\n- Total annual series check:\n$$\nA_T = A_G + A_{\\text{base}} \\approx 127.89 + 150 = \\mathbf{277.89}\n$$\n\n### 3. Final Answer\n- **P_T**: **$1266.49** (present worth of combined flow)\n- **A_T**: **$277.89 per year** (uniform annual series over 7 years)\n- **P_G**: **$582.34** (present worth of the gradient component)\n- **P_base**: **$684.15** (present worth of the base uniform series)\n- **A_G**: **$127.89 per year** (annualized gradient component)\n- **A_base**: **$150 per year** (base uniform annual amount)\n\n> Check: The gradient and base components properly sum to the total present worth and annual series, i.e., \\(P_T = P_G + P_{\\text{base}} \\approx 1266.49\\) and \\(A_T = A_G + A_{\\text{base}} \\approx 277.89\\).",
+      "quality": {
+        "overall_quality": "excellent",
+        "issues": [
+          "Slight rounding differences between P_base and P_G lead to a very small discrepancy in the sum P_T (e.g., 684.15 + 582.34 ≈ 1266.49; exact PVs of the yearly cash flows give a very similar total around 1266.88). This is minor but could be tightened by using a consistent rounding convention throughout (e.g., two decimals) and/or specifying exact computations before rounding.",
+          "Some notation is briefly repeated (e.g., A_base appears both as given and as a derived/partitioned term). A single consistent naming convention for the base component vs. the total annualized components would improve readability.",
+          "No explicit year-by-year cash-flow table is shown. Providing a short year-by-year breakdown would help validate the gradient interpretation (year 1: 150, year 2: 200, ..., year 7: 450) and cross-check the PV and A_T computations."
+        ],
+        "suggestions": [
+          "Present all intermediate results with a consistent two-decimal rounding and show a final check that P_T equals P_base + P_G (and that A_T equals A_base + A_G) to illustrate internal consistency.",
+          "Optionally include a compact closed-form expression for P_G (if desired) and show how it matches the step-by-step sum, to reinforce understanding of the arithmetic gradient formula.",
+          "Add a short year-by-year cash-flow table or list (Years 1–7: 150, 200, 250, 300, 350, 400, 450) and its discounted PVs to corroborate the computed P_T.",
+          "Clarify terminology: explicitly state that A_T is the uniform annual equivalent of the entire 7-year stream, and that A_G is the annualized portion corresponding to the gradient, with A_base equal to the base uniform annual amount."
+        ]
+      }
+    }
+  ],
+  "analysis": {
+    "topics": [
+      "Calculations with uniform series and randomly placed single amounts",
+      "Present worth (P) and future worth (F) concepts",
+      "A value and A/P, A/F factors",
+      "Combining NPV and PMT in spreadsheet-based cash flow analysis",
+      "Arithmetic gradient (G) and gradient factors P/G, A/G",
+      "Shifted gradients: timing, renumbering, and n value",
+      "Partitioning cash flows into arithmetic gradient and remainder",
+      "Total present worth and total annual series: P_T and A_T",
+      "Uniform series that are shifted: methods to compute P",
+      "Timing rules when using P/A and F/A for shifted series"
+    ],
+    "key_formulas": [
+      "P = G (P/G, i, n)",
+      "A = G (A/G, i, n)",
+      "NPV (i%, range) + first_cell",
+      "PMT (i %, n, P, F)",
+      "PMT (i %, n, NPV (i %, range) + first_cell, F)",
+      "P/G and A/G factors used to convert a gradient to present value or annual series",
+      "P_T and A_T denote the total present worth and total annual series for combined flows",
+      "Gradient starting point: conventional gradient starts between periods 1 and 2; shifted gradient requires renumbering",
+      "P_G is located two periods before the gradient starts",
+      "A/G factor converts a gradient to an equivalent A-series over the gradient term",
+      "To find equivalent A for a gradient across all n periods: compute P_G at time 0, then A using (A/P, i, n)",
+      "P/F, F/P, F/A, and P/A methods for shifted uniform series",
+      "P of shifted uniform series can be obtained by: (a) summing P/F discounted disbursements to year 0, (b) using F/P to move to year end and then P/F to year 0, (c) using F/A to compute F then P/F to 0, (d) using P/A to get P3 at year 3 and then P/F to year 0"
+    ],
+    "concepts": [
+      "Time value of money and the distinction between present worth and future worth",
+      "Uniform series (annuity) vs. single, irregular cash flows",
+      "A value as the equivalent annual amount for a series of cash flows",
+      "A/P, A/F, P/A, F/A, P/F, F/P factors and their roles in transforming cash flows",
+      "Arithmetic gradient (G) and the related P/G and A/G factors",
+      "Shifted gradients: gradient timing, two-period-before rule, and renumbering to determine n",
+      "Partitioning a cash flow into a gradient component and a remainder for clearer analysis",
+      "Combination of gradients and uniform/non-uniform components into P_T and A_T",
+      "Techniques for shifting a uniform series: several equivalent methods and the corresponding timing implications",
+      "Important timing rules: using P/A places the present value one period before the first uniform amount; using F/A places the future value in the period of the last uniform amount"
+    ],
+    "difficulty_areas": {
+      "easy": [
+        "Understanding present worth (P) and future worth (F) concepts",
+        "Recognizing uniform series and single amounts as cash flow components",
+        "Basic idea that A can be found by converting to P or F and applying A/P or A/F"
+      ],
+      "medium": [
+        "Applying NPV and PMT functions to convert shifted uniform series to A values in spreadsheets",
+        "Using P/A, F/A, P/F, and F/P relationships to shift or combine cash flows",
+        "Understanding basic gradient concepts: P/G, A/G and the notion that base amount is separate"
+      ],
+      "hard": [
+        "Shifted gradients: determining the correct n value via time renumbering and handling gradient starting times",
+        "Partitioning flows into arithmetic gradient and remainder for correct P_T and A_T calculations",
+        "Calculating equivalent A values for gradients across all periods using P_G at time 0 and (A/P, i, n)",
+        "Computing P for shifted uniform series via multiple distinct methods and correctly applying timing rules (P/A vs F/A implications)"
+      ]
+    }
+  }
+}

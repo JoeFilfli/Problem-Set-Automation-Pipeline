@@ -9,6 +9,7 @@ from api.routers.mcqs import router as mcqs_router
 from api.routers.analytics import router as analytics_router
 from api.routers.images import router as images_router
 from api.routers.guided_solve import router as guided_solve_router
+from api.routers.beat_ai import router as beat_ai_router
 
 __all__ = [
     "materials_router",
@@ -19,4 +20,5 @@ __all__ = [
     "analytics_router",
     "images_router",
     "guided_solve_router",
+    "beat_ai_router",
 ]

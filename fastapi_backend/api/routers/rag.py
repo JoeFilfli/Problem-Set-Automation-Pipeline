@@ -131,15 +131,14 @@ def rag_query(payload: RAGChatRequest) -> Dict[str, Any]:
 
     client = OpenAI()
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-4o",
         messages=[
             {
                 "role": "system",
                 "content": "You are an expert tutor who must rely strictly on the provided context.",
             },
             {"role": "user", "content": prompt_body},
-        ],
-        temperature=0.3,
+        ]
     )
 
     answer = response.choices[0].message.content
@@ -180,7 +179,7 @@ def rag_query_stream(payload: RAGChatRequest):
         accumulated_answer = ""
         try:
             completion = client.chat.completions.create(
-                model="gpt-4o-mini",
+                model="gpt-4o",
                 messages=[
                     {
                         "role": "system",
@@ -188,8 +187,7 @@ def rag_query_stream(payload: RAGChatRequest):
                     },
                     {"role": "user", "content": prompt_body},
                 ],
-                temperature=0.3,
-                stream=True,
+                stream=True
             )
 
             for chunk in completion:

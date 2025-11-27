@@ -15,6 +15,7 @@ export default function StudentLayout({ children }: { children: ReactNode }) {
     { href: '/student', label: 'Dashboard', icon: '🏠' },
     { href: '/student/workspace', label: 'Workspace', icon: '📚' },
     { href: '/student/problem-sets', label: 'Problem Sets', icon: '📝' },
+    { href: '/student/beat-ai', label: 'Beat the AI', icon: '🤖' },
     { href: '/student/grades', label: 'Grades', icon: '📊' },
   ];
 

@@ -17,6 +17,7 @@ export default function ProfessorLayout({ children }: { children: ReactNode }) {
     { href: '/professor/materials', label: 'Materials', icon: '📚' },
     { href: '/professor/problem-sets', label: 'Problem Sets', icon: '📝' },
     { href: '/professor/mcqs', label: 'MCQs & Exams', icon: '✅' },
+    { href: '/professor/beat-ai', label: 'Beat the AI', icon: '🤖' },
     { href: '/professor/analytics', label: 'Analytics', icon: '📈' },
   ];
 

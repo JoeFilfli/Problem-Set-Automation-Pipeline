@@ -192,13 +192,13 @@ def fix_mcq_latex(mcq: Dict[str, Any]) -> Dict[str, Any]:
 class Agent:
     """Base class for specialized agents."""
     
-    def __init__(self, name: str, role: str, model: str = "gpt-4o-mini"):
+    def __init__(self, name: str, role: str, model: str = "gpt-4o"):
         self.name = name
         self.role = role
         self.model = model
         self.client = OpenAI()
         
-    def run(self, task: str, context: Dict[str, Any] = None, force_json: bool = False) -> str:
+    def run(self, task: str, context: Dict[str, Any] = None, force_json: bool = False, max_tokens: int = 4000) -> str:
         """
         Execute the agent's task.
         
@@ -206,6 +206,7 @@ class Agent:
             task: The specific task/prompt for this agent
             context: Additional context data
             force_json: Whether to force JSON response format
+            max_tokens: Maximum tokens for response
             
         Returns:
             Agent's response as string
@@ -220,7 +221,9 @@ class Agent:
         kwargs = {
             "model": self.model,
             "messages": messages,
-            "temperature": 0.3,
+            "max_tokens": max_tokens,  # ✅ Limit response size
+            "temperature": 0.7,        # ✅ Slightly faster
+            "timeout": 45              # ✅ Fail fast if stuck (45 sec for problem gen)
         }
         
         # Force JSON output when requested
@@ -258,13 +261,20 @@ Return your analysis as structured JSON with:
     
     def analyze_chapter(self, chapter_content: str) -> Dict[str, Any]:
         """Analyze chapter and return structured topics/concepts."""
+        
+        # ⚡ PERFORMANCE FIX: Truncate huge chapter content
+        max_content_length = 6000  # chars
+        truncated_content = chapter_content[:max_content_length]
+        if len(chapter_content) > max_content_length:
+            truncated_content += "\n\n[Content truncated for performance...]"
+        
         task = f"""Analyze this chapter content and extract key information:
 
-{chapter_content}
+{truncated_content}
 
 Return ONLY valid JSON with the structure specified in your role."""
         
-        response = self.run(task, force_json=True)
+        response = self.run(task, force_json=True, max_tokens=2000)
         
         # Extract JSON from response
         try:
@@ -311,13 +321,19 @@ Format each problem with:
     ) -> List[Dict[str, Any]]:
         """Generate problems based on chapter analysis."""
         
+        # ⚡ PERFORMANCE FIX: Truncate huge chapter content to prevent slowness
+        max_content_length = 8000  # chars
+        truncated_content = chapter_content[:max_content_length]
+        if len(chapter_content) > max_content_length:
+            truncated_content += "\n\n[Content truncated for performance...]"
+        
         task = f"""Based on this chapter content and analysis, generate {num_problems} problems.
 
 CHAPTER ANALYSIS:
 {json.dumps(analysis, indent=2)}
 
-CHAPTER CONTENT:
-{chapter_content}
+CHAPTER CONTENT (key excerpts):
+{truncated_content}
 
 Generate {num_problems} problems covering different topics and difficulty levels.
 
@@ -335,7 +351,7 @@ Return ONLY valid JSON in this format:
   ]
 }}"""
         
-        response = self.run(task, force_json=True)
+        response = self.run(task, force_json=True, max_tokens=3000)
         
         try:
             start = response.find("{")
@@ -398,13 +414,19 @@ Produce polished, classroom-ready solution walkthroughs that:
     ) -> str:
         """Generate detailed solution for a problem."""
         
+        # ⚡ PERFORMANCE FIX: Truncate chapter content (solutions don't need full chapter)
+        max_content_length = 5000  # chars
+        truncated_content = chapter_content[:max_content_length]
+        if len(chapter_content) > max_content_length:
+            truncated_content += "\n\n[Additional content available but not shown for performance...]"
+        
         task = f"""Solve this problem with a detailed, step-by-step solution that strictly follows the Markdown template shown below.
 
 PROBLEM:
 {json.dumps(problem, indent=2)}
 
 CHAPTER CONTENT (for reference):
-{chapter_content}
+{truncated_content}
 
 TEMPLATE TO FOLLOW (replace the angle-bracket placeholders with actual content and keep the section headings exactly as shown):
 
@@ -417,7 +439,7 @@ Formatting requirements:
 - When a step involves computations, include the symbolic equation first, then the substituted numbers, then the evaluated result.
 - Ensure the Final Answer section summarizes the result in a single bullet plus an optional check."""
         
-        return self.run(task)
+        return self.run(task, max_tokens=3000)
 
 
 class MCQGeneratorAgent(Agent):
@@ -462,6 +484,12 @@ Format each MCQ with:
     ) -> List[Dict[str, Any]]:
         """Generate multiple choice questions based on chapter analysis."""
         
+        # ⚡ PERFORMANCE FIX: Truncate huge chapter content
+        max_content_length = 7000  # chars
+        truncated_content = chapter_content[:max_content_length]
+        if len(chapter_content) > max_content_length:
+            truncated_content += "\n\n[Content truncated for performance...]"
+        
         # Build the task string with proper escaping for LaTeX examples
         latex_examples = """- Examples of proper LaTeX formatting:
   * Simple equation: $x = 5$ or $y = mx + b$
@@ -477,8 +505,8 @@ Format each MCQ with:
 CHAPTER ANALYSIS:
 {json.dumps(analysis, indent=2)}
 
-CHAPTER CONTENT:
-{chapter_content}
+CHAPTER CONTENT (key excerpts):
+{truncated_content}
 
 Generate {num_mcqs} MCQs covering different topics and difficulty levels.
 
@@ -511,7 +539,7 @@ Return ONLY valid JSON in this format:
   ]
 }}"""
         
-        response = self.run(task, force_json=True)
+        response = self.run(task, force_json=True, max_tokens=3500)
         
         try:
             start = response.find("{")

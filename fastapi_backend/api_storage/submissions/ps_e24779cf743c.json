@@ -1,0 +1,673 @@
+{
+  "problem_set_id": "ps_e24779cf743c",
+  "submissions": [
+    {
+      "id": "sub_86a0ed034385",
+      "problem_id": 1,
+      "student_name": "Current Student",
+      "solution": "Old equipment\n\nOnly operating costs matter:\n$10,000 per year × 5 years = $50,000\n\nNew equipment\n\nYou pay both purchase and operating costs:\nPurchase: $40,000\nOperating: $5,000 per year × 5 years = $25,000\nTotal = $65,000\n\nResult\n\nOld equipment (5 years): $50,000\n\nNew equipment (5 years): $65,000\n\nSo, purely on nominal cost over 5 years, replacing the equipment is $15,000 more expensive.\n\nCounterpoint worth noticing: this conclusion ignores the time value of money, reliability differences, downtime risk, and potential productivity gains. If any of those matter (and in real engineering decisions, they always do), this “obvious” answer may be economically wrong. If you want the realistic verdict, the next step is a present worth or equivalent annual cost analysis.",
+      "images": [],
+      "submitted_at": "2025-11-27T22:48:40.755921",
+      "graded": true,
+      "grade": {
+        "student_name": "Current Student",
+        "problem": {
+          "id": 1,
+          "difficulty": "easy",
+          "topic": "Engineering Economy",
+          "statement": "An engineering firm is considering whether to replace an old piece of equipment. The current equipment has a remaining life of 5 years with an annual operating cost of $10,000. A new equipment costs $40,000 and has an annual operating cost of $5,000. Assume no salvage value for both pieces of equipment. Determine the total cost of operating each piece over the next 5 years.",
+          "given": [
+            "Old equipment annual operating cost: $10,000",
+            "New equipment cost: $40,000",
+            "New equipment annual operating cost: $5,000",
+            "Time period: 5 years"
+          ],
+          "required": [
+            "Total cost of operating the old equipment over 5 years",
+            "Total cost of operating the new equipment over 5 years"
+          ]
+        },
+        "rubric": {
+          "total_points": 10,
+          "criteria": [
+            {
+              "step": "Identify and understand the given data",
+              "points": 2,
+              "requirements": [
+                "Correctly identify annual operating costs for both pieces of equipment",
+                "Acknowledge the initial cost of the new equipment"
+              ],
+              "partial_credit": {
+                "description": 1,
+                "points": 1
+              }
+            },
+            {
+              "step": "Calculate total cost of old equipment",
+              "points": 3,
+              "requirements": [
+                "Multiply annual operating cost by the number of years",
+                "Correctly calculate total cost as $50,000"
+              ],
+              "partial_credit": {
+                "description": "Correct setup but arithmetic error",
+                "points": 2
+              }
+            },
+            {
+              "step": "Calculate total cost of new equipment",
+              "points": 3,
+              "requirements": [
+                "Add initial cost to the total operating costs over 5 years",
+                "Correctly calculate total cost as $65,000"
+              ],
+              "partial_credit": {
+                "description": "Correct setup but arithmetic error",
+                "points": 2
+              }
+            },
+            {
+              "step": "Compare costs to determine economical option",
+              "points": 2,
+              "requirements": [
+                "Correctly identify that old equipment is cheaper based on calculations"
+              ],
+              "partial_credit": {
+                "description": "Recognize comparison but incorrect conclusion",
+                "points": 1
+              }
+            }
+          ]
+        },
+        "evaluation": {
+          "score": 9,
+          "max_score": 10,
+          "percentage": 90,
+          "criteria_scores": [
+            {
+              "criterion": "Identify and understand the given data",
+              "earned": 2,
+              "possible": 2,
+              "correct": true,
+              "notes": "The student correctly identified the costs and the initial cost of the new equipment."
+            },
+            {
+              "criterion": "Calculate total cost of old equipment",
+              "earned": 3,
+              "possible": 3,
+              "correct": true,
+              "notes": "The student correctly calculated the total cost of the old equipment as $50,000."
+            },
+            {
+              "criterion": "Calculate total cost of new equipment",
+              "earned": 3,
+              "possible": 3,
+              "correct": true,
+              "notes": "The student correctly calculated the total cost of the new equipment as $65,000."
+            },
+            {
+              "criterion": "Compare costs to determine economical option",
+              "earned": 1,
+              "possible": 2,
+              "correct": false,
+              "notes": "The student correctly identified that the new equipment is more expensive but did not conclude which is more economical. However, they acknowledged other factors that could affect the decision."
+            }
+          ],
+          "strengths": [
+            "Correctly calculated the total costs for both pieces of equipment.",
+            "Recognized additional factors that could influence decision-making."
+          ],
+          "errors": [
+            "Did not explicitly conclude which option is more economical based solely on costs calculated."
+          ],
+          "overall_assessment": "The student demonstrated a strong understanding of the problem and correctly calculated the total costs for both options. They acknowledged other considerations beyond just the nominal cost, though they did not explicitly conclude on the more economical option based solely on cost."
+        },
+        "feedback": "Great job on your solution! You demonstrated a clear understanding of the problem by accurately identifying and calculating the total costs for both the old and new equipment. This is a crucial step in any engineering economy problem, and your calculations were spot on. Well done!\n\nYou also did an excellent job of recognizing that economic decisions often require more than just a simple cost comparison. Your mention of the time value of money, reliability differences, downtime risk, and potential productivity gains shows a deeper understanding of how complex these decisions can be in real-world scenarios. This level of awareness is impressive and will serve you well in more advanced topics.\n\nFor improvement, consider explicitly stating which option is more economical based solely on the costs you've calculated. Even though you acknowledged the nominal cost difference, clearly concluding which option is less expensive based on your calculations would strengthen your analysis. For instance, you could explicitly say: \"Based solely on the total nominal cost over 5 years, the old equipment is the more economical option, being $15,000 cheaper than the new equipment.\"\n\nIn future analyses, when you mention additional factors, consider suggesting how they might quantitatively affect the decision. For example, you could briefly state that a present worth or equivalent annual cost analysis would be needed to account for the time value of money.\n\nOverall, you did an excellent job, and your ability to consider broader decision-making factors is commendable. Keep up the great work and continue to build on this strong foundation!",
+        "summary": {
+          "score": 9,
+          "max_score": 10,
+          "percentage": 90,
+          "grade": "A-",
+          "flagged_for_review": false,
+          "needs_manual_review": false
+        }
+      }
+    },
+    {
+      "id": "sub_972af4126f2f",
+      "problem_id": 2,
+      "student_name": "Current Student",
+      "solution": "Let’s cut to the economics instead of eyeballing cash flows.\n\n### Present Worth Factor (8%, 5 years)\n\n[\n(P/A, 8%, 5) = \\frac{1-(1.08)^{-5}}{0.08} \\approx 3.993\n]\n\n---\n\n## Project A\n\nPV of returns:\n[\n30,000 \\times 3.993 = 119,790\n]\n\nNPV:\n[\n119,790 - 100,000 = \\boxed{+19,790}\n]\n\n---\n\n## Project B\n\nPV of returns:\n[\n35,000 \\times 3.993 = 139,755\n]\n\nNPV:\n[\n139,755 - 120,000 = \\boxed{+19,755}\n]\n\n---\n\n## Decision (NPV Rule)\n\nChoose the project with the higher NPV.\n\n* Project A NPV ≈ **$19,790**\n* Project B NPV ≈ **$19,755**\n\n✅ **Project A is very slightly better financially.**\n\nIntellectual reality check: Project B “looks” superior because of higher annual returns, yet it loses once the higher upfront cost and discounting are accounted for. However, the difference is only about **$35** — economically insignificant in practice. In real decision-making, risk, scalability, strategic value, or uncertainty would easily override this razor-thin margin. If this were your money, you'd be foolish to pretend this is a mathematically decisive victory.\n",
+      "images": [],
+      "submitted_at": "2025-11-27T22:49:46.010975",
+      "graded": true,
+      "grade": {
+        "student_name": "Current Student",
+        "problem": {
+          "id": 2,
+          "difficulty": "medium",
+          "topic": "Decision-Making Process in Engineering Economy",
+          "statement": "A company must choose between two projects. Project A requires an initial investment of $100,000 and provides annual returns of $30,000 for 5 years. Project B requires an initial investment of $120,000 and provides annual returns of $35,000 for 5 years. The company's discount rate is 8%. Determine which project the company should choose based on the Net Present Value (NPV) method.",
+          "given": [
+            "Project A initial investment: $100,000",
+            "Project A annual return: $30,000",
+            "Project B initial investment: $120,000",
+            "Project B annual return: $35,000",
+            "Discount rate: 8%",
+            "Time period: 5 years"
+          ],
+          "required": [
+            "NPV of Project A",
+            "NPV of Project B",
+            "Decision based on NPV comparison"
+          ]
+        },
+        "rubric": {
+          "total_points": 10,
+          "criteria": [
+            {
+              "step": "Understand and apply the NPV formula",
+              "points": 2,
+              "requirements": [
+                "Correctly identify and use the NPV formula",
+                "Recognize the importance of discount rate for present value calculations"
+              ],
+              "partial_credit": {
+                "description": "Identifies NPV concept but misuses the formula",
+                "points": 1
+              }
+            },
+            {
+              "step": "Calculate NPV for Project A",
+              "points": 2,
+              "requirements": [
+                "Correctly apply the NPV formula for Project A",
+                "Accurately compute present value of each cash flow",
+                "Subtract initial investment correctly"
+              ],
+              "partial_credit": {
+                "description": "Partial calculations correct (e.g., some cash flows calculated correctly)",
+                "points": 1
+              }
+            },
+            {
+              "step": "Calculate NPV for Project B",
+              "points": 2,
+              "requirements": [
+                "Correctly apply the NPV formula for Project B",
+                "Accurately compute present value of each cash flow",
+                "Subtract initial investment correctly"
+              ],
+              "partial_credit": {
+                "description": "Partial calculations correct (e.g., some cash flows calculated correctly)",
+                "points": 1
+              }
+            },
+            {
+              "step": "Compare NPVs",
+              "points": 2,
+              "requirements": [
+                "Correctly compare NPVs of both projects",
+                "Understand that higher NPV indicates a better financial decision"
+              ],
+              "partial_credit": {
+                "description": "Recognizes comparison but chooses wrong project",
+                "points": 1
+              }
+            },
+            {
+              "step": "Make a decision based on comparison",
+              "points": 2,
+              "requirements": [
+                "Correctly choose the project with the higher NPV",
+                "Explain reasoning for the choice based on NPV"
+              ],
+              "partial_credit": {
+                "description": "Decision made but explanation is insufficient",
+                "points": 1
+              }
+            }
+          ]
+        },
+        "evaluation": {
+          "score": 9,
+          "max_score": 10,
+          "percentage": 90,
+          "criteria_scores": [
+            {
+              "criterion": "Understand and apply the NPV formula",
+              "earned": 2,
+              "possible": 2,
+              "correct": true,
+              "notes": "The student correctly identified and applied the NPV formula, showing understanding of the discount rate's role."
+            },
+            {
+              "criterion": "Calculate NPV for Project A",
+              "earned": 2,
+              "possible": 2,
+              "correct": true,
+              "notes": "The student accurately calculated the NPV for Project A, with correct present value calculations and subtraction of the initial investment."
+            },
+            {
+              "criterion": "Calculate NPV for Project B",
+              "earned": 2,
+              "possible": 2,
+              "correct": true,
+              "notes": "The student accurately calculated the NPV for Project B, with correct present value calculations and subtraction of the initial investment."
+            },
+            {
+              "criterion": "Compare NPVs",
+              "earned": 2,
+              "possible": 2,
+              "correct": true,
+              "notes": "The student correctly compared the NPVs of both projects, understanding that a higher NPV indicates a better financial decision."
+            },
+            {
+              "criterion": "Make a decision based on comparison",
+              "earned": 1,
+              "possible": 2,
+              "correct": false,
+              "notes": "Decision was correct, but the explanation mentioned that the difference is economically insignificant, which might mislead real decision-making."
+            }
+          ],
+          "strengths": [
+            "Correct application of NPV formula",
+            "Accurate calculations and comparison of NPVs"
+          ],
+          "errors": [
+            "Explanation of decision-making could imply the difference is negligible, which might not always be the case."
+          ],
+          "overall_assessment": "The student demonstrated a strong understanding of the NPV method, correctly calculating and comparing the NPVs for both projects. The final decision was accurate, though the explanation could be clearer in emphasizing the importance of any positive NPV."
+        },
+        "feedback": "Your solution to the decision-making problem using the Net Present Value (NPV) method was excellent! You accurately applied the NPV formula, demonstrating a clear understanding of how the discount rate affects future cash flows. This is a crucial skill in engineering economy, and your ability to calculate the present value of the projects' returns and their respective NPVs was spot on.\n\nYou did a great job in determining the NPVs for both projects. Your calculations were precise, and you correctly identified that Project A had a slightly higher NPV than Project B. It's commendable how you recognized that a higher NPV suggests a better financial choice, indicating a solid grasp of the NPV rule.\n\nOne area for improvement is in the explanation of your decision-making process. While you correctly noted that Project A has a higher NPV, your commentary suggested that the difference is economically insignificant. It's important to emphasize that any positive NPV, regardless of how small the margin, suggests that a project is likely to add value to the company. In practice, while other factors like risk and strategic alignment are crucial, the NPV should not be downplayed unless the context justifies it.\n\nTo further enhance your explanation, consider discussing how even small differences in NPV can accumulate over time or affect other financial metrics. This will strengthen your economic analysis and decision-making rationale.\n\nOverall, you've done a fantastic job! Keep up the great work, and continue to refine your explanations to provide clear, decisive insights into financial decisions. Your analytical skills are clearly developing well!",
+        "summary": {
+          "score": 9,
+          "max_score": 10,
+          "percentage": 90,
+          "grade": "A-",
+          "flagged_for_review": false,
+          "needs_manual_review": false
+        }
+      }
+    },
+    {
+      "id": "sub_63011180cb61",
+      "problem_id": 3,
+      "student_name": "Current Student",
+      "solution": "1. Re-anchor the Economics (Stop living off the original forecast)\n\nRecalculate NPV, IRR, and Payback using actual performance data and updated market assumptions.\n\nCompare:\n\nContinue-as-is scenario\n\nModified scenario\n\nAbandonment value (even if near zero)\n\nKey principle: Sunk costs are irrelevant. If “we’ve already spent so much” drives the decision, logic has collapsed.\n\n2. Diagnose the Performance Gap\n\nIdentify why returns dropped:\n\nDemand misjudgment?\n\nPrice erosion?\n\nCost inflation?\n\nCompetitive disruption?\n\nSeparate:\n\nTemporary shock (cyclical downturn, short-term volatility)\n\nStructural damage (permanent market shift, obsolete technology)\n\nOnly the first deserves patience. The second demands action.\n\n3. Apply Sensitivity & Scenario Analysis\n\nStress-test the project under:\n\nBest-case recovery\n\nMost-likely case\n\nWorst-case continuation\n\nIf NPV is negative in most realistic scenarios, persistence becomes gambling.\n\n4. Evaluate Strategic Options\nContinue (only if justified by data)\n\nIf revised NPV is still positive and downside risk is bounded.\n\nModify (rational middle ground)\n\nPossible adjustments:\n\nCost restructuring\n\nScope reduction\n\nPricing changes\n\nProcess optimization\n\nMarket repositioning\n\nPartnership or outsourcing\n\nThis is where intelligent engineering management lives.\n\nAbandon (when math and logic agree)\n\nTrigger conditions:\n\nPersistent negative NPV\n\nBetter redeployment opportunities\n\nHigh probability of further decline\n\nAbandonment is not failure — it’s capital discipline.\n\n5. Implement a Monitoring System\n\nReplace blind optimism with control:\n\nKPIs tied to profitability, not activity\n\nRolling forecasts (quarterly or monthly)\n\nPerformance thresholds with pre-approved exit triggers\n\nIf thresholds are crossed, the decision is automatic. No emotional negotiation.\n\nStrategy Adjustments Summary\nSituation\tRational Action\nNegative but recoverable NPV\tModify aggressively\nSlight decline, temporary market shift\tContinue with monitoring\nStructurally damaged economics\tAbandon and reallocate capital\nIntellectual reality check:\n",
+      "images": [],
+      "submitted_at": "2025-11-27T22:50:28.251650",
+      "graded": true,
+      "grade": {
+        "student_name": "Current Student",
+        "problem": {
+          "id": 3,
+          "difficulty": "hard",
+          "topic": "Implementing and Monitoring in Engineering Economy",
+          "statement": "After selecting a project based on economic analysis, a company finds that the actual returns are lower than expected due to unforeseen market changes. The company needs to decide whether to continue, modify, or abandon the project. What steps should the company undertake to refine their decision-making process and adjust their strategy?",
+          "given": [
+            "Selected project shows lower returns",
+            "Unforeseen market changes"
+          ],
+          "required": [
+            "Steps to refine decision-making",
+            "Strategy adjustment recommendations"
+          ]
+        },
+        "rubric": {
+          "total_points": 20,
+          "criteria": [
+            {
+              "step": "Understanding the Problem and Defining the Objective",
+              "points": 3,
+              "requirements": [
+                "Clearly define the problem and revised objective in light of market changes"
+              ],
+              "partial_credit": {
+                "description": "Problem identified but objective not well-defined",
+                "points": 1
+              }
+            },
+            {
+              "step": "Collecting Relevant Information",
+              "points": 3,
+              "requirements": [
+                "Gather current project performance data and market conditions"
+              ],
+              "partial_credit": {
+                "description": "Partial data gathered but incomplete",
+                "points": 1
+              }
+            },
+            {
+              "step": "Defining Alternatives and Estimating Costs",
+              "points": 3,
+              "requirements": [
+                "Identify alternatives and estimate costs/benefits for each"
+              ],
+              "partial_credit": {
+                "description": "Alternatives identified with incomplete cost estimates",
+                "points": 1
+              }
+            },
+            {
+              "step": "Identifying Evaluation Criteria",
+              "points": 2,
+              "requirements": [
+                "Establish criteria like NPV, ROI to evaluate alternatives"
+              ],
+              "partial_credit": {
+                "description": "Criteria mentioned but not fully applicable",
+                "points": 1
+              }
+            },
+            {
+              "step": "Evaluating Each Alternative",
+              "points": 3,
+              "requirements": [
+                "Perform financial calculations for each alternative"
+              ],
+              "partial_credit": {
+                "description": "Calculations attempted but with errors",
+                "points": 1
+              }
+            },
+            {
+              "step": "Selecting the Best Alternative",
+              "points": 2,
+              "requirements": [
+                "Select the alternative that aligns with company goals"
+              ],
+              "partial_credit": {
+                "description": "Selection based on incomplete evaluation",
+                "points": 1
+              }
+            },
+            {
+              "step": "Implementing the Solution",
+              "points": 2,
+              "requirements": [
+                "Develop a detailed implementation plan"
+              ],
+              "partial_credit": {
+                "description": "Plan developed but lacks detail",
+                "points": 1
+              }
+            },
+            {
+              "step": "Monitoring the Results",
+              "points": 1,
+              "requirements": [
+                "Monitor project's progress post-implementation"
+              ],
+              "partial_credit": {
+                "description": "Monitoring mentioned but not detailed",
+                "points": 0.5
+              }
+            },
+            {
+              "step": "Refining the Solution",
+              "points": 1,
+              "requirements": [
+                "Refine decision-making process as necessary"
+              ],
+              "partial_credit": {
+                "description": "Refinement process mentioned but not applied",
+                "points": 0.5
+              }
+            }
+          ]
+        },
+        "evaluation": {
+          "score": 17,
+          "max_score": 20,
+          "percentage": 85,
+          "criteria_scores": [
+            {
+              "criterion": "Understanding the Problem and Defining the Objective",
+              "earned": 3,
+              "possible": 3,
+              "correct": true,
+              "notes": "The student clearly defined the problem and set revised objectives based on market changes."
+            },
+            {
+              "criterion": "Collecting Relevant Information",
+              "earned": 3,
+              "possible": 3,
+              "correct": true,
+              "notes": "The student gathered relevant data including performance metrics and market conditions."
+            },
+            {
+              "criterion": "Defining Alternatives and Estimating Costs",
+              "earned": 3,
+              "possible": 3,
+              "correct": true,
+              "notes": "Alternatives were identified and costs/benefits were considered for each option."
+            },
+            {
+              "criterion": "Identifying Evaluation Criteria",
+              "earned": 2,
+              "possible": 2,
+              "correct": true,
+              "notes": "The student established criteria such as NPV and ROI to evaluate alternatives."
+            },
+            {
+              "criterion": "Evaluating Each Alternative",
+              "earned": 2,
+              "possible": 3,
+              "correct": false,
+              "notes": "The student applied scenario analysis but didn't show specific financial calculations for each alternative."
+            },
+            {
+              "criterion": "Selecting the Best Alternative",
+              "earned": 2,
+              "possible": 2,
+              "correct": true,
+              "notes": "The student selected alternatives that align with company goals based on data."
+            },
+            {
+              "criterion": "Implementing the Solution",
+              "earned": 1,
+              "possible": 2,
+              "correct": false,
+              "notes": "Implementation plan was mentioned, but lacked significant detail."
+            },
+            {
+              "criterion": "Monitoring the Results",
+              "earned": 1,
+              "possible": 1,
+              "correct": true,
+              "notes": "Monitoring system was addressed with emphasis on KPIs and performance thresholds."
+            },
+            {
+              "criterion": "Refining the Solution",
+              "earned": 0,
+              "possible": 1,
+              "correct": false,
+              "notes": "Refinement of the decision-making process was not explicitly detailed."
+            }
+          ],
+          "strengths": [
+            "Clear definition of problem and objectives",
+            "Comprehensive data collection and analysis",
+            "Effective use of scenario analysis"
+          ],
+          "errors": [
+            "Lack of detailed financial calculations for each alternative",
+            "Implementation plan lacked detail",
+            "Refinement process not explicitly addressed"
+          ],
+          "overall_assessment": "The student demonstrated a strong understanding of the decision-making process in engineering economy, effectively identifying and analyzing alternatives. Some details in calculations and implementation planning were lacking, but the overall approach was sound."
+        },
+        "feedback": "You've done a fantastic job tackling this complex engineering economy problem! Your solution demonstrates a strong grasp of the decision-making process, and you've clearly defined the problem and objectives amidst unforeseen market changes. This is an essential first step, and you handled it excellently.\n\nYour data collection and analysis were comprehensive, ensuring that the alternatives were well-informed. The use of scenario and sensitivity analysis was another highlight of your work, showing your ability to anticipate a range of potential outcomes. This is a crucial skill in engineering economy as it prepares you for various market conditions.\n\nWhile your approach was robust, there are a few areas where you can enhance your solution further:\n\n1. **Detailed Financial Calculations:**\n   - While you mentioned recalculating NPV, IRR, and other financial metrics, including these calculations in your solution would strengthen your analysis. Try detailing one example calculation for each scenario to illustrate how these financial metrics influence your decision-making.\n\n2. **Implementation Plan:**\n   - Your implementation plan mentions key elements like KPIs and performance thresholds, which is a great start. However, dive deeper into the steps needed to execute these plans. Consider outlining specific actions, timelines, and responsible parties to make your plan actionable and clear.\n\n3. **Refining the Decision-Making Process:**\n   - Explicitly addressing how your decision-making process can be refined would round out your solution nicely. Consider discussing lessons learned from this analysis and how they can be applied to future projects. This might include improving forecasting methods or enhancing market research techniques.\n\nKeep up the great work! Your ability to analyze and evaluate complex scenarios is evident, and with a bit more detail in your calculations and plans, you'll be well on your way to mastering these concepts. Remember, refining your processes and expanding on details will only enhance your strategic decision-making skills in engineering economy. Keep pushing forward—you’re doing great!",
+        "summary": {
+          "score": 17,
+          "max_score": 20,
+          "percentage": 85,
+          "grade": "B",
+          "flagged_for_review": false,
+          "needs_manual_review": false
+        }
+      }
+    },
+    {
+      "id": "sub_41caa92b02b6",
+      "problem_id": 4,
+      "student_name": "Current Student",
+      "solution": "Total Cost Calculation\nMaterial X\n\n$5 × 1000 units = $5,000\n\nMaterial Y\n\n$8 × 1000 units = $8,000\n\nNaïve Cost-Based Recommendation\n\nPurely on purchase price:\n✅ Material X is cheaper by $3,000\n\nIf cost per unit were the only variable that mattered, the decision would already be over.\n\nThe Economic Thinking an Engineer Should Apply\n\nThis is where engineering economy actually earns its name:\n\nAsk what the numbers don’t show:\n\nDoes Material Y last longer?\n\nReduce waste or defects?\n\nImprove product quality or brand perception?\n\nLower maintenance or replacement costs?\n\nIncrease customer satisfaction or allow premium pricing?\n\nIf Material Y cuts failure rates or increases service life even slightly, the $3,000 “savings” from X could evaporate fast.\n\nRational Recommendation\n\nIf performance, durability, and lifecycle costs are equal → choose Material X\n\nIf Material Y improves reliability, lifespan, or reduces future costs → the higher upfront cost may be economically superior over the product’s lifecycle\n\nCore principle:\n\nEngineering economy is not about choosing the cheapest option — it’s about choosing the option with the lowest total cost of ownership.",
+      "images": [],
+      "submitted_at": "2025-11-27T22:51:05.534120",
+      "graded": true,
+      "grade": {
+        "student_name": "Current Student",
+        "problem": {
+          "id": 4,
+          "difficulty": "easy",
+          "topic": "Importance of Engineering Economy to Engineers",
+          "statement": "An engineer is tasked with selecting a material for a new product. Two materials are considered: Material X, costing $5 per unit and Material Y, costing $8 per unit. The product requires 1000 units. How should the engineer incorporate economic analysis into the decision-making process?",
+          "given": [
+            "Material X cost: $5/unit",
+            "Material Y cost: $8/unit",
+            "Units required: 1000"
+          ],
+          "required": [
+            "Total cost for Material X",
+            "Total cost for Material Y",
+            "Recommendation based on cost analysis"
+          ]
+        },
+        "rubric": {
+          "total_points": 10,
+          "criteria": [
+            {
+              "step": "Understanding economic analysis in material selection",
+              "points": 2,
+              "requirements": [
+                "Recognize the need for calculating total costs to compare materials"
+              ],
+              "partial_credit": {
+                "description": "Recognizes cost as a factor but does not mention total calculation",
+                "points": 1
+              }
+            },
+            {
+              "step": "Calculate total cost for Material X",
+              "points": 2,
+              "requirements": [
+                "Apply correct formula: Unit Cost of Material X * Units Required",
+                "Correct calculation resulting in 5000 USD"
+              ],
+              "partial_credit": {
+                "description": "Correct formula but incorrect calculation",
+                "points": 1
+              }
+            },
+            {
+              "step": "Calculate total cost for Material Y",
+              "points": 2,
+              "requirements": [
+                "Apply correct formula: Unit Cost of Material Y * Units Required",
+                "Correct calculation resulting in 8000 USD"
+              ],
+              "partial_credit": {
+                "description": "Correct formula but incorrect calculation",
+                "points": 1
+              }
+            },
+            {
+              "step": "Comparison and recommendation based on cost",
+              "points": 2,
+              "requirements": [
+                "Correctly identify Material X as more cost-effective",
+                "Recommendation is based on cost analysis"
+              ],
+              "partial_credit": {
+                "description": "Correctly identifies cheaper option but lacks explanation",
+                "points": 1
+              }
+            },
+            {
+              "step": "Check and validate decision",
+              "points": 2,
+              "requirements": [
+                "Mention cost savings of 3000 USD",
+                "Validate recommendation with calculated savings"
+              ],
+              "partial_credit": {
+                "description": "Mentions savings but incorrect amount",
+                "points": 1
+              }
+            }
+          ]
+        },
+        "evaluation": {
+          "score": 10,
+          "max_score": 10,
+          "percentage": 100,
+          "criteria_scores": [
+            {
+              "criterion": "Understanding economic analysis in material selection",
+              "earned": 2,
+              "possible": 2,
+              "correct": true,
+              "notes": "The student recognizes the importance of cost analysis and additional economic factors in material selection."
+            },
+            {
+              "criterion": "Calculate total cost for Material X",
+              "earned": 2,
+              "possible": 2,
+              "correct": true,
+              "notes": "The student correctly calculates the total cost for Material X as $5000."
+            },
+            {
+              "criterion": "Calculate total cost for Material Y",
+              "earned": 2,
+              "possible": 2,
+              "correct": true,
+              "notes": "The student correctly calculates the total cost for Material Y as $8000."
+            },
+            {
+              "criterion": "Comparison and recommendation based on cost",
+              "earned": 2,
+              "possible": 2,
+              "correct": true,
+              "notes": "The student correctly identifies Material X as cheaper and provides a clear recommendation."
+            },
+            {
+              "criterion": "Check and validate decision",
+              "earned": 2,
+              "possible": 2,
+              "correct": true,
+              "notes": "The student mentions the $3000 savings and correctly validates the recommendation."
+            }
+          ],
+          "strengths": [
+            "Thorough understanding of economic factors beyond initial cost.",
+            "Accurate calculations for total costs of both materials."
+          ],
+          "errors": [],
+          "overall_assessment": "The student demonstrates a comprehensive understanding of engineering economy principles and accurately performs the necessary calculations, resulting in a perfect score."
+        },
+        "feedback": "Great job on your solution! You demonstrated an impressive understanding of the principles of engineering economy, especially in recognizing that economic analysis goes beyond just the initial cost. Your calculations for both Material X and Material Y were spot-on, showing a solid grasp of the arithmetic involved.\n\nYou did an excellent job of articulating the importance of considering long-term economic factors, such as durability, maintenance, and potential impacts on brand perception. This kind of holistic thinking is exactly what sets apart a good engineer from a great one, and it's clear you have a knack for it.\n\nWhile your work was nearly flawless, as you continue to refine your skills, consider exploring even more real-world factors that might influence material selection. For example, what about the environmental impact or the supply chain stability of each material? These are subtler points that can further enhance your analysis and decision-making process.\n\nKeep up the fantastic work and continue to challenge yourself by considering an even wider range of economic factors. Your ability to think critically and evaluate all aspects of a problem will serve you well in any engineering challenge you face in the future. Keep pushing your boundaries, and you’ll continue to excel!",
+        "summary": {
+          "score": 10,
+          "max_score": 10,
+          "percentage": 100,
+          "grade": "A",
+          "flagged_for_review": false,
+          "needs_manual_review": false
+        }
+      }
+    },
+    {
+      "id": "sub_7523184d11a6",
+      "problem_id": 5,
+      "student_name": "Current Student",
+      "solution": "Expected Profit\n\nProject 1\n$500,000 × 15% = $75,000\n\nProject 2\n$300,000 × 20% = $60,000\n\nRecommendation (based on expected profit only)\n\n✅ Choose Project 1\nIt generates $75,000, which is $15,000 more than Project 2.\n\nHigher margin ≠ higher profit. This problem is designed to catch that mistake.\n\nWhat a serious decision-maker must still consider\n\nIf you stop at “Project 1 makes more money,” you’re thinking shallowly. Real engineering economy asks:\n\n1. Capital efficiency\n\nProject 1 ROI: 15%\n\nProject 2 ROI: 20%\nProject 2 uses capital more effectively. If funds are tight, this matters.\n\n2. Risk exposure\n\nLarger projects usually mean:\n\nLarger absolute losses if something goes wrong\n\nGreater uncertainty in cost estimates\n\nProject 1 may be more profitable — but also more dangerous.\n\n3. Cash flow timing\n\nWhich project pays earlier?\n\nWhich ties up cash longer?\n\nTime can quietly erase “higher profit.”\n\n4. Resource constraints\n\nEquipment, labor, and time commitments might block other opportunities.\n\n5. Strategic value\n\nClient importance, future work potential, reputation impact.\n\nFinal Answer Summary\n\nExpected Profit Project 1: $75,000\n\nExpected Profit Project 2: $60,000\n\nDecision:\n\nBy absolute expected profit → Choose Project 1\n\nBy efficiency, flexibility, or risk-adjusted thinking → Project 2 may be superior\n\nThe real question is not “Which pays more?”\nIt’s “Which pays more for the risk and capital consumed?”",
+      "images": [],
+      "submitted_at": "2025-11-27T22:52:30.576446",
+      "graded": false,
+      "grade": null
+    }
+  ]
+}

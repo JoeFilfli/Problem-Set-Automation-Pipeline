@@ -1,0 +1,185 @@
+{
+  "id": "ps_e24779cf743c",
+  "doc_id": "INDE301_Ch1_Notes_24.pdf",
+  "title": "INDE301_Ch1_Notes_24.pdf - Problem Set",
+  "num_problems": 5,
+  "created_at": "2025-11-27T20:31:32.948121",
+  "problem_set": [
+    {
+      "problem": {
+        "id": 1,
+        "difficulty": "easy",
+        "topic": "Engineering Economy",
+        "statement": "An engineering firm is considering whether to replace an old piece of equipment. The current equipment has a remaining life of 5 years with an annual operating cost of $10,000. A new equipment costs $40,000 and has an annual operating cost of $5,000. Assume no salvage value for both pieces of equipment. Determine the total cost of operating each piece over the next 5 years.",
+        "given": [
+          "Old equipment annual operating cost: $10,000",
+          "New equipment cost: $40,000",
+          "New equipment annual operating cost: $5,000",
+          "Time period: 5 years"
+        ],
+        "required": [
+          "Total cost of operating the old equipment over 5 years",
+          "Total cost of operating the new equipment over 5 years"
+        ]
+      },
+      "solution": "### 1. Approach & Strategy\n- Calculate the total operating cost for the old equipment over 5 years.\n- Calculate the total operating cost for the new equipment over 5 years, including its purchase cost.\n- Compare both total costs to determine which option is more economical.\n\n### 2. Step-by-step Calculations\n\n#### Step 1: Calculate Total Cost of Old Equipment\n- The old equipment has an annual operating cost with no purchase cost.\n- The total cost over 5 years is simply the sum of the annual operating costs.\n\n**Given:**\n- **Old equipment annual operating cost:** $10,000\n- **Time period:** 5 years\n\nThe total cost for the old equipment is calculated as:\n\n\\[\n\\text{Total Cost}_{\\text{old}} = \\text{Annual Operating Cost} \\times \\text{Number of Years}\n\\]\n\nSubstituting the values:\n\n\\[\n\\text{Total Cost}_{\\text{old}} = 10,000 \\times 5 = 50,000\n\\]\n\n**Total Cost of Old Equipment:** **$50,000**\n\n#### Step 2: Calculate Total Cost of New Equipment\n- The new equipment has an initial purchase cost and a lower annual operating cost.\n- Calculate the sum of the purchase cost and the total operating costs over 5 years.\n\n**Given:**\n- **New equipment cost:** $40,000\n- **New equipment annual operating cost:** $5,000\n- **Time period:** 5 years\n\nThe total cost for the new equipment is calculated as:\n\n\\[\n\\text{Total Cost}_{\\text{new}} = \\text{Purchase Cost} + (\\text{Annual Operating Cost} \\times \\text{Number of Years})\n\\]\n\nSubstituting the values:\n\n\\[\n\\text{Total Cost}_{\\text{new}} = 40,000 + (5,000 \\times 5) = 40,000 + 25,000 = 65,000\n\\]\n\n**Total Cost of New Equipment:** **$65,000**\n\n### 3. Final Answer\n- **Answer:** The total cost of operating the old equipment over 5 years is **$50,000**. The total cost of operating the new equipment over 5 years is **$65,000**.\n- **Check:** The calculations consider all given costs (initial and operating) over the specified period, assuming no salvage value.",
+      "quality": {
+        "overall_quality": "excellent",
+        "issues": [],
+        "suggestions": []
+      }
+    },
+    {
+      "problem": {
+        "id": 2,
+        "difficulty": "medium",
+        "topic": "Decision-Making Process in Engineering Economy",
+        "statement": "A company must choose between two projects. Project A requires an initial investment of $100,000 and provides annual returns of $30,000 for 5 years. Project B requires an initial investment of $120,000 and provides annual returns of $35,000 for 5 years. The company's discount rate is 8%. Determine which project the company should choose based on the Net Present Value (NPV) method.",
+        "given": [
+          "Project A initial investment: $100,000",
+          "Project A annual return: $30,000",
+          "Project B initial investment: $120,000",
+          "Project B annual return: $35,000",
+          "Discount rate: 8%",
+          "Time period: 5 years"
+        ],
+        "required": [
+          "NPV of Project A",
+          "NPV of Project B",
+          "Decision based on NPV comparison"
+        ]
+      },
+      "solution": "### 1. Approach & Strategy\n- Calculate the Net Present Value (NPV) for Project A and Project B.\n- Use the formula for NPV to account for the time value of money with a discount rate of 8%.\n- Compare the NPVs to decide which project is more financially viable.\n\n### 2. Step-by-step Calculations\n\n#### Step 1: Calculate NPV for Project A\n- Use the NPV formula to determine the present value of cash flows for Project A.\n- **Given:**\n  - **Initial Investment (A):** $100,000\n  - **Annual Return (A):** $30,000\n  - **Discount Rate:** 8%\n  - **Time Period:** 5 years\n\nThe NPV formula is:\n\n$$\nNPV = -C_0 + \\sum_{t=1}^{n} \\frac{C_t}{(1 + r)^t}\n$$\n\nFor Project A:\n\n$$\nNPV_A = -100,000 + \\sum_{t=1}^{5} \\frac{30,000}{(1 + 0.08)^t}\n$$\n\nCalculating each term:\n\n$$\n\\begin{align*}\nNPV_A &= -100,000 + \\frac{30,000}{1.08} + \\frac{30,000}{1.08^2} + \\frac{30,000}{1.08^3} + \\frac{30,000}{1.08^4} + \\frac{30,000}{1.08^5} \\\\\n&= -100,000 + 27,777.78 + 25,720.16 + 23,817.00 + 22,057.41 + 20,429.92 \\\\\n&= -100,000 + 119,802.27 \\\\\n&= 19,802.27\n\\end{align*}\n$$\n\n#### Step 2: Calculate NPV for Project B\n- Use the NPV formula to determine the present value of cash flows for Project B.\n- **Given:**\n  - **Initial Investment (B):** $120,000\n  - **Annual Return (B):** $35,000\n  - **Discount Rate:** 8%\n  - **Time Period:** 5 years\n\nFor Project B:\n\n$$\nNPV_B = -120,000 + \\sum_{t=1}^{5} \\frac{35,000}{(1 + 0.08)^t}\n$$\n\nCalculating each term:\n\n$$\n\\begin{align*}\nNPV_B &= -120,000 + \\frac{35,000}{1.08} + \\frac{35,000}{1.08^2} + \\frac{35,000}{1.08^3} + \\frac{35,000}{1.08^4} + \\frac{35,000}{1.08^5} \\\\\n&= -120,000 + 32,407.41 + 30,015.19 + 27,791.85 + 25,728.57 + 23,815.34 \\\\\n&= -120,000 + 139,758.36 \\\\\n&= 19,758.36\n\\end{align*}\n$$\n\n### 3. Final Answer\n- **Answer:** Project A has an NPV of **$19,802.27** and Project B has an NPV of **$19,758.36**.\n- **Decision:** Choose Project A, as it has a slightly higher NPV.",
+      "quality": {
+        "overall_quality": "excellent",
+        "issues": [],
+        "suggestions": [
+          "Consider providing more context on the assumptions behind the decision-making process, such as risks or other financial metrics that might be relevant.",
+          "It may be helpful to explain why a higher NPV is preferable, for those who are not familiar with the NPV method."
+        ]
+      }
+    },
+    {
+      "problem": {
+        "id": 3,
+        "difficulty": "hard",
+        "topic": "Implementing and Monitoring in Engineering Economy",
+        "statement": "After selecting a project based on economic analysis, a company finds that the actual returns are lower than expected due to unforeseen market changes. The company needs to decide whether to continue, modify, or abandon the project. What steps should the company undertake to refine their decision-making process and adjust their strategy?",
+        "given": [
+          "Selected project shows lower returns",
+          "Unforeseen market changes"
+        ],
+        "required": [
+          "Steps to refine decision-making",
+          "Strategy adjustment recommendations"
+        ]
+      },
+      "solution": "### 1. Approach & Strategy\n\n- Assess the current situation to understand the extent of the issue.\n- Gather detailed information to inform potential adjustments.\n- Evaluate alternative strategies using economic analysis principles.\n\n### 2. Step-by-step Calculations\n\n#### Step 1: Understand the Problem and Define the Objective\n- The company must first clearly define the problem and set a revised objective in light of the unforeseen market changes.\n- **Given:**\n  - **Selected project shows lower returns**\n  - **Unforeseen market changes**\n- Objective: Decide whether to continue, modify, or abandon the project to optimize returns.\n\n#### Step 2: Collect Relevant Information\n- Gather current data on the project's performance and market conditions.\n- **Data to Collect:**\n  - **Current project performance metrics**\n  - **Updated market trends**\n  - **Cost of modification or termination**\n\n#### Step 3: Define Alternatives and Estimate Relevant Costs\n- Identify potential paths forward: continuation, modification, or abandonment.\n- Estimate the costs and benefits associated with each alternative.\n- **Alternatives:**\n  - **Continue the project**\n  - **Modify the project**\n  - **Abandon the project**\n- **Cost Estimates:**\n  - **Modification costs**\n  - **Potential savings from abandonment**\n\n#### Step 4: Identify the Criteria\n- Establish criteria to evaluate alternatives, such as net present value (NPV), payback period, or return on investment (ROI).\n- **Criteria:**\n  - **Net Present Value (NPV)**\n  - **Payback Period**\n  - **Return on Investment (ROI)**\n\n#### Step 5: Evaluate Each Alternative\n- Calculate the financial outcomes for each alternative using the selected criteria.\n- **Financial Evaluation:**\n  $$ NPV = \\sum \\frac{C_t}{(1 + r)^t} $$\n  - Where \\( C_t \\) = cash flow at time \\( t \\), \\( r \\) = discount rate.\n\n#### Step 6: Select the Best Alternative\n- Choose the alternative that meets the criteria and aligns with the company's goals.\n- **Decision:**\n  - Based on calculated NPV, ROI, and other metrics, select the most viable option.\n\n#### Step 7: Implement the Solution\n- Develop a detailed implementation plan for the chosen alternative.\n- **Implementation Plan:**\n  - **Timeline for actions**\n  - **Resource allocation**\n\n#### Step 8: Monitor the Results\n- Continuously monitor the project's progress post-implementation to ensure it meets revised expectations.\n- **Monitoring:**\n  - **Key performance indicators (KPIs)**\n  - **Regular reviews**\n\n#### Step 9: Refine the Solution\n- If necessary, revisit the decision-making process to make further adjustments.\n- **Refinement:**\n  - **Go back to Step 3 as needed**\n\n### 3. Final Answer\n- **Answer:** The company should follow a structured decision-making process: redefine objectives, gather data, evaluate alternatives, select and implement the best option, and continuously monitor and refine the strategy.\n- **Check:** This approach aligns with engineering economy principles, ensuring decisions are data-driven and strategically sound.",
+      "quality": {
+        "overall_quality": "good",
+        "issues": [
+          "The problem statement is somewhat vague and lacks specificity in terms of the constraints and details of the project.",
+          "The solution lacks specific examples or scenarios that could illustrate how the theoretical steps apply to real-world situations.",
+          "There is no inclusion of potential risks or challenges that might arise during the implementation of each step."
+        ],
+        "suggestions": [
+          "Provide more context or background about the project, such as the industry or typical market conditions, to make the problem more engaging and realistic.",
+          "Include a specific example or case study within the solution to demonstrate the application of the steps in a real-world scenario.",
+          "Discuss potential risks or challenges for each alternative and how the company can mitigate them during the decision-making process."
+        ]
+      }
+    },
+    {
+      "problem": {
+        "id": 4,
+        "difficulty": "easy",
+        "topic": "Importance of Engineering Economy to Engineers",
+        "statement": "An engineer is tasked with selecting a material for a new product. Two materials are considered: Material X, costing $5 per unit and Material Y, costing $8 per unit. The product requires 1000 units. How should the engineer incorporate economic analysis into the decision-making process?",
+        "given": [
+          "Material X cost: $5/unit",
+          "Material Y cost: $8/unit",
+          "Units required: 1000"
+        ],
+        "required": [
+          "Total cost for Material X",
+          "Total cost for Material Y",
+          "Recommendation based on cost analysis"
+        ]
+      },
+      "solution": "### 1. Approach & Strategy\n- Use engineering economy to evaluate the financial impact of choosing between two materials.\n- Calculate the total cost for each material option based on given unit prices and required quantity.\n- Compare the total costs and recommend the more cost-effective option.\n\n### 2. Step-by-step Calculations\n\n#### Step 1: Calculate Total Cost for Material X\n- Determine the total cost by multiplying the unit cost of Material X by the number of units required.\n- **Given Values:**\n  - **Material X cost:** $5/unit\n  - **Units required:** 1000\n\nThe formula for total cost is:\n$$\n\\text{Total Cost for Material X} = \\text{Unit Cost of Material X} \\times \\text{Units Required}\n$$\nSubstitute the given values:\n$$\n\\text{Total Cost for Material X} = 5 \\, \\text{USD/unit} \\times 1000 \\, \\text{units} = 5000 \\, \\text{USD}\n$$\n- **Total Cost for Material X:** **5000 USD**\n\n#### Step 2: Calculate Total Cost for Material Y\n- Similarly, determine the total cost by multiplying the unit cost of Material Y by the number of units required.\n- **Given Values:**\n  - **Material Y cost:** $8/unit\n  - **Units required:** 1000\n\nThe formula for total cost is:\n$$\n\\text{Total Cost for Material Y} = \\text{Unit Cost of Material Y} \\times \\text{Units Required}\n$$\nSubstitute the given values:\n$$\n\\text{Total Cost for Material Y} = 8 \\, \\text{USD/unit} \\times 1000 \\, \\text{units} = 8000 \\, \\text{USD}\n$$\n- **Total Cost for Material Y:** **8000 USD**\n\n### 3. Final Answer\n- **Answer:** Material X is recommended based on cost analysis as it totals **5000 USD** compared to Material Y's **8000 USD**.\n- **Check:** The economic analysis indicates that Material X is more cost-effective, saving **3000 USD** compared to Material Y for the required quantity.",
+      "quality": {
+        "overall_quality": "good",
+        "issues": [],
+        "suggestions": [
+          "Include additional factors that may influence the decision besides cost, such as material properties, durability, or application-specific requirements, to provide a more comprehensive economic analysis.",
+          "Clarify that the recommendation is based solely on direct cost analysis, which may not account for other potential economic factors like maintenance, lifecycle cost, or material performance.",
+          "Ensure the problem and solution align with realistic engineering decision-making processes, where multiple criteria are considered beyond just cost."
+        ]
+      }
+    },
+    {
+      "problem": {
+        "id": 5,
+        "difficulty": "medium",
+        "topic": "Practical Applications of Engineering Economy",
+        "statement": "A construction company is planning to bid on two projects. Project 1 has an estimated cost of $500,000 with an expected profit margin of 15%. Project 2 has an estimated cost of $300,000 with an expected profit margin of 20%. If the company can only undertake one project, which one should they choose based on expected profit, and what considerations should be taken into account?",
+        "given": [
+          "Project 1 cost: $500,000",
+          "Project 1 profit margin: 15%",
+          "Project 2 cost: $300,000",
+          "Project 2 profit margin: 20%"
+        ],
+        "required": [
+          "Expected profit for Project 1",
+          "Expected profit for Project 2",
+          "Project recommendation",
+          "Considerations for selection"
+        ]
+      },
+      "solution": "### 1. Approach & Strategy\n- Calculate the expected profit for each project using the given cost and profit margin.\n- Compare the expected profits to determine which project is more financially beneficial.\n- Consider additional factors that may influence the final decision.\n\n### 2. Step-by-step Calculations\n\n#### Step 1: Calculate Expected Profit for Project 1\n- Calculate the expected profit using the formula: \n  $$ \\text{Expected Profit} = \\text{Cost} \\times \\text{Profit Margin} $$\n- **Given:**\n  - **Project 1 Cost:** $500,000\n  - **Project 1 Profit Margin:** 15% or 0.15\n\n$$\n\\text{Expected Profit for Project 1} = 500,000 \\times 0.15 = 75,000\n$$\n\n- **Expected Profit for Project 1:** **$75,000**\n\n#### Step 2: Calculate Expected Profit for Project 2\n- Use the same formula to calculate the expected profit for Project 2.\n- **Given:**\n  - **Project 2 Cost:** $300,000\n  - **Project 2 Profit Margin:** 20% or 0.20\n\n$$\n\\text{Expected Profit for Project 2} = 300,000 \\times 0.20 = 60,000\n$$\n\n- **Expected Profit for Project 2:** **$60,000**\n\n#### Step 3: Compare Expected Profits\n- Compare the calculated expected profits to determine which project offers more profit.\n- **Project 1 Expected Profit:** $75,000\n- **Project 2 Expected Profit:** $60,000\n\n- Since $75,000 > $60,000, Project 1 provides a higher expected profit.\n\n### 3. Final Answer\n- **Answer:** Project 1 should be chosen for its higher expected profit of **$75,000**.\n- **Considerations:** \n  - Evaluate any non-financial factors such as project risk, strategic alignment, resource availability, and long-term benefits.\n  - Consider the impact on stakeholder relationships and future opportunities.",
+      "quality": {
+        "overall_quality": "excellent",
+        "issues": [],
+        "suggestions": [
+          "The problem statement is clear and well-structured, providing all necessary information for solving the problem.",
+          "The solution is technically correct and well-organized, with a logical flow of calculations and reasoning.",
+          "Consider including a brief explanation of why non-financial factors are significant in decision-making to enhance understanding.",
+          "Ensure that the scenario remains realistic by discussing the implications of project scale or duration if relevant in actual project management scenarios."
+        ]
+      }
+    }
+  ],
+  "analysis": {
+    "topics": [
+      "Engineering Economy",
+      "Decision-Making Process in Engineering Economy",
+      "Importance of Engineering Economy to Engineers",
+      "Practical Applications of Engineering Economy"
+    ],
+    "key_formulas": [],
+    "concepts": [
+      "Estimating financial outcomes",
+      "Formulating financial outcomes",
+      "Evaluating financial outcomes",
+      "Economic comparison",
+      "Decision-making criteria"
+    ],
+    "difficulty_areas": {
+      "easy": [
+        "Understanding the problem and defining the objective",
+        "Collecting relevant information",
+        "Defining alternatives and estimating relevant costs"
+      ],
+      "medium": [
+        "Identifying the criteria",
+        "Evaluating each alternative",
+        "Selecting the best alternative"
+      ],
+      "hard": [
+        "Implementing the solution",
+        "Monitoring the results",
+        "Refining the solution"
+      ]
+    }
+  }
+}

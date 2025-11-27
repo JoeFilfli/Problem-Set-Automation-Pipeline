@@ -135,9 +135,9 @@ def test_rag(vs: RAGVectorStore):
         ])
         
         # Generate answer using OpenAI
-        print(f"\n   [Generation] Sending to OpenAI (gpt-4o-mini)...")
+        print(f"\n   [Generation] Sending to OpenAI (gpt-4o)...")
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4o",
             messages=[
                 {
                     "role": "system",
@@ -147,8 +147,7 @@ def test_rag(vs: RAGVectorStore):
                     "role": "user",
                     "content": f"Context from course materials:\n\n{context}\n\nQuestion: {test['query']}\n\nProvide a clear, concise answer based on the context above. Include references to which documents you used."
                 }
-            ],
-            temperature=0.3,
+            ]
         )
         
         answer = response.choices[0].message.content

@@ -194,6 +194,21 @@ export default function StudentProblemSetPage() {
           const submissionInfo = submissionData[problem.id];
           const isGraded = submissionInfo?.graded;
           const grade = submissionInfo?.grade;
+          const percentage = grade?.summary?.percentage ?? 0;
+          const letterGrade = grade?.summary?.grade ?? 'Graded';
+          const criteriaScores = grade?.evaluation?.criteria_scores || [];
+          const totalCriteria = criteriaScores.length;
+          const correctCriteria = criteriaScores.filter((criterion: any) => criterion.correct).length;
+          const strengthsList = grade?.evaluation?.strengths || [];
+          const improvementList = grade?.evaluation?.errors || [];
+          const scoreLine = grade?.summary ? `${grade.summary.score}/${grade.summary.max_score} points` : 'Score available';
+          const toneKey = percentage >= 90 ? 'green' : percentage >= 80 ? 'blue' : percentage >= 70 ? 'amber' : 'orange';
+          const tone = {
+            green: { border: 'border-green-500', header: 'from-green-700 to-emerald-500' },
+            blue: { border: 'border-blue-500', header: 'from-blue-700 to-sky-500' },
+            amber: { border: 'border-amber-500', header: 'from-amber-700 to-orange-500' },
+            orange: { border: 'border-orange-600', header: 'from-orange-700 to-amber-500' },
+          }[toneKey];
 
           return (
             <div key={problem.id} className="card">

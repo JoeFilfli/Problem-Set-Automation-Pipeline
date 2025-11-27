@@ -166,7 +166,7 @@ def split_for_llm(
 class LLMChunker:
     """Handles semantic chunking of documents using LLM with math awareness."""
     
-    def __init__(self, model="gpt-4o-mini", format_mode="markdown"):
+    def __init__(self, model="gpt-4o", format_mode="markdown"):
         self.client = OpenAI()
         self.model = model
         self.format_mode = format_mode
@@ -231,8 +231,7 @@ Text to chunk:
         resp = self.client.chat.completions.create(
             model=self.model,
             messages=[{"role": "user", "content": prompt}],
-            response_format={"type": "json_object"},
-            temperature=0.1,
+            response_format={"type": "json_object"}
         )
 
         raw_output = resp.choices[0].message.content
@@ -248,8 +247,7 @@ Text to chunk:
             resp = self.client.chat.completions.create(
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
-                response_format={"type": "json_object"},
-                temperature=0.1,
+                response_format={"type": "json_object"}
             )
             raw_output = resp.choices[0].message.content
             json_str = self.extract_json(raw_output)

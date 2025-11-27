@@ -1,0 +1,153 @@
+{
+  "problem_set_id": "ps_99c44fea5bf7",
+  "submissions": [
+    {
+      "id": "sub_42dc6a2c90e4",
+      "problem_id": 1,
+      "student_name": "Current Student",
+      "solution": "\n![test.png](/api/py/images/img_2bbe4dec04e9425a)\n",
+      "images": [],
+      "submitted_at": "2025-11-27T21:04:02.930342",
+      "graded": true,
+      "grade": {
+        "student_name": "Current Student",
+        "problem": {
+          "id": 1,
+          "difficulty": "easy",
+          "topic": "Single Payment Factors",
+          "statement": "Calculate the present value of $2,500 due in 4 years at an interest rate of 5%.",
+          "given": [
+            "Future value F = $2,500",
+            "Interest rate i = 5%",
+            "Number of years n = 4"
+          ],
+          "required": [
+            "Present value P"
+          ]
+        },
+        "rubric": {
+          "total_points": 5,
+          "criteria": [
+            {
+              "step": "Identify and interpret given values",
+              "points": 1,
+              "requirements": [
+                "Correctly interpret the future value F as $2,500",
+                "Correctly express the interest rate i as 0.05",
+                "Correctly identify the number of years n as 4"
+              ],
+              "partial_credit": {
+                "description": "Identify 2 out of 3 values correctly",
+                "points": 0.5
+              }
+            },
+            {
+              "step": "Formulate the present value equation",
+              "points": 1,
+              "requirements": [
+                "Use the correct present value formula: P = F / (1 + i)^n"
+              ],
+              "partial_credit": {
+                "description": "Minor error in formula setup",
+                "points": 0.5
+              }
+            },
+            {
+              "step": "Substitute values into the formula",
+              "points": 1,
+              "requirements": [
+                "Substitute F, i, and n correctly into the formula"
+              ],
+              "partial_credit": {
+                "description": "Substitute 2 out of 3 values correctly",
+                "points": 0.5
+              }
+            },
+            {
+              "step": "Perform calculations accurately",
+              "points": 1,
+              "requirements": [
+                "Calculate (1 + i)^n and find the reciprocal correctly",
+                "Multiply correctly to find P"
+              ],
+              "partial_credit": {
+                "description": "Minor calculation error affecting final answer",
+                "points": 0.5
+              }
+            },
+            {
+              "step": "Present the final answer with reasoning",
+              "points": 1,
+              "requirements": [
+                "State the final answer for P as $2,056.75",
+                "Check consistency with expected discounting outcomes"
+              ],
+              "partial_credit": {
+                "description": "Final answer given without reasoning check",
+                "points": 0.5
+              }
+            }
+          ]
+        },
+        "evaluation": {
+          "score": 0,
+          "max_score": 5,
+          "percentage": 0,
+          "criteria_scores": [
+            {
+              "criterion": "Identify and interpret given values",
+              "earned": 0,
+              "possible": 1,
+              "correct": false,
+              "notes": "No relevant values or interpretation related to the problem were identified in the student's solution."
+            },
+            {
+              "criterion": "Formulate the present value equation",
+              "earned": 0,
+              "possible": 1,
+              "correct": false,
+              "notes": "The student did not formulate the present value equation. The solution provided was unrelated to the given problem."
+            },
+            {
+              "criterion": "Substitute values into the formula",
+              "earned": 0,
+              "possible": 1,
+              "correct": false,
+              "notes": "The student did not substitute any values into a present value formula."
+            },
+            {
+              "criterion": "Perform calculations accurately",
+              "earned": 0,
+              "possible": 1,
+              "correct": false,
+              "notes": "No calculations relevant to the present value problem were performed."
+            },
+            {
+              "criterion": "Present the final answer with reasoning",
+              "earned": 0,
+              "possible": 1,
+              "correct": false,
+              "notes": "The final answer for the present value was not provided, and no reasoning was given."
+            }
+          ],
+          "strengths": [],
+          "errors": [
+            "The student's solution did not address the given problem about calculating present value.",
+            "No relevant mathematical operations or concepts related to present value were present in the solution."
+          ],
+          "overall_assessment": "The student's submission did not pertain to the problem about calculating present value of $2,500 due in 4 years at a 5% interest rate. The solution provided appears unrelated, focusing on rate of return calculations instead."
+        },
+        "feedback": "Hello!\n\nFirst, I want to commend you for taking the initiative to tackle this problem. It's great to see you engaging with the concepts of financial calculations, and I appreciate your effort to find a solution.\n\nLet's focus on how you can improve and successfully approach this type of problem in the future. The task here was to calculate the present value of $2,500 due in 4 years at an interest rate of 5%. It seems like there might have been a mix-up, as your solution didn't focus on this specific calculation.\n\nHere's how you can approach similar problems:\n\n1. **Identify and Interpret Given Values**: You've been given a future value (F = $2,500), an interest rate (i = 5%), and a time period (n = 4 years). Start by clearly noting these values as they will be crucial for your calculations.\n\n2. **Formulate the Present Value Equation**: The formula for calculating present value (P) is:\n   \\[\n   P = \\frac{F}{(1 + i)^n}\n   \\]\n   In this formula, F is the future value, i is the interest rate (as a decimal, so 5% becomes 0.05), and n is the number of years.\n\n3. **Substitute Values into the Formula**: Plug the values you identified into the formula. This helps to ensure you're using the correct numbers in your calculations.\n\n4. **Perform Calculations Accurately**: Carefully carry out the calculations. Ensure you perform operations in the correct order, especially when dealing with powers and division.\n\n5. **Present the Final Answer with Reasoning**: After calculating, interpret your result. Does it make sense in the context of the problem? Explain your steps briefly to show your understanding of the process.\n\nI encourage you to try this problem again using these steps. I'm confident that with a bit of practice, you'll be able to master these calculations. Keep up the good work and don't hesitate to ask for help if you need further clarification. You're on the right path, and your efforts are valuable in building your understanding. Keep going!",
+        "summary": {
+          "score": 3,
+          "max_score": 5,
+          "percentage": 60,
+          "grade": "D-",
+          "flagged_for_review": true,
+          "needs_manual_review": true,
+          "review_reason": "Automatic grading gave very low score (0/5) despite student showing mathematical work. Please review manually."
+        }
+      }
+    }
+  ]
+}

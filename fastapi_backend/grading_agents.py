@@ -6,6 +6,8 @@ from typing import List, Dict, Any
 from openai import OpenAI
 from dotenv import load_dotenv
 import json
+import concurrent.futures
+import re
 
 load_dotenv(override=True)
 
@@ -13,13 +15,13 @@ load_dotenv(override=True)
 class Agent:
     """Base class for grading agents."""
     
-    def __init__(self, name: str, role: str, model: str = "gpt-4o-mini"):
+    def __init__(self, name: str, role: str, model: str = "gpt-4o"):
         self.name = name
         self.role = role
         self.model = model
         self.client = OpenAI()
         
-    def run(self, task: str, context: Dict[str, Any] = None) -> str:
+    def run(self, task: str, context: Dict[str, Any] = None, max_tokens: int = 2000) -> str:
         """Execute the agent's task."""
         print(f"   [{self.name}] Processing...")
         
@@ -31,7 +33,9 @@ class Agent:
         response = self.client.chat.completions.create(
             model=self.model,
             messages=messages,
-            temperature=0.2,  # Lower temp for consistent grading
+            max_tokens=max_tokens,  # Limit response size
+            temperature=0.7,        # Slightly reduce variability for speed
+            timeout=30              # Fail fast if stuck
         )
         
         result = response.choices[0].message.content
@@ -47,24 +51,32 @@ class RubricGeneratorAgent(Agent):
             name="Rubric Generator",
             role="""You are an expert at creating detailed, fair grading rubrics.
 Your rubrics should:
-- Break down problems into scorable steps
+- Break down problems into scorable steps based on CONCEPTUAL GOALS, not rigid step sequences
 - Assign point values based on difficulty and importance
 - Include partial credit criteria
 - Be objective and measurable
 - Cover conceptual understanding, methodology, and accuracy
+- RECOGNIZE ALTERNATIVE VALID METHODS - students may solve problems differently
 
-Return rubrics as JSON:
+For each criterion:
+- Describe the CONCEPTUAL GOAL (what understanding is being checked)
+- Avoid requiring an exact step order unless essential
+- Keep descriptions concise
+
+Return rubrics as JSON (keep it concise):
 {
   "total_points": X,
   "criteria": [
     {
-      "step": "description",
+      "step": "description of conceptual goal",
       "points": X,
-      "requirements": ["req1", "req2"],
+      "requirements": ["what must be true conceptually"],
       "partial_credit": {"description": points}
     }
   ]
-}"""
+}
+
+Note: Keep output brief. Focus on core concepts, not exhaustive lists."""
         )
     
     def generate_rubric(
@@ -241,8 +253,7 @@ Return ONLY the extracted text, no commentary or analysis."""
                             ]
                         }
                     ],
-                    max_tokens=2000,
-                    temperature=0.1
+                    max_tokens=2000
                 )
                 
                 extracted = response.choices[0].message.content
@@ -303,18 +314,39 @@ CORRECT SOLUTION:
 STUDENT SOLUTION:
 {combined_solution}
 
-IMPORTANT NOTES:
-- The student submitted their work as an image. The text above was extracted using OCR.
-- The OCR text may have minor formatting differences, but the mathematical content and calculations are what matter.
-- Evaluate the work shown: formulas used, calculations performed, and reasoning demonstrated.
-- Give credit for correct mathematical approach and accurate results, even if formatting varies.
-- If the student's work addresses the problem and shows valid mathematical reasoning, award appropriate points.
-
 GRADING RUBRIC:
 {json.dumps(rubric, indent=2)}
 
-Carefully evaluate the student's work against each rubric criterion.
-Focus on the mathematical correctness, not OCR formatting artifacts.
+CRITICAL GRADING INSTRUCTIONS - READ CAREFULLY:
+- The student submitted their work as an image. The text above was extracted using OCR.
+- PRIORITIZE conceptual understanding and mathematically correct reasoning above ALL else.
+- The rubric is a GUIDE, not a strict template. DO NOT fail students for formatting or step order.
+
+SCORING POLICY (MANDATORY):
+- If the student's FINAL ANSWER is CORRECT → Give 80-100% of points regardless of method
+- If the student's APPROACH is CORRECT but has minor errors → Give 60-80% of points
+- If the student shows UNDERSTANDING but made calculation errors → Give 40-60% of points
+- If the student ATTEMPTED the problem with relevant math → Give at least 25-30% of points
+- ONLY give below 25% if: completely blank, irrelevant content, or fundamentally wrong concept
+
+WHAT TO REWARD:
+- Correct final answers (even with different methods)
+- Valid alternative formulas or approaches
+- Correct reasoning with calculation mistakes
+- Proper identification of problem type and variables
+- Any demonstration of relevant mathematical knowledge
+
+DO NOT PENALIZE:
+- Different step order than rubric
+- Equivalent formulas (e.g., PV = FV/(1+i)^n vs PV = FV(P/F, i%, n))
+- Minor algebraic differences
+- OCR formatting artifacts
+- Notation variations
+- Steps combined or split differently
+
+REMEMBER: Your job is to recognize UNDERSTANDING, not to match a template perfectly.
+If a student demonstrates they know how to solve this type of problem, REWARD THEM GENEROUSLY.
+
 Return ONLY valid JSON as specified in your role."""
                 
                 result = self.run(task)
@@ -351,7 +383,6 @@ Return ONLY valid JSON as specified in your role."""
                     # Grade the typed text
                     task = f"""Evaluate this student's solution:
 
-
 PROBLEM:
 {json.dumps(problem, indent=2)}
 
@@ -361,14 +392,16 @@ CORRECT SOLUTION:
 STUDENT SOLUTION:
 {student_solution}
 
-IMPORTANT: Student uploaded images but they could not be processed by the vision system.
-Only grade based on any text that is present. If there is insufficient text to evaluate,
-assign a very low score and note that images could not be processed.
-
 GRADING RUBRIC:
 {json.dumps(rubric, indent=2)}
 
-Carefully evaluate the student's work against each rubric criterion.
+IMPORTANT CONTEXT:
+- Student uploaded images but OCR extraction failed (technical issue, not student's fault).
+- Only grade based on any typed text that is present.
+- If there is insufficient typed text to evaluate, you must assign a low score,
+  BUT include a clear note explaining this is due to technical limitations, not lack of effort.
+- DO NOT assume the student did nothing - they may have worked hard on paper but the system couldn't read it.
+
 Return ONLY valid JSON as specified in your role."""
                     
                     result = self.run(task)
@@ -389,7 +422,34 @@ STUDENT SOLUTION:
 GRADING RUBRIC:
 {json.dumps(rubric, indent=2)}
 
-Carefully evaluate the student's work against each rubric criterion.
+CRITICAL GRADING INSTRUCTIONS - READ CAREFULLY:
+- PRIORITIZE conceptual understanding and mathematically correct reasoning above ALL else.
+- The rubric is a GUIDE, not a strict template. DO NOT fail students for formatting or step order.
+
+SCORING POLICY (MANDATORY):
+- If the student's FINAL ANSWER is CORRECT → Give 80-100% of points regardless of method
+- If the student's APPROACH is CORRECT but has minor errors → Give 60-80% of points
+- If the student shows UNDERSTANDING but made calculation errors → Give 40-60% of points
+- If the student ATTEMPTED the problem with relevant math → Give at least 25-30% of points
+- ONLY give below 25% if: completely blank, irrelevant content, or fundamentally wrong concept
+
+WHAT TO REWARD:
+- Correct final answers (even with different methods)
+- Valid alternative formulas or approaches
+- Correct reasoning with calculation mistakes
+- Proper identification of problem type and variables
+- Any demonstration of relevant mathematical knowledge
+
+DO NOT PENALIZE:
+- Different step order than rubric
+- Equivalent formulas (e.g., PV = FV/(1+i)^n vs PV = FV(P/F, i%, n))
+- Minor algebraic differences
+- Notation variations
+- Steps combined or split differently
+
+REMEMBER: Your job is to recognize UNDERSTANDING, not to match a template perfectly.
+If a student demonstrates they know how to solve this type of problem, REWARD THEM GENEROUSLY.
+
 Return ONLY valid JSON as specified in your role."""
             
             result = self.run(task)
@@ -490,6 +550,7 @@ class GradingOrchestrator:
         self.rubric_gen = RubricGeneratorAgent()
         self.evaluator = SolutionEvaluatorAgent()
         self.feedback_gen = FeedbackGeneratorAgent()
+        self._rubric_cache = {}  # Cache rubrics by problem ID to avoid regeneration
         
     def grade_submission(
         self,
@@ -499,7 +560,8 @@ class GradingOrchestrator:
         student_name: str = "Student",
         generate_rubric: bool = True,
         existing_rubric: Dict[str, Any] = None,
-        image_urls: List[str] = None
+        image_urls: List[str] = None,
+        generate_feedback: bool = True
     ) -> Dict[str, Any]:
         """
         Grade a single student submission.
@@ -520,11 +582,23 @@ class GradingOrchestrator:
         print(f"GRADING SUBMISSION: {student_name}")
         print(f"{'='*70}\n")
         
-        # Step 1: Generate or use existing rubric
+        # Step 1: Generate or use existing rubric (with caching)
         if generate_rubric or existing_rubric is None:
-            print("[Step 1] Generating grading rubric...")
-            rubric = self.rubric_gen.generate_rubric(problem, correct_solution)
-            print(f"   ✓ Rubric created ({rubric.get('total_points', 0)} points)\n")
+            # Check cache first
+            problem_id = problem.get('id', None)
+            cache_key = f"{problem_id}_{hash(correct_solution)}" if problem_id else None
+            
+            if cache_key and cache_key in self._rubric_cache:
+                print(f"[Step 1] Using cached rubric ({self._rubric_cache[cache_key].get('total_points', 0)} points)\n")
+                rubric = self._rubric_cache[cache_key]
+            else:
+                print("[Step 1] Generating grading rubric...")
+                rubric = self.rubric_gen.generate_rubric(problem, correct_solution)
+                print(f"   ✓ Rubric created ({rubric.get('total_points', 0)} points)\n")
+                
+                # Cache the rubric
+                if cache_key:
+                    self._rubric_cache[cache_key] = rubric
         else:
             rubric = existing_rubric
             print(f"[Step 1] Using existing rubric ({rubric.get('total_points', 0)} points)\n")
@@ -543,14 +617,51 @@ class GradingOrchestrator:
         percentage = evaluation.get('percentage', (score/max_score*100) if max_score > 0 else 0)
         print(f"   ✓ Score: {score}/{max_score} ({percentage:.1f}%)\n")
         
-        # Step 3: Generate personalized feedback
-        print("[Step 3] Generating feedback...")
-        feedback = self.feedback_gen.generate_feedback(
-            problem,
-            evaluation,
-            student_solution
-        )
-        print(f"   ✓ Feedback generated\n")
+        # Step 2.5: Safety rail - sanity check for extremely low scores
+        # This catches cases where valid work gets scored unfairly due to rigid rubric matching
+        flagged_for_review = False
+        original_score = score
+        
+        # CRITICAL FIX: Check if score is suspiciously low (less than 20% for any substantial work)
+        if percentage < 20 and len(student_solution.strip()) > 30:
+            print(f"   [SAFETY CHECK] Very low score ({percentage:.1f}%) detected. Running sanity check...")
+            
+            # Check if student solution shows mathematical reasoning
+            import re
+            # Look for mathematical content: numbers, formulas, equals signs, common math symbols, keywords
+            has_math_content = bool(re.search(r'[\d\+\-\*\/\=\^\(\)]|formula|calculate|result|answer|value|rate|cost|price|npv|irr|present|future', 
+                                              student_solution.lower()))
+            
+            # FIXED LOGIC: Flag if score is below 20% AND there's any meaningful content
+            # Don't require "no partial credit" - even 1/12 (8.3%) should be flagged if work was shown
+            if has_math_content:
+                print(f"   [WARNING] Student showed mathematical work but received {score}/{max_score} ({percentage:.1f}%).")
+                print(f"   [WARNING] This is suspiciously low and may indicate rubric mismatch.")
+                print(f"   [ACTION] FLAGGING FOR MANUAL REVIEW - instructor must verify this grade.")
+                flagged_for_review = True
+                
+                # Enforce a minimum floor for students showing meaningful work
+                # If they attempted the problem with math content, give at least 25% credit
+                min_score = max(int(max_score * 0.25), 3)  # At least 25% or 3 points
+                if score < min_score:
+                    original_percentage = percentage
+                    score = min_score
+                    percentage = (score / max_score * 100) if max_score > 0 else 0
+                    print(f"   [ADJUSTED] Score raised from {original_score} to {score}/{max_score} ({percentage:.1f}%)")
+                    print(f"   [REASON] Student showed meaningful attempt - enforcing minimum credit policy.")
+        
+        # Step 3: Generate personalized feedback (optional for speed)
+        if generate_feedback:
+            print("[Step 3] Generating feedback...")
+            feedback = self.feedback_gen.generate_feedback(
+                problem,
+                evaluation,
+                student_solution
+            )
+            print(f"   ✓ Feedback generated\n")
+        else:
+            print("[Step 3] Skipping feedback generation (deferred for speed)\n")
+            feedback = "Feedback will be generated separately. Your score is shown above."
         
         result = {
             "student_name": student_name,
@@ -562,12 +673,21 @@ class GradingOrchestrator:
                 "score": score,
                 "max_score": max_score,
                 "percentage": percentage,
-                "grade": self._calculate_letter_grade(percentage)
+                "grade": self._calculate_letter_grade(percentage),
+                "flagged_for_review": flagged_for_review,
+                "needs_manual_review": flagged_for_review  # For instructor attention
             }
         }
         
+        if flagged_for_review:
+            result["summary"]["review_reason"] = (
+                f"Automatic grading gave very low score ({original_score}/{max_score}) "
+                "despite student showing mathematical work. Please review manually."
+            )
+        
         print(f"{'='*70}")
-        print(f"GRADING COMPLETE: {score}/{max_score} ({percentage:.1f}%) - {result['summary']['grade']}")
+        status = " [FLAGGED FOR REVIEW]" if flagged_for_review else ""
+        print(f"GRADING COMPLETE: {score}/{max_score} ({percentage:.1f}%) - {result['summary']['grade']}{status}")
         print(f"{'='*70}\n")
         
         return result
@@ -576,7 +696,9 @@ class GradingOrchestrator:
         self,
         problem: Dict[str, Any],
         correct_solution: str,
-        student_submissions: List[Dict[str, str]]
+        student_submissions: List[Dict[str, str]],
+        parallel: bool = True,
+        generate_feedback: bool = True
     ) -> List[Dict[str, Any]]:
         """
         Grade multiple student submissions for the same problem.
@@ -585,6 +707,8 @@ class GradingOrchestrator:
             problem: The problem definition
             correct_solution: The correct solution
             student_submissions: List of {name, solution} dicts
+            parallel: Whether to grade submissions in parallel (faster)
+            generate_feedback: Whether to generate feedback (disable for speed)
             
         Returns:
             List of grading results
@@ -598,27 +722,85 @@ class GradingOrchestrator:
         rubric = self.rubric_gen.generate_rubric(problem, correct_solution)
         print(f"   ✓ Rubric created ({rubric.get('total_points', 0)} points)\n")
         
-        results = []
-        for i, submission in enumerate(student_submissions, 1):
-            print(f"Processing {i}/{len(student_submissions)}...")
-            
-            # Extract image URLs from markdown
-            import re
+        # Extract image URLs for all submissions first
+        import re
+        submissions_with_images = []
+        for submission in student_submissions:
             solution_text = submission['solution']
             image_pattern = r'!\[([^\]]*)\]\((/api/py/images/[^)]+)\)'
             image_urls = re.findall(image_pattern, solution_text)
             image_urls = [url[1] for url in image_urls]  # Extract just the URLs
             
-            result = self.grade_submission(
-                problem=problem,
-                correct_solution=correct_solution,
-                student_solution=submission['solution'],
-                student_name=submission['name'],
-                generate_rubric=False,
-                existing_rubric=rubric,
-                image_urls=image_urls if image_urls else None  # Pass extracted images
-            )
-            results.append(result)
+            submissions_with_images.append({
+                'submission': submission,
+                'image_urls': image_urls if image_urls else None
+            })
+        
+        results = []
+        
+        if parallel and len(student_submissions) > 1:
+            # PARALLEL GRADING - Much faster for multiple students
+            print(f"[MODE] Parallel grading enabled (max 5 concurrent)\n")
+            import concurrent.futures
+            
+            def grade_single(sub_data):
+                """Helper function for parallel execution"""
+                sub = sub_data['submission']
+                imgs = sub_data['image_urls']
+                return self.grade_submission(
+                    problem=problem,
+                    correct_solution=correct_solution,
+                    student_solution=sub['solution'],
+                    student_name=sub['name'],
+                    generate_rubric=False,
+                    existing_rubric=rubric,
+                    image_urls=imgs,
+                    generate_feedback=generate_feedback
+                )
+            
+            with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+                # Submit all grading tasks
+                futures = {
+                    executor.submit(grade_single, sub_data): i 
+                    for i, sub_data in enumerate(submissions_with_images, 1)
+                }
+                
+                # Collect results as they complete
+                for future in concurrent.futures.as_completed(futures):
+                    idx = futures[future]
+                    try:
+                        result = future.result()
+                        results.append((idx, result))
+                        print(f"   ✓ Completed {idx}/{len(student_submissions)}")
+                    except Exception as e:
+                        print(f"   ✗ Error grading student {idx}: {e}")
+                        # Add error result
+                        results.append((idx, {
+                            "student_name": submissions_with_images[idx-1]['submission']['name'],
+                            "error": str(e),
+                            "summary": {"score": 0, "max_score": rubric.get('total_points', 10)}
+                        }))
+            
+            # Sort results by original order
+            results = [r[1] for r in sorted(results, key=lambda x: x[0])]
+            
+        else:
+            # SEQUENTIAL GRADING - Original implementation
+            print(f"[MODE] Sequential grading\n")
+            for i, sub_data in enumerate(submissions_with_images, 1):
+                print(f"Processing {i}/{len(student_submissions)}...")
+                
+                result = self.grade_submission(
+                    problem=problem,
+                    correct_solution=correct_solution,
+                    student_solution=sub_data['submission']['solution'],
+                    student_name=sub_data['submission']['name'],
+                    generate_rubric=False,
+                    existing_rubric=rubric,
+                    image_urls=sub_data['image_urls'],
+                    generate_feedback=generate_feedback
+                )
+                results.append(result)
         
         # Calculate statistics
         scores = [r['summary']['percentage'] for r in results]

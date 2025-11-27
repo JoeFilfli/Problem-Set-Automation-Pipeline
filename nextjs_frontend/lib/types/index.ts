@@ -309,3 +309,97 @@ export interface SubmissionFilters {
   sort_order: 'asc' | 'desc';
 }
 
+// Beat the AI Types
+export interface BeatAIChallenge {
+  id: string;
+  chapter_id: string;
+  topic?: string;
+  title: string;
+  problem_statement: string;
+  difficulty: 'EASY' | 'MEDIUM' | 'HARD';
+  tags: string[];
+  reference_solution: string;
+  ai_wrong_solution: string;
+  created_by_user_id: string;
+  created_at: string;
+  updated_at: string;
+  submission_count?: number;
+  avg_score?: number;
+}
+
+export interface BeatAIChallengeStudent {
+  id: string;
+  title: string;
+  problem_statement: string;
+  difficulty: 'EASY' | 'MEDIUM' | 'HARD';
+  tags: string[];
+  ai_wrong_solution: string;
+  created_at?: string;
+}
+
+export interface ErrorClassification {
+  segment_index: number;
+  segment_text: string;
+  error_type: 'incorrect_calculation' | 'unnecessary_step' | 'logic_error' | 'custom';
+  custom_description?: string | null;
+}
+
+export interface BeatAISubmission {
+  id: string;
+  challenge_id: string;
+  student_id: string;
+  selected_errors: ErrorClassification[];
+  workflow_suggestion?: string | null;
+  ai_feedback?: string | null;
+  score?: number | null;
+  review_notes?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BeatAIChallengeCreate {
+  chapter_id: string;
+  topic?: string;
+  title?: string;
+  problem_statement?: string;
+  difficulty: 'EASY' | 'MEDIUM' | 'HARD';
+  tags: string[];
+  reference_solution?: string;
+  ai_wrong_solution?: string;
+  created_by_user_id?: string;
+}
+
+export interface GenerateProblemFromChapterRequest {
+  chapter_id: string;
+  topic?: string;
+  difficulty: 'EASY' | 'MEDIUM' | 'HARD';
+}
+
+export interface GeneratedProblemContent {
+  title: string;
+  problem_statement: string;
+  reference_solution: string;
+  tags: string[];
+}
+
+export interface BeatAIChallengeUpdate {
+  title?: string;
+  problem_statement?: string;
+  difficulty?: 'EASY' | 'MEDIUM' | 'HARD';
+  tags?: string[];
+  reference_solution?: string;
+  ai_wrong_solution?: string;
+}
+
+export interface BeatAISubmissionCreate {
+  challenge_id: string;
+  student_id?: string;
+  selected_errors: ErrorClassification[];
+  workflow_suggestion?: string;
+}
+
+export interface BeatAISubmissionGrade {
+  score: number;
+  review_notes: string;
+}
+

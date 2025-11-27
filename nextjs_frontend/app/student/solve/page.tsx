@@ -123,7 +123,7 @@ function GuidedSolvePageContent() {
   const fetchProblemSets = async () => {
     try {
       setIsLoadingProblemSets(true);
-      const res = await fetch('/api/py/problem-sets');
+      const res = await fetch('http://127.0.0.1:8000/api/py/problem-sets');
       if (!res.ok) throw new Error('Failed to load problem sets');
       const data = await res.json();
       
@@ -131,7 +131,7 @@ function GuidedSolvePageContent() {
       const fullSets: ProblemSet[] = [];
       for (const ps of data.problem_sets || []) {
         try {
-          const detailRes = await fetch(`/api/py/problem-sets/${ps.id}`);
+          const detailRes = await fetch(`http://127.0.0.1:8000/api/py/problem-sets/${ps.id}`);
           if (detailRes.ok) {
             const detail = await detailRes.json();
             fullSets.push(detail.problem_set);
@@ -169,7 +169,7 @@ function GuidedSolvePageContent() {
 
       console.log('Starting session with problem:', problem);
       
-      const res = await fetch('/api/py/guided/start-session', {
+      const res = await fetch('http://127.0.0.1:8000/api/py/guided/start-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ problem, difficulty })
@@ -231,7 +231,7 @@ function GuidedSolvePageContent() {
       setFeedback(null);
       setShowExplanation(false);
 
-      const res = await fetch('/api/py/guided/submit-answer', {
+      const res = await fetch('http://127.0.0.1:8000/api/py/guided/submit-answer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -335,7 +335,7 @@ function GuidedSolvePageContent() {
     try {
       setIsLoadingHint(true);
 
-      const res = await fetch('/api/py/guided/get-hint', {
+      const res = await fetch('http://127.0.0.1:8000/api/py/guided/get-hint', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -88,6 +88,19 @@ export async function put<T>(path: string, data: any): Promise<T> {
 }
 
 /**
+ * PATCH request with JSON body
+ */
+export async function patch<T>(path: string, data: any): Promise<T> {
+  return fetchApi<T>(path, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+}
+
+/**
  * POST request with FormData (for file uploads)
  */
 export async function postFormData<T>(path: string, formData: FormData): Promise<T> {
@@ -167,6 +180,7 @@ const apiClient = {
   get,
   post,
   put,
+  patch,
   postFormData,
   del,
   uploadWithProgress,
