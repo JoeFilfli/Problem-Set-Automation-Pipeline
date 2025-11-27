@@ -11,6 +11,7 @@ import 'katex/dist/katex.min.css';
 import { getMaterials } from '@/lib/api';
 import {
   generateMCQs,
+  streamMCQGeneration,
   saveMCQ,
   getSavedMCQs,
   deleteSavedMCQ,
@@ -18,6 +19,7 @@ import {
   downloadExamPDF,
   type MCQ,
   type SavedMCQ,
+  type MCQStreamEvent,
 } from '@/lib/api/mcqs';
 
 /**
@@ -36,6 +38,8 @@ export default function MCQPage() {
   const [generating, setGenerating] = useState(false);
   const [mcqSet, setMcqSet] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+  const [statusMessage, setStatusMessage] = useState<string>('');
+  const [controllerRef, setControllerRef] = useState<AbortController | null>(null);
 
   // Saved MCQs state
   const [savedMCQs, setSavedMCQs] = useState<SavedMCQ[]>([]);
@@ -79,7 +83,7 @@ export default function MCQPage() {
     loadSavedMCQs();
   }, []);
 
-  // Handle MCQ generation
+  // Handle MCQ generation with streaming
   const handleGenerateMCQs = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -88,17 +92,85 @@ export default function MCQPage() {
       return;
     }
 
+    // Cancel any existing stream
+    if (controllerRef) {
+      controllerRef.abort();
+    }
+
+    const controller = new AbortController();
+    setControllerRef(controller);
+
     try {
       setGenerating(true);
       setError(null);
+      setStatusMessage('');
       setMcqSet(null);
 
-      const result = await generateMCQs(selectedMaterial, numMCQs);
-      setMcqSet(result);
+      // Initialize MCQ set structure
+      const initialSet: any = {
+        doc_id: selectedMaterial,
+        analysis: null,
+        prompt_info: null,
+        num_mcqs: 0,
+        mcqs: [],
+      };
+      setMcqSet(initialSet);
+
+      await streamMCQGeneration(
+        selectedMaterial,
+        numMCQs,
+        (event: MCQStreamEvent) => {
+          if (event.type === 'status') {
+            setStatusMessage(event.message);
+            if (event.complete && event.step === 4) {
+              setGenerating(false);
+              setControllerRef(null);
+            }
+          } else if (event.type === 'prompt_info') {
+            setMcqSet((prev: any) => ({
+              ...prev,
+              prompt_info: event.data,
+            }));
+          } else if (event.type === 'analysis') {
+            setMcqSet((prev: any) => ({
+              ...prev,
+              analysis: event.data,
+            }));
+          } else if (event.type === 'mcq') {
+            // Add new MCQ to the list as it arrives
+            setMcqSet((prev: any) => ({
+              ...prev,
+              mcqs: [...prev.mcqs, event.data],
+              num_mcqs: prev.mcqs.length + 1,
+            }));
+          } else if (event.type === 'done') {
+            setGenerating(false);
+            setControllerRef(null);
+            setStatusMessage('Generation complete!');
+          } else if (event.type === 'error') {
+            setError(event.message);
+            setGenerating(false);
+            setControllerRef(null);
+          }
+        },
+        controller.signal
+      );
     } catch (err: any) {
-      setError(err.message || 'Failed to generate MCQs');
-    } finally {
+      if (err.name !== 'AbortError') {
+        setError(err.message || 'Failed to generate MCQs');
+        setGenerating(false);
+      }
+      setControllerRef(null);
+    }
+  };
+
+  // Handle stop generation
+  const handleStopGeneration = () => {
+    if (controllerRef) {
+      controllerRef.abort();
+      setControllerRef(null);
       setGenerating(false);
+      setStatusMessage('Generation stopped');
     }
   };
 
@@ -233,20 +305,40 @@ export default function MCQPage() {
               <div className="alert-error text-sm">{error}</div>
             )}
 
-            <button
-              type="submit"
-              disabled={generating || loadingMaterials || materials.length === 0}
-              className="btn-primary w-full"
-            >
-              {generating ? (
-                <>
-                  <span className="spinner mr-2"></span>
-                  Generating MCQs...
-                </>
-              ) : (
-                'Generate MCQs'
+            {statusMessage && generating && (
+              <div className="bg-blue-50 border border-blue-200 rounded-aub p-3 text-sm text-blue-800">
+                <div className="flex items-center gap-2">
+                  <span className="spinner"></span>
+                  <span>{statusMessage}</span>
+                </div>
+              </div>
+            )}
+
+            <div className="flex gap-2">
+              <button
+                type="submit"
+                disabled={generating || loadingMaterials || materials.length === 0}
+                className="btn-primary flex-1"
+              >
+                {generating ? (
+                  <>
+                    <span className="spinner mr-2"></span>
+                    Generating...
+                  </>
+                ) : (
+                  'Generate MCQs'
+                )}
+              </button>
+              {generating && (
+                <button
+                  type="button"
+                  onClick={handleStopGeneration}
+                  className="btn-secondary"
+                >
+                  Stop
+                </button>
               )}
-            </button>
+            </div>
           </form>
         </div>
 
@@ -316,12 +408,24 @@ export default function MCQPage() {
 
           <div className="space-y-6">
             {mcqSet.mcqs.map((mcq: MCQ, index: number) => (
-              <div key={mcq.id || index} className="border border-gray-200 rounded-aub p-4">
+              <div key={`${mcqSet.doc_id}-${mcq.id}-${index}`} className="border border-gray-200 rounded-aub p-4">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="badge text-xs capitalize">{mcq.difficulty}</span>
                       <span className="badge-info text-xs">{mcq.topic}</span>
+                      {mcq.question_type && (
+                        <span 
+                          className={`text-xs px-2 py-1 rounded font-semibold ${
+                            mcq.question_type === 'analytical' 
+                              ? 'bg-purple-100 text-purple-700 border border-purple-300' 
+                              : 'bg-blue-100 text-blue-700 border border-blue-300'
+                          }`}
+                          title={mcq.question_type === 'analytical' ? 'Analytical question - tests deeper understanding and reasoning' : 'Direct question - tests factual knowledge and recall'}
+                        >
+                          {mcq.question_type === 'analytical' ? '🧠 Analytical' : '📝 Direct'}
+                        </span>
+                      )}
                     </div>
                     <div className="font-medium text-gray-900 mb-3 prose prose-sm max-w-none">
                       <ReactMarkdown
@@ -408,6 +512,18 @@ export default function MCQPage() {
                         {savedMCQ.mcq.difficulty}
                       </span>
                       <span className="badge-info text-xs">{savedMCQ.mcq.topic}</span>
+                      {savedMCQ.mcq.question_type && (
+                        <span 
+                          className={`text-xs px-2 py-1 rounded font-semibold ${
+                            savedMCQ.mcq.question_type === 'analytical' 
+                              ? 'bg-purple-100 text-purple-700 border border-purple-300' 
+                              : 'bg-blue-100 text-blue-700 border border-blue-300'
+                          }`}
+                          title={savedMCQ.mcq.question_type === 'analytical' ? 'Analytical question - tests deeper understanding and reasoning' : 'Direct question - tests factual knowledge and recall'}
+                        >
+                          {savedMCQ.mcq.question_type === 'analytical' ? '🧠 Analytical' : '📝 Direct'}
+                        </span>
+                      )}
                       <span className="text-xs text-gray-500">
                         from {savedMCQ.chapter}
                       </span>
