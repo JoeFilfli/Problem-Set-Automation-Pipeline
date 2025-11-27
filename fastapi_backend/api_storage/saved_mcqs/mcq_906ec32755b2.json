@@ -1,0 +1,20 @@
+{
+  "id": "mcq_906ec32755b2",
+  "mcq": {
+    "id": 3,
+    "difficulty": "medium",
+    "topic": "Annual Worth Analysis",
+    "question": "What does the Annual Worth (AW) formula account for in investment evaluations?",
+    "options": {
+      "A": "The initial investment only.",
+      "B": "The annual operating costs (AOC) and capital recovery (CR).",
+      "C": "The salvage value of the investment.",
+      "D": "The total cash inflows over the investment's life."
+    },
+    "correct_answer": "B",
+    "explanation": "The formula for AW is $$AW = CR + AOC$$, which includes both capital recovery and annual operating costs.",
+    "question_type": "direct"
+  },
+  "chapter": "INDE301_Ch_6_Notes_24.pdf",
+  "saved_at": "2025-11-27T23:06:51.697225"
+}

@@ -76,6 +76,51 @@ def generate_mcqs(payload: GenerateMCQRequest) -> Dict[str, Any]:
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.post("/generate-mcqs/stream")
+def generate_mcqs_stream(payload: GenerateMCQRequest):
+    """
+    Streaming version of MCQ generation.
+    Yields events as MCQs are generated, allowing progressive UI updates.
+    
+    Args:
+        payload: Request with doc_id and num_mcqs
+        
+    Returns:
+        StreamingResponse with Server-Sent Events
+    """
+    try:
+        vs = get_vector_store()
+        orchestrator = get_problem_set_orchestrator(vs)
+        
+        def event_stream():
+            try:
+                for event in orchestrator.generate_mcq_set_stream(
+                    doc_id=payload.doc_id,
+                    num_mcqs=payload.num_mcqs
+                ):
+                    yield event
+            except Exception as e:
+                import json
+                yield json.dumps({
+                    "type": "error",
+                    "message": str(e)
+                }) + "\n"
+        
+        return StreamingResponse(
+            event_stream(),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+                "X-Accel-Buffering": "no"
+            }
+        )
+    except Exception as e:
+        print(f"[API] Error in generate_mcqs_stream: {repr(e)}")
+        print(f"[API] Traceback:\n{traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.post("/save-mcq")
 def save_mcq(payload: SaveMCQRequest) -> Dict[str, Any]:
     """
