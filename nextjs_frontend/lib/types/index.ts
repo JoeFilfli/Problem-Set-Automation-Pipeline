@@ -403,3 +403,68 @@ export interface BeatAISubmissionGrade {
   review_notes: string;
 }
 
+// Course Feedback Types
+export interface CourseFeedbackCreate {
+  student_id?: string;
+  student_name?: string;
+  overall_rating: number;
+  content_quality: number;
+  difficulty_level: number;
+  pacing: number;
+  materials_quality: number;
+  instructor_effectiveness: number;
+  what_worked_well?: string;
+  what_needs_improvement?: string;
+  suggestions?: string;
+  favorite_topics?: string[];
+  challenging_topics?: string[];
+  submission_context?: string;
+}
+
+export interface CourseFeedback {
+  id: string;
+  student_id: string;
+  student_name: string;
+  overall_rating: number;
+  content_quality: number;
+  difficulty_level: number;
+  pacing: number;
+  materials_quality: number;
+  instructor_effectiveness: number;
+  what_worked_well: string;
+  what_needs_improvement: string;
+  suggestions: string;
+  favorite_topics: string[];
+  challenging_topics: string[];
+  submission_context?: string;
+  created_at: string;
+}
+
+export interface FeedbackSummary {
+  success: boolean;
+  has_data: boolean;
+  total_responses?: number;
+  message?: string;
+  average_ratings?: {
+    overall_rating: number;
+    content_quality: number;
+    difficulty_level: number;
+    pacing: number;
+    materials_quality: number;
+    instructor_effectiveness: number;
+  };
+  rating_distribution?: {
+    [key: string]: { [rating: number]: number };
+  };
+  top_favorite_topics?: Array<{ topic: string; count: number }>;
+  top_challenging_topics?: Array<{ topic: string; count: number }>;
+  positive_comments?: Array<{ student: string; comment: string }>;
+  improvement_comments?: Array<{ student: string; comment: string }>;
+  suggestions?: Array<{ student: string; comment: string }>;
+  insights?: Array<{
+    type: 'success' | 'warning' | 'info';
+    title: string;
+    description: string;
+  }>;
+}
+

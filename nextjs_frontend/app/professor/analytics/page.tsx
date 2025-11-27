@@ -7,6 +7,8 @@ import {
   type ProblemSetWithSubmissions,
   type AnalyticsResponse
 } from '@/lib/api';
+import { getFeedbackSummary } from '@/lib/api/feedback';
+import type { FeedbackSummary } from '@/lib/types';
 
 /**
  * Analytics Dashboard
@@ -16,14 +18,18 @@ export default function AnalyticsPage() {
   const [problemSets, setProblemSets] = useState<ProblemSetWithSubmissions[]>([]);
   const [selectedProblemSetId, setSelectedProblemSetId] = useState<string | null>(null);
   const [analytics, setAnalytics] = useState<AnalyticsResponse | null>(null);
+  const [feedbackSummary, setFeedbackSummary] = useState<FeedbackSummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [analyticsLoading, setAnalyticsLoading] = useState(false);
+  const [feedbackLoading, setFeedbackLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function loadProblemSets() {
+    async function loadData() {
       try {
         setLoading(true);
+        
+        // Load problem sets
         const data = await getAnalyticsProblemSets();
         setProblemSets(data.problem_sets);
 
@@ -31,13 +37,25 @@ export default function AnalyticsPage() {
         if (data.problem_sets.length > 0) {
           setSelectedProblemSetId(data.problem_sets[0].id);
         }
+
+        // Load feedback summary
+        setFeedbackLoading(true);
+        try {
+          const feedbackData = await getFeedbackSummary();
+          setFeedbackSummary(feedbackData);
+        } catch (feedbackErr) {
+          console.error('Failed to load feedback:', feedbackErr);
+          // Don't block page load if feedback fails
+        } finally {
+          setFeedbackLoading(false);
+        }
       } catch (err: any) {
         setError(err.message || 'Failed to load problem sets');
       } finally {
         setLoading(false);
       }
     }
-    loadProblemSets();
+    loadData();
   }, []);
 
   useEffect(() => {
@@ -426,6 +444,290 @@ export default function AnalyticsPage() {
           </p>
         </div>
       ) : null}
+
+      {/* Course Feedback Section */}
+      <div className="border-t-4 border-purple-200 pt-8 mt-8">
+        <div className="card bg-gradient-to-br from-indigo-50 to-purple-50 border-2 border-purple-200 mb-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="text-3xl">📋</div>
+            <h2 className="text-2xl font-bold text-purple-900">Student Course Feedback</h2>
+          </div>
+          <p className="text-purple-700">
+            See what students are saying about your course. Use these insights to improve content, pacing, and teaching effectiveness.
+          </p>
+        </div>
+
+        {feedbackLoading ? (
+          <div className="flex items-center justify-center h-32">
+            <div className="text-center">
+              <div className="spinner-lg mb-3"></div>
+              <p className="text-gray-600">Loading feedback...</p>
+            </div>
+          </div>
+        ) : feedbackSummary && feedbackSummary.has_data ? (
+          <>
+            {/* Feedback Insights */}
+            {feedbackSummary.insights && feedbackSummary.insights.length > 0 && (
+              <div className="card mb-6">
+                <h2 className="text-xl font-semibold text-aub-black mb-4">
+                  🎯 Key Insights
+                </h2>
+                <div className="space-y-3">
+                  {feedbackSummary.insights.map((insight, i) => (
+                    <div
+                      key={i}
+                      className={`p-4 rounded-lg border-l-4 ${
+                        insight.type === 'success' ? 'border-green-500 bg-green-50' :
+                        insight.type === 'warning' ? 'border-orange-500 bg-orange-50' :
+                        'border-blue-500 bg-blue-50'
+                      }`}
+                    >
+                      <h3 className="font-semibold text-gray-900 mb-1">
+                        {insight.type === 'success' ? '✅' : insight.type === 'warning' ? '⚠️' : 'ℹ️'} {insight.title}
+                      </h3>
+                      <p className="text-sm text-gray-700">{insight.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Rating Overview */}
+            <div className="grid md:grid-cols-3 gap-6 mb-6">
+              <div className="card bg-gradient-to-br from-yellow-50 to-orange-100">
+                <div className="text-3xl mb-2">⭐</div>
+                <div className="text-3xl font-bold text-aub-black">
+                  {feedbackSummary.average_ratings?.overall_rating.toFixed(1)}/5
+                </div>
+                <div className="text-sm text-gray-600">Overall Rating</div>
+                <div className="text-xs text-gray-500 mt-1">
+                  {feedbackSummary.total_responses} responses
+                </div>
+              </div>
+
+              <div className="card bg-gradient-to-br from-blue-50 to-blue-100">
+                <div className="text-3xl mb-2">📚</div>
+                <div className="text-3xl font-bold text-aub-black">
+                  {feedbackSummary.average_ratings?.content_quality.toFixed(1)}/5
+                </div>
+                <div className="text-sm text-gray-600">Content Quality</div>
+              </div>
+
+              <div className="card bg-gradient-to-br from-purple-50 to-purple-100">
+                <div className="text-3xl mb-2">👨‍🏫</div>
+                <div className="text-3xl font-bold text-aub-black">
+                  {feedbackSummary.average_ratings?.instructor_effectiveness.toFixed(1)}/5
+                </div>
+                <div className="text-sm text-gray-600">Instructor Effectiveness</div>
+              </div>
+            </div>
+
+            {/* Detailed Ratings */}
+            <div className="card mb-6">
+              <h2 className="text-xl font-semibold text-aub-black mb-4">
+                📊 Detailed Ratings
+              </h2>
+              <div className="space-y-6">
+                {/* Difficulty Level */}
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium text-gray-700">Difficulty Level</span>
+                    <span className="text-sm text-gray-600">
+                      {feedbackSummary.average_ratings?.difficulty_level.toFixed(1)}/5
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-gray-500 w-16">Too Easy</span>
+                    <div className="flex-1 h-8 bg-gray-200 rounded-full overflow-hidden flex">
+                      {[1, 2, 3, 4, 5].map(rating => {
+                        const count = feedbackSummary.rating_distribution?.difficulty_level?.[rating] || 0;
+                        const total = feedbackSummary.total_responses || 1;
+                        const percentage = (count / total) * 100;
+                        return (
+                          <div
+                            key={rating}
+                            className={`h-full flex items-center justify-center text-xs font-medium ${
+                              rating <= 2 ? 'bg-green-400' :
+                              rating === 3 ? 'bg-yellow-400' :
+                              'bg-red-400'
+                            }`}
+                            style={{ width: `${percentage}%` }}
+                            title={`${rating} stars: ${count} responses`}
+                          >
+                            {count > 0 && count}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <span className="text-xs text-gray-500 w-16 text-right">Too Hard</span>
+                  </div>
+                </div>
+
+                {/* Pacing */}
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium text-gray-700">Course Pacing</span>
+                    <span className="text-sm text-gray-600">
+                      {feedbackSummary.average_ratings?.pacing.toFixed(1)}/5
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-gray-500 w-16">Too Slow</span>
+                    <div className="flex-1 h-8 bg-gray-200 rounded-full overflow-hidden flex">
+                      {[1, 2, 3, 4, 5].map(rating => {
+                        const count = feedbackSummary.rating_distribution?.pacing?.[rating] || 0;
+                        const total = feedbackSummary.total_responses || 1;
+                        const percentage = (count / total) * 100;
+                        return (
+                          <div
+                            key={rating}
+                            className={`h-full flex items-center justify-center text-xs font-medium ${
+                              rating <= 2 ? 'bg-blue-400' :
+                              rating === 3 ? 'bg-green-400' :
+                              'bg-orange-400'
+                            }`}
+                            style={{ width: `${percentage}%` }}
+                            title={`${rating} stars: ${count} responses`}
+                          >
+                            {count > 0 && count}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <span className="text-xs text-gray-500 w-16 text-right">Too Fast</span>
+                  </div>
+                </div>
+
+                {/* Materials Quality */}
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium text-gray-700">Materials Quality</span>
+                    <span className="text-sm text-gray-600">
+                      {feedbackSummary.average_ratings?.materials_quality.toFixed(1)}/5
+                    </span>
+                  </div>
+                  <div className="h-8 bg-gray-200 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center text-white text-sm font-medium"
+                      style={{ width: `${(feedbackSummary.average_ratings?.materials_quality || 0) * 20}%` }}
+                    >
+                      {feedbackSummary.average_ratings?.materials_quality.toFixed(1)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Top Topics */}
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              {/* Favorite Topics */}
+              {feedbackSummary.top_favorite_topics && feedbackSummary.top_favorite_topics.length > 0 && (
+                <div className="card">
+                  <h2 className="text-xl font-semibold text-aub-black mb-4">
+                    💚 Favorite Topics
+                  </h2>
+                  <div className="space-y-2">
+                    {feedbackSummary.top_favorite_topics.slice(0, 10).map((item, i) => (
+                      <div key={i} className="flex items-center justify-between p-2 bg-green-50 rounded">
+                        <span className="text-sm text-gray-800">{item.topic}</span>
+                        <span className="px-2 py-1 bg-green-200 text-green-800 text-xs font-semibold rounded">
+                          {item.count}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Challenging Topics */}
+              {feedbackSummary.top_challenging_topics && feedbackSummary.top_challenging_topics.length > 0 && (
+                <div className="card">
+                  <h2 className="text-xl font-semibold text-aub-black mb-4">
+                    🔥 Challenging Topics
+                  </h2>
+                  <div className="space-y-2">
+                    {feedbackSummary.top_challenging_topics.slice(0, 10).map((item, i) => (
+                      <div key={i} className="flex items-center justify-between p-2 bg-red-50 rounded">
+                        <span className="text-sm text-gray-800">{item.topic}</span>
+                        <span className="px-2 py-1 bg-red-200 text-red-800 text-xs font-semibold rounded">
+                          {item.count}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Student Comments */}
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Positive Comments */}
+              {feedbackSummary.positive_comments && feedbackSummary.positive_comments.length > 0 && (
+                <div className="card">
+                  <h2 className="text-xl font-semibold text-aub-black mb-4">
+                    ✨ What Worked Well
+                  </h2>
+                  <div className="space-y-3 max-h-96 overflow-y-auto">
+                    {feedbackSummary.positive_comments.map((comment, i) => (
+                      <div key={i} className="p-3 bg-green-50 border-l-4 border-green-400 rounded">
+                        <p className="text-sm text-gray-800 mb-1">&quot;{comment.comment}&quot;</p>
+                        <p className="text-xs text-gray-500">— {comment.student}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Improvement Suggestions */}
+              {feedbackSummary.improvement_comments && feedbackSummary.improvement_comments.length > 0 && (
+                <div className="card">
+                  <h2 className="text-xl font-semibold text-aub-black mb-4">
+                    🔧 Areas for Improvement
+                  </h2>
+                  <div className="space-y-3 max-h-96 overflow-y-auto">
+                    {feedbackSummary.improvement_comments.map((comment, i) => (
+                      <div key={i} className="p-3 bg-orange-50 border-l-4 border-orange-400 rounded">
+                        <p className="text-sm text-gray-800 mb-1">&quot;{comment.comment}&quot;</p>
+                        <p className="text-xs text-gray-500">— {comment.student}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Additional Suggestions */}
+            {feedbackSummary.suggestions && feedbackSummary.suggestions.length > 0 && (
+              <div className="card mt-6">
+                <h2 className="text-xl font-semibold text-aub-black mb-4">
+                  💡 Student Suggestions
+                </h2>
+                <div className="space-y-3 max-h-96 overflow-y-auto">
+                  {feedbackSummary.suggestions.map((comment, i) => (
+                    <div key={i} className="p-3 bg-blue-50 border-l-4 border-blue-400 rounded">
+                      <p className="text-sm text-gray-800 mb-1">&quot;{comment.comment}&quot;</p>
+                      <p className="text-xs text-gray-500">— {comment.student}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        ) : feedbackSummary && !feedbackSummary.has_data ? (
+          <div className="card bg-gray-50">
+            <div className="text-center py-8">
+              <div className="text-6xl mb-4">📋</div>
+              <h3 className="text-xl font-semibold text-gray-700 mb-2">No Feedback Yet</h3>
+              <p className="text-gray-600">
+                {feedbackSummary.message || 'No students have submitted course feedback yet.'}
+              </p>
+              <p className="text-sm text-gray-500 mt-4">
+                Encourage students to provide feedback at /student/feedback
+              </p>
+            </div>
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }

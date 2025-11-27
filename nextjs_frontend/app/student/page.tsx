@@ -77,6 +77,45 @@ export default function StudentDashboard() {
         </div>
       </div>
 
+      {/* Additional Features */}
+      <div>
+        <h2 className="text-xl font-bold text-aub-black mb-4">More Features</h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          <Link href="/student/beat-ai">
+            <div className="card-hover bg-gradient-to-br from-purple-50 to-indigo-50">
+              <h3 className="text-lg font-semibold text-aub-black mb-2">
+                🤖 Beat the AI
+              </h3>
+              <p className="text-sm text-gray-600">
+                Challenge yourself by finding errors in AI solutions
+              </p>
+            </div>
+          </Link>
+
+          <Link href="/student/solve">
+            <div className="card-hover bg-gradient-to-br from-blue-50 to-cyan-50">
+              <h3 className="text-lg font-semibold text-aub-black mb-2">
+                🎮 Guided Solving
+              </h3>
+              <p className="text-sm text-gray-600">
+                Step-by-step problem solving with AI guidance
+              </p>
+            </div>
+          </Link>
+
+          <Link href="/student/feedback">
+            <div className="card-hover bg-gradient-to-br from-yellow-50 to-orange-50">
+              <h3 className="text-lg font-semibold text-aub-black mb-2">
+                📋 Course Feedback
+              </h3>
+              <p className="text-sm text-gray-600">
+                Share your thoughts and help improve the course
+              </p>
+            </div>
+          </Link>
+        </div>
+      </div>
+
       {/* Recent Activity */}
       <div className="card">
         <h2 className="text-xl font-bold text-aub-black mb-4">

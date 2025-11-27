@@ -19,6 +19,7 @@ from api.routers import (
     images_router,
     guided_solve_router,
     beat_ai_router,
+    feedback_router,
 )
 from api.dependencies import get_vector_store
 
@@ -44,6 +45,7 @@ app.include_router(analytics_router)
 app.include_router(images_router)
 app.include_router(guided_solve_router)
 app.include_router(beat_ai_router)
+app.include_router(feedback_router)
 
 
 # Core endpoints

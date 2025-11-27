@@ -1,0 +1,22 @@
+{
+  "feedback": [
+    {
+      "id": "fb_b0d618ac2086",
+      "student_id": "student",
+      "student_name": "Anonymous",
+      "overall_rating": 5,
+      "content_quality": 3,
+      "difficulty_level": 3,
+      "pacing": 5,
+      "materials_quality": 3,
+      "instructor_effectiveness": 5,
+      "what_worked_well": "Real-life case studies and practical examples",
+      "what_needs_improvement": "Pace of lectures (too fast during complex topics)",
+      "suggestions": "Introduce weekly review sessions",
+      "favorite_topics": [],
+      "challenging_topics": [],
+      "submission_context": null,
+      "created_at": "2025-11-27T23:21:46.274860"
+    }
+  ]
+}
