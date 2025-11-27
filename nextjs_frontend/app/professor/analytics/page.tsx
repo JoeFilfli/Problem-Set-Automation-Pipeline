@@ -176,7 +176,7 @@ export default function AnalyticsPage() {
                           <div
                             className="bg-gradient-to-r from-aub-red to-red-400 h-full flex items-center justify-end pr-2 text-white text-xs font-medium"
                             style={{
-                              width: `${(count / analytics.stats.graded_submissions) * 100}%`,
+                              width: `${(count / (analytics.stats?.graded_submissions || 1)) * 100}%`,
                               minWidth: count > 0 ? '30px' : '0',
                             }}
                           >

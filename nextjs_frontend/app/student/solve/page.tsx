@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
@@ -62,7 +62,8 @@ type ProblemSet = {
   }>;
 };
 
-export default function GuidedSolvePage() {
+// Main component that uses useSearchParams
+function GuidedSolvePageContent() {
   const searchParams = useSearchParams();
   const preselectedProblemSetId = searchParams.get('problemSetId');
   // Problem selection state
@@ -556,7 +557,7 @@ export default function GuidedSolvePage() {
                     {isStarting ? (
                       <>
                         <span className="spinner mr-2"></span>
-                        Preparing your guided session...
+                        Preparing your guided session... (this may take 10-20 seconds)
                       </>
                     ) : (
                       '🚀 Start Guided Solving'
@@ -589,7 +590,7 @@ export default function GuidedSolvePage() {
               <div className="text-center">
                 <div className="text-4xl mb-2">💡</div>
                 <h3 className="font-medium">3. Use Hints</h3>
-                <p className="text-sm text-gray-600">Get help if you're stuck (costs points)</p>
+                <p className="text-sm text-gray-600">Get help if you&apos;re stuck (costs points)</p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-2">🏆</div>
@@ -845,3 +846,19 @@ export default function GuidedSolvePage() {
   );
 }
 
+// Wrapper component with Suspense boundary
+// This is required by Next.js for components using useSearchParams()
+export default function GuidedSolvePage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <div className="spinner-lg mb-3"></div>
+          <p className="text-gray-600">Loading problem solving interface...</p>
+        </div>
+      </div>
+    }>
+      <GuidedSolvePageContent />
+    </Suspense>
+  );
+}
