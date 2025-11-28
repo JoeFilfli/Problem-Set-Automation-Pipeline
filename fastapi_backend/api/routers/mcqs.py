@@ -259,6 +259,12 @@ def generate_exam_pdf(payload: GenerateExamRequest) -> StreamingResponse:
             exam_title=payload.exam_title or "Exam"
         )
         
+        if not pdf_bytes or len(pdf_bytes) == 0:
+            raise HTTPException(
+                status_code=500,
+                detail="PDF generation returned empty data"
+            )
+        
         exam_filename = f"exam_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
         
         return StreamingResponse(
@@ -271,6 +277,11 @@ def generate_exam_pdf(payload: GenerateExamRequest) -> StreamingResponse:
     except HTTPException:
         raise
     except Exception as e:
+        error_msg = str(e)
         print(f"[API] Error generating exam PDF: {repr(e)}")
         print(f"[API] Traceback:\n{traceback.format_exc()}")
-        raise HTTPException(status_code=500, detail=str(e))
+        # Ensure we always return a JSON error, not HTML
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to generate PDF: {error_msg}"
+        )

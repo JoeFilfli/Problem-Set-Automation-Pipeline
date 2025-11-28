@@ -157,6 +157,53 @@ def fix_latex_formatting(text: str) -> str:
     for letter in greek_letters:
         text = re.sub(rf'(?<!\\)\b{letter}\b(?!\w)', rf'\\{letter}', text)
     
+    # Restore common LaTeX commands whose leading backslash was swallowed
+    escape_char_map = {
+        '\t': 't',  # \t -> \t...
+        '\f': 'f',  # \f -> \f...
+        '\a': 'a',  # \a -> \a...
+        '\b': 'b',  # \b -> \b...
+        '\v': 'v',  # \v -> \v...
+        '\r': 'r',  # \r -> \r...
+    }
+    
+    for esc_char, letter in escape_char_map.items():
+        pattern = re.escape(esc_char) + r'([A-Za-z]+)'
+        text = re.sub(
+            pattern,
+            lambda m, letter=letter: '\\' + letter + m.group(1),
+            text
+        )
+    
+    return text
+
+
+MATH_TRIGGER_PATTERN = re.compile(
+    r'(\\frac|\\times|\\cdot|\\sqrt|\\sum|\\int|\\pi|\\alpha|\\beta|\\gamma|\\theta|[=^_])'
+)
+
+
+def ensure_math_delimiters(text: str) -> str:
+    """
+    Ensure that standalone mathematical expressions include LaTeX math delimiters.
+    This helps the frontend render the expression via KaTeX/Markdown.
+    """
+    if not text:
+        return text
+    
+    stripped = text.strip()
+    if not stripped:
+        return text
+    
+    if (stripped.startswith('$$') and stripped.endswith('$$')) or \
+       (stripped.startswith('$') and stripped.endswith('$')):
+        return text
+    
+    if MATH_TRIGGER_PATTERN.search(stripped):
+        # Use block math for longer expressions, inline otherwise
+        delimiter = '$$' if ('\n' in stripped or len(stripped) > 40 or '=' in stripped) else '$'
+        return f'{delimiter}{stripped}{delimiter}'
+    
     return text
 
 
@@ -180,7 +227,8 @@ def fix_mcq_latex(mcq: Dict[str, Any]) -> Dict[str, Any]:
     if 'options' in fixed_mcq and isinstance(fixed_mcq['options'], dict):
         fixed_options = {}
         for key, value in fixed_mcq['options'].items():
-            fixed_options[key] = fix_latex_formatting(str(value))
+            cleaned_value = fix_latex_formatting(str(value))
+            fixed_options[key] = ensure_math_delimiters(cleaned_value)
         fixed_mcq['options'] = fixed_options
     
     # Fix explanation

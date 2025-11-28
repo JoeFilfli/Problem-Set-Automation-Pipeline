@@ -1,0 +1,20 @@
+{
+  "id": "mcq_20d240f7b29c",
+  "mcq": {
+    "id": 3,
+    "difficulty": "hard",
+    "topic": "Geometric Gradient Factors",
+    "question": "What is the formula for calculating the present value of a cash flow series that increases by a fixed percentage each period?",
+    "options": {
+      "A": "$P = A_1 \\frac{1 - (1 + g)^n}{(1 + i)^n - (1 + g)^n}$",
+      "B": "$P = A_1 \\frac{1 - (1 + i)^{-n}}{g}$",
+      "C": "$P = A_1 \\cdot (1 + g)^{-n}$",
+      "D": "$P = A_1 \\cdot \\frac{(1 + i)^n}{g}$"
+    },
+    "correct_answer": "A",
+    "explanation": "The present value of a cash flow series increasing by a fixed percentage $g$ each period is calculated using the geometric gradient formula: $$P = A_1 \\frac{1 - (1 + g)^n}{(1 + i)^n - (1 + g)^n}$$ where $A_1$ is the initial cash flow, $i$ is the interest rate, and $n$ is the number of periods.",
+    "question_type": "direct"
+  },
+  "chapter": "INDE301_Ch_2_Notes_24.pdf",
+  "saved_at": "2025-11-28T03:38:24.234254"
+}
