@@ -1,0 +1,20 @@
+{
+  "id": "mcq_682b95bc6453",
+  "mcq": {
+    "id": 1,
+    "difficulty": "easy",
+    "topic": "Single Payment Factors",
+    "question": "What is the formula for calculating the future value of a single payment?",
+    "options": {
+      "A": "$F = P(1 + i)^n$",
+      "B": "$F = P/i$",
+      "C": "$F = A(1 + i)^{-n}$",
+      "D": "$F = A \\cdot P/F$"
+    },
+    "correct_answer": "A",
+    "explanation": "The future value $F$ of a single payment $P$ is calculated using the formula $F = P(1 + i)^n$, where $i$ is the interest rate and $n$ is the number of periods.",
+    "question_type": "direct"
+  },
+  "chapter": "INDE301_Ch_2_Notes_24.pdf",
+  "saved_at": "2025-11-28T03:38:20.914098"
+}

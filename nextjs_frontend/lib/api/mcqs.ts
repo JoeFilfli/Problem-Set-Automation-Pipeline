@@ -167,7 +167,8 @@ export async function generateExamPDF(
   mcqIds: string[],
   examTitle?: string
 ): Promise<Blob> {
-  const response = await fetch('/api/py/generate-exam-pdf', {
+  const url = buildApiUrl('/api/py/generate-exam-pdf');
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -178,9 +179,96 @@ export async function generateExamPDF(
     }),
   });
 
+  // Check content type first
+  const contentType = response.headers.get('content-type') || '';
+  
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.detail || 'Failed to generate exam PDF');
+    // Handle error response
+    let errorMessage = `Failed to generate exam PDF (HTTP ${response.status})`;
+    
+    try {
+      // Clone response to read it without consuming the original
+      const responseClone = response.clone();
+      const text = await responseClone.text();
+      
+      console.error('[generateExamPDF] Error response:', {
+        status: response.status,
+        contentType,
+        textPreview: text.substring(0, 200)
+      });
+      
+      // Try to parse as JSON
+      if (contentType.includes('application/json')) {
+        try {
+          const error = JSON.parse(text);
+          errorMessage = error.detail || error.message || errorMessage;
+        } catch (parseError) {
+          // If JSON parsing fails, try to extract from text
+          const jsonMatch = text.match(/"detail"\s*:\s*"([^"]+)"/i) || 
+                           text.match(/"message"\s*:\s*"([^"]+)"/i) ||
+                           text.match(/"error"\s*:\s*"([^"]+)"/i);
+          if (jsonMatch && jsonMatch[1]) {
+            errorMessage = jsonMatch[1].replace(/\\"/g, '"').replace(/\\n/g, ' ');
+          } else {
+            // If it starts with <, it's probably HTML
+            if (text.trim().startsWith('<')) {
+              errorMessage = `Server returned HTML instead of JSON. This usually means the backend encountered an error. Status: ${response.status}`;
+            }
+          }
+        }
+      } else if (text.includes('<!DOCTYPE') || text.includes('<html') || text.trim().startsWith('<')) {
+        // It's HTML - try to extract error message
+        const htmlMatch = text.match(/<title>(.*?)<\/title>/i) || 
+                         text.match(/<h1[^>]*>(.*?)<\/h1>/i) ||
+                         text.match(/<body[^>]*>(.*?)<\/body>/is);
+        if (htmlMatch && htmlMatch[1]) {
+          // Clean up HTML tags
+          errorMessage = htmlMatch[1].replace(/<[^>]+>/g, '').trim();
+          if (errorMessage.length > 200) {
+            errorMessage = errorMessage.substring(0, 200) + '...';
+          }
+        } else {
+          errorMessage = `Server returned HTML error page (HTTP ${response.status}). Check backend logs for details.`;
+        }
+      } else if (text.length > 0 && text.length < 1000) {
+        // It's plain text and not too long
+        errorMessage = text.trim();
+      }
+    } catch (readError) {
+      // If we can't read the response, use the default error message
+      console.error('[generateExamPDF] Error reading error response:', readError);
+    }
+    
+    throw new Error(errorMessage);
+  }
+
+  // Response is OK - verify it's actually a PDF
+  if (!contentType.includes('application/pdf') && !contentType.includes('application/octet-stream')) {
+    // If it's not a PDF, it might be an error response that got through
+    try {
+      const text = await response.text();
+      let errorMessage = `Expected PDF but received ${contentType}`;
+      
+      // Try to parse as JSON error
+      try {
+        const error = JSON.parse(text);
+        errorMessage = error.detail || error.message || errorMessage;
+      } catch {
+        // If not JSON, check if it's HTML
+        if (text.includes('<!DOCTYPE') || text.includes('<html')) {
+          const match = text.match(/<title>(.*?)<\/title>/i) || text.match(/<h1[^>]*>(.*?)<\/h1>/i);
+          if (match && match[1]) {
+            errorMessage = match[1].trim();
+          }
+        } else if (text.length < 500) {
+          errorMessage = text.trim();
+        }
+      }
+      
+      throw new Error(errorMessage);
+    } catch (readError) {
+      throw new Error(`Expected PDF but received ${contentType}. Unable to read error details.`);
+    }
   }
 
   return await response.blob();

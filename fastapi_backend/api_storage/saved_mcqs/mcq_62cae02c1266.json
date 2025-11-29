@@ -1,0 +1,20 @@
+{
+  "id": "mcq_62cae02c1266",
+  "mcq": {
+    "id": 2,
+    "difficulty": "medium",
+    "topic": "Uniform Series Factors",
+    "question": "How does extending the payment period affect the present value of a uniform series of $ 4,000 per year at an interest rate of 6%?",
+    "options": {
+      "A": "The present value decreases as the payment period is extended.",
+      "B": "The present value remains the same regardless of the payment period.",
+      "C": "The present value increases as the payment period is extended.",
+      "D": "The present value is unaffected by changes in the interest rate."
+    },
+    "correct_answer": "A",
+    "explanation": "Extending the payment period decreases the present value because future payments are discounted over more periods, reducing their present worth.",
+    "question_type": "analytical"
+  },
+  "chapter": "INDE301_Ch_2_Notes_24.pdf",
+  "saved_at": "2025-11-28T03:38:17.779756"
+}
