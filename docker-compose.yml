@@ -1,0 +1,115 @@
+# Docker Compose configuration for Problem-Set Automation Pipeline
+# This orchestrates both the FastAPI backend and Next.js frontend
+
+version: '3.8'
+
+services:
+  # FastAPI Backend Service
+  backend:
+    build:
+      context: ./fastapi_backend
+      dockerfile: Dockerfile
+    container_name: problemset-backend
+    
+    # Restart policy: always restart if container stops
+    restart: unless-stopped
+    
+    # Port mapping: host:container
+    ports:
+      - "8000:8000"
+    
+    # Environment variables
+    environment:
+      - PYTHONUNBUFFERED=1
+    
+    # Load environment variables from .env file
+    # You need to create this file with your OPENAI_API_KEY
+    env_file:
+      - ./fastapi_backend/.env
+    
+    # Volume mounts for data persistence and hot-reloading
+    volumes:
+      # Persist RAG database across container restarts
+      - ./fastapi_backend/rag_db:/app/rag_db
+      # Persist API storage (problem sets, submissions, etc.)
+      - ./fastapi_backend/api_storage:/app/api_storage
+      # Persist sample materials
+      - ./fastapi_backend/sample_materials:/app/sample_materials
+      # Persist student work
+      - ./fastapi_backend/student_work:/app/student_work
+      # Mount code for development (optional - comment out for production)
+      - ./fastapi_backend:/app
+    
+    # Network configuration
+    networks:
+      - app-network
+    
+    # Health check to monitor backend status
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/api/py/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Next.js Frontend Service
+  frontend:
+    build:
+      context: ./nextjs_frontend
+      # Use development Dockerfile for hot-reloading
+      # Change to 'Dockerfile' for production builds
+      dockerfile: Dockerfile.dev
+    container_name: problemset-frontend
+    
+    # Restart policy
+    restart: unless-stopped
+    
+    # Port mapping: host:container
+    ports:
+      - "3000:3000"
+    
+    # Environment variables
+    environment:
+      - NODE_ENV=development
+      # Backend API URL (internal Docker network)
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+    
+    # Volume mounts for hot-reloading in development
+    volumes:
+      # Mount source code for hot-reloading
+      - ./nextjs_frontend:/app
+      # Exclude node_modules from mount (use container's version)
+      - /app/node_modules
+      # Exclude .next build directory
+      - /app/.next
+    
+    # Network configuration
+    networks:
+      - app-network
+    
+    # Depends on backend service
+    # Frontend will wait for backend to start
+    depends_on:
+      - backend
+    
+    # Health check to monitor frontend status
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+# Network definition
+# Creates an isolated network for service communication
+networks:
+  app-network:
+    driver: bridge
+
+# Volume definitions (optional - for explicit volume management)
+volumes:
+  rag_db:
+    driver: local
+  api_storage:
+    driver: local
+

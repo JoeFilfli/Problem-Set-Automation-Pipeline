@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    // Target ES2018 for modern JavaScript features
+    // Required for regex dotAll flag (s) and other features
+    "target": "ES2018",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,

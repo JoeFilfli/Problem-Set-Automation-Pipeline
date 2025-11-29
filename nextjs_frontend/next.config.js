@@ -2,7 +2,12 @@ const path = require('path');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Enable standalone output for Docker production builds
+  // This creates a minimal server.js file with all dependencies
+  output: 'standalone',
+  
   outputFileTracingRoot: path.join(__dirname, '../'),
+  
   rewrites: async () => {
     return [
       {
