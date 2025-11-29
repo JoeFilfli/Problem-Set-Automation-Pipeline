@@ -56,9 +56,7 @@ services:
   frontend:
     build:
       context: ./nextjs_frontend
-      # Use development Dockerfile for hot-reloading
-      # Change to 'Dockerfile' for production builds
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     container_name: problemset-frontend
     
     # Restart policy
@@ -70,18 +68,9 @@ services:
     
     # Environment variables
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       # Backend API URL (internal Docker network)
       - NEXT_PUBLIC_API_URL=http://backend:8000
-    
-    # Volume mounts for hot-reloading in development
-    volumes:
-      # Mount source code for hot-reloading
-      - ./nextjs_frontend:/app
-      # Exclude node_modules from mount (use container's version)
-      - /app/node_modules
-      # Exclude .next build directory
-      - /app/.next
     
     # Network configuration
     networks:
@@ -105,11 +94,4 @@ services:
 networks:
   app-network:
     driver: bridge
-
-# Volume definitions (optional - for explicit volume management)
-volumes:
-  rag_db:
-    driver: local
-  api_storage:
-    driver: local
 

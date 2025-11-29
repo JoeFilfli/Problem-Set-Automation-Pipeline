@@ -41,7 +41,19 @@ Problem-Set-Automation-Pipeline/
 │
 ├── fastapi_backend/          # Python/FastAPI backend
 │   ├── api/                  # API routes and endpoints
+│   │   ├── index.py          # FastAPI app entry point
+│   │   ├── dependencies.py   # Shared dependencies (vector store, etc.)
 │   │   └── routers/          # Modular route handlers
+│   │       ├── materials.py      # Upload & manage course materials
+│   │       ├── problem_sets.py   # Generate & retrieve problem sets
+│   │       ├── submissions.py    # Submit & grade student work
+│   │       ├── rag.py            # RAG queries & document ingestion
+│   │       ├── mcqs.py           # Generate multiple-choice questions
+│   │       ├── analytics.py      # Student performance analytics
+│   │       ├── guided_solve.py   # AI-assisted problem solving
+│   │       ├── beat_ai.py        # "Beat the AI" challenges
+│   │       ├── feedback.py       # Course feedback collection
+│   │       └── images.py         # Image upload & retrieval
 │   ├── api_storage/          # File storage for problem sets, submissions, etc.
 │   ├── rag_db/               # ChromaDB vector database
 │   ├── sample_materials/     # Example course materials
@@ -56,11 +68,42 @@ Problem-Set-Automation-Pipeline/
 └── nextjs_frontend/          # Next.js/React/TypeScript frontend
     ├── app/                  # Next.js 13+ app directory
     │   ├── professor/        # Professor dashboard and tools
+    │   │   ├── materials/        # Material management
+    │   │   ├── problem-sets/     # Problem set creation
+    │   │   ├── mcqs/             # MCQ generation
+    │   │   ├── analytics/        # Performance analytics
+    │   │   └── beat-ai/          # Create AI challenges
     │   ├── student/          # Student interface
+    │   │   ├── problem-sets/     # View assignments
+    │   │   ├── workspace/        # Solve problems
+    │   │   ├── solve/            # Guided solving
+    │   │   ├── grades/           # View grades
+    │   │   ├── beat-ai/          # Take challenges
+    │   │   └── feedback/         # Submit feedback
     │   └── rag-lab/          # RAG testing interface
     ├── components/           # Reusable React components
     └── lib/                  # API clients and utilities
+        ├── api/              # API client functions
+        ├── types/            # TypeScript type definitions
+        └── utils/            # Utility functions
 ```
+
+### Backend Router Details
+
+Each router handles specific functionality with RESTful endpoints:
+
+| Router | Prefix | Purpose |
+|--------|--------|---------|
+| **materials** | `/api/py` | Upload PDFs, list materials, delete documents |
+| **problem_sets** | `/api/py` | Generate problem sets, retrieve by ID, list all |
+| **submissions** | `/api/py` | Submit student work, auto-grade, retrieve grades |
+| **rag** | `/api/py` | Query RAG database, ingest documents, semantic search |
+| **mcqs** | `/api/py` | Generate multiple-choice questions from materials |
+| **analytics** | `/api/py/analytics` | Performance metrics, topic analysis, student insights |
+| **guided_solve** | `/api/py/guided` | AI hints, step-by-step guidance, chat sessions |
+| **beat_ai** | `/api/beat-ai` | Create challenges, submit attempts, compare with AI |
+| **feedback** | `/api/feedback` | Collect course feedback, retrieve aggregated results |
+| **images** | `/api/py` | Upload images, retrieve by ID, handle diagrams |
 
 ## 🚀 Getting Started
 
@@ -108,7 +151,7 @@ The easiest way to get started is using Docker. This handles all dependencies au
 
 3. **Start the application:**
    ```bash
-   # Development mode (with hot-reloading)
+   # Start both services
    docker-compose up
    
    # Or run in background
@@ -140,21 +183,6 @@ The easiest way to get started is using Docker. This handles all dependencies au
    # Stop and remove all data (clean restart)
    docker-compose down -v
    ```
-
-### Docker Production Deployment
-
-For production environments, use the optimized production configuration:
-
-```bash
-# Build and run production containers
-docker-compose -f docker-compose.prod.yml up -d
-
-# View production logs
-docker-compose -f docker-compose.prod.yml logs -f
-
-# Stop production containers
-docker-compose -f docker-compose.prod.yml down
-```
 
 ### Docker Commands Cheat Sheet
 
@@ -190,8 +218,6 @@ Data persists even when containers are stopped. To completely reset:
 ```bash
 docker-compose down -v
 ```
-
-**📚 For detailed Docker documentation, see [DOCKER.md](DOCKER.md)**
 
 ---
 

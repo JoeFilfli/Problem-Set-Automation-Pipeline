@@ -73,6 +73,7 @@ Write-Host "===================================" -ForegroundColor Cyan
 Write-Host "Starting Docker containers..." -ForegroundColor Cyan
 Write-Host "===================================" -ForegroundColor Cyan
 Write-Host ""
+Write-Host "Building and starting services..." -ForegroundColor Yellow
 Write-Host "This may take a few minutes on first run..." -ForegroundColor Yellow
 Write-Host ""
 

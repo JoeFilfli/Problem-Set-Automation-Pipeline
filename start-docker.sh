@@ -65,6 +65,7 @@ echo "==================================="
 echo "Starting Docker containers..."
 echo "==================================="
 echo ""
+echo "Building and starting services..."
 echo "This may take a few minutes on first run..."
 echo ""
 
