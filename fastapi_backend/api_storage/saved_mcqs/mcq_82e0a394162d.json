@@ -1,0 +1,20 @@
+{
+  "id": "mcq_82e0a394162d",
+  "mcq": {
+    "id": 1,
+    "difficulty": "easy",
+    "topic": "Single Payment Factors",
+    "question": "What is the future value of a single payment of $ 3,000 invested at an annual interest rate of 4% for 5 years?",
+    "options": {
+      "A": "$3000 \\times (1 + 0.04)^5 = 3650.91$",
+      "B": "$3000 \\times (1 + 0.04)^5 = 3658.03$",
+      "C": "$3000 \\times (1 + 0.04)^5 = 3600.00$",
+      "D": "$3000 \\times (1 + 0.04)^5 = 3700.00$"
+    },
+    "correct_answer": "B",
+    "explanation": "The future value is calculated using the formula $F = P(1 + i)^n$. Here, $F = 3000 \\times (1 + 0.04)^5 = 3658.03$.",
+    "question_type": "analytical"
+  },
+  "chapter": "INDE301_Ch_2_Notes_24.pdf",
+  "saved_at": "2025-11-28T03:38:14.601151"
+}

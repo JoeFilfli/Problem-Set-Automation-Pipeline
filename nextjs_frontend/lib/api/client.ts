@@ -36,11 +36,15 @@ async function fetchApi<T>(
     if (!response.ok) {
       // Try to parse error details from response
       let errorDetail = `HTTP ${response.status}`;
-      try {
-        const errorData = await response.json();
-        errorDetail = errorData.detail || errorData.error || errorDetail;
-      } catch {
-        // Ignore JSON parse errors
+      const contentType = response.headers.get('content-type');
+      
+      if (contentType && contentType.includes('application/json')) {
+        try {
+          const errorData = await response.json();
+          errorDetail = errorData.detail || errorData.error || errorDetail;
+        } catch {
+          // Ignore JSON parse errors
+        }
       }
       throw new Error(errorDetail);
     }
